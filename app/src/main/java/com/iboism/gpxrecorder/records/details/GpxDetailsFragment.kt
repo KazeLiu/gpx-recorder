@@ -1,10 +1,10 @@
 package com.iboism.gpxrecorder.records.details
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -16,7 +16,6 @@ import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.recording.configurator.GPX_ID_KEY
 import com.iboism.gpxrecorder.recording.configurator.READ_ONLY_TITLE_KEY
 import com.iboism.gpxrecorder.recording.configurator.RecordingConfiguratorModal
-import com.iboism.gpxrecorder.recording.waypoint.CreateWaypointDialogActivity
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import com.iboism.gpxrecorder.util.FileHelper
 import com.iboism.gpxrecorder.util.Holder
@@ -27,7 +26,7 @@ import io.realm.ObjectChangeSet
 import io.realm.Realm
 import io.realm.RealmObjectChangeListener
 
-class GpxDetailsFragment : Fragment() {
+class GpxDetailsFragment : Fragment(), TrackPointEditingDelegate {
     private lateinit var detailsView: GpxDetailsView
     private lateinit var gpxId: Holder<Long>
     private var fileHelper: FileHelper? = null
@@ -60,8 +59,8 @@ class GpxDetailsFragment : Fragment() {
         resumeRecording()
     }
 
-    private val addWaypointTouchConsumer = Consumer<Unit> {
-        addWaypointButtonClicked()
+    private val trackPointEditToggleConsumer = Consumer<Boolean> {
+        setTrackPointEditingEnabled(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,7 +102,8 @@ class GpxDetailsFragment : Fragment() {
             binding = binding,
             titleText = gpxContent.title,
             distanceText = resources.getString(R.string.distance_km, distance),
-            dateText = DateTimeFormatHelper.toReadableString(gpxContent.date),
+            dateText24Hour = DateTimeFormatHelper.toReadableString24Hour(gpxContent.date),
+            dateTextAmPm = DateTimeFormatHelper.toReadableStringAmPm(gpxContent.date),
             waypointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         )
 
@@ -118,11 +118,12 @@ class GpxDetailsFragment : Fragment() {
             detailsView.mapTypeToggleObservable.subscribe(mapLayerTouchConsumer),
             detailsView.deleteRouteObservable.subscribe(deleteRouteTouchConsumer),
             detailsView.resumeRecordingObservable.subscribe(resumeRecordingTouchConsumer),
-            detailsView.addWaypointObservable.subscribe(addWaypointTouchConsumer)
+            detailsView.trackPointEditToggleObservable.subscribe(trackPointEditToggleConsumer)
         )
 
         binding.mapView.let {
             val controller = MapController(it, gpxId.value)
+            controller.trackPointEditingDelegate = this
             mapController = controller
             controller.onCreate(savedInstanceState)
         }
@@ -136,10 +137,6 @@ class GpxDetailsFragment : Fragment() {
         realm.close()
 
         parentFragmentManager.popBackStack()
-    }
-
-    private fun addWaypointButtonClicked() {
-        context?.startActivity(Intent(context, CreateWaypointDialogActivity::class.java).putExtra(Keys.GpxId, gpxId.value))
     }
 
     private fun savePressed() {
@@ -174,6 +171,47 @@ class GpxDetailsFragment : Fragment() {
             GpxContent.withId(gpxId.value, itRealm)?.title = newTitle
         }
         realm.close()
+    }
+
+    private fun setTrackPointEditingEnabled(isEnabled: Boolean) {
+        val controller = mapController ?: return
+        if (isEnabled && !controller.supportsTrackPointEditing) {
+            detailsView.setTrackPointEditingEnabled(false)
+            onTrackPointEditingUnsupported()
+            return
+        }
+
+        controller.setTrackPointEditingEnabled(isEnabled)
+        detailsView.setTrackPointEditingEnabled(isEnabled)
+    }
+
+    private fun updateRouteStats() {
+        val realm = Realm.getDefaultInstance()
+        val gpxContent = GpxContent.withId(gpxId.value, realm)
+        if (gpxContent != null) {
+            val distance = gpxContent.totalDistanceKm()
+            val pointCount = gpxContent.trackPointCount()
+            detailsView.setRouteStats(
+                waypointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount),
+                distanceText = resources.getString(R.string.distance_km, distance)
+            )
+        }
+        realm.close()
+    }
+
+    override fun onTrackPointEditingChanged() {
+        updateRouteStats()
+    }
+
+    override fun onTrackPointEditingUnsupported() {
+        context?.let {
+            AlertDialog.Builder(it)
+                .setTitle(R.string.track_point_editing_unavailable_title)
+                .setMessage(R.string.track_point_editing_unavailable_message)
+                .setPositiveButton(R.string.okay, null)
+                .create()
+                .show()
+        }
     }
 
     override fun onResume() {

@@ -27,7 +27,7 @@
         android:textAlignment="viewStart"
         android:textColor="@color/on_nav_bar_surface"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/more_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:paddingTop="6dp"
@@ -46,7 +46,8 @@
         app:layout_constraintStart_toStartOf="@id/current_rec_header"
         app:layout_constraintTop_toBottomOf="@id/current_rec_header" />
 
-    <ImageButton android:id="@+id/more_btn"
+    <ImageButton
+        android:id="@+id/more_btn"
         android:alpha=".9"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -66,7 +67,7 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_waypoint"
+        android:text="@string/append_track_point"
         android:textAllCaps="false"
         android:textColor="@color/button_text_on_surface"
         android:textSize="14sp"

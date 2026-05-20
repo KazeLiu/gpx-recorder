@@ -9,16 +9,21 @@ import com.iboism.gpxrecorder.databinding.FragmentRouteDetailsBinding
 import io.reactivex.subjects.PublishSubject
 
 private const val DRAFT_TITLE_KEY: String = "GpxDetailsView_titleDraft"
+private const val DRAFT_DATE_AM_PM_KEY: String = "GpxDetailsView_dateAmPm"
 
 class GpxDetailsView(
     val binding: FragmentRouteDetailsBinding,
     val titleText: String,
     val distanceText: String,
     val waypointsText: String,
-    val dateText: String
+    val dateText24Hour: String,
+    val dateTextAmPm: String
 ) {
 
     private var savedText = ""
+    private var isEditingTitle = false
+    private var isShowingAmPmDate = false
+    private var isEditingTrackPoints = false
     private val moreMenu: PopupMenu = PopupMenu(binding.root.context, binding.moreBtn, R.menu.details_overlfow_menu)
 
     var saveTouchObservable: PublishSubject<Unit> = PublishSubject.create()
@@ -27,18 +32,20 @@ class GpxDetailsView(
     var mapTypeToggleObservable: PublishSubject<Unit> = PublishSubject.create()
     var deleteRouteObservable: PublishSubject<Unit> = PublishSubject.create()
     var resumeRecordingObservable: PublishSubject<Unit> = PublishSubject.create()
-    var addWaypointObservable: PublishSubject<Unit> = PublishSubject.create()
+    var trackPointEditToggleObservable: PublishSubject<Boolean> = PublishSubject.create()
 
     init {
-        binding.titleEt.isEnabled = false
+        setTitleReadOnly()
         binding.titleEt.append(titleText)
-        binding.distanceTv.text = distanceText
-        binding.waypointTv.text = waypointsText
-        binding.dateTv.text = dateText
+        binding.distanceTv.visibility = View.GONE
+        binding.waypointTv.text = "$waypointsText · $distanceText"
+        binding.dateTv.text = dateText24Hour
 
         binding.resumeBtn.setOnClickListener { resumePressed() }
         binding.moreBtn.setOnClickListener { morePressed() }
-        binding.addWptBtn.setOnClickListener { addWaypointObservable.onNext(Unit) }
+        binding.addWptBtn.text = binding.root.context.getString(R.string.edit_track_points)
+        binding.addWptBtn.setOnClickListener { trackPointEditToggleObservable.onNext(!isEditingTrackPoints) }
+        binding.dateTv.setOnClickListener { toggleDateFormat() }
         moreMenu.menuInflater.inflate(R.menu.details_overlfow_menu, moreMenu.menu)
 
         moreMenu.setOnMenuItemClickListener { menuItem ->
@@ -56,6 +63,12 @@ class GpxDetailsView(
     }
 
     fun restoreInstanceState(outState: Bundle?) {
+        outState?.getBoolean(DRAFT_DATE_AM_PM_KEY)?.let { draftDateAmPm ->
+            isShowingAmPmDate = draftDateAmPm
+            updateDateText()
+            outState.remove(DRAFT_DATE_AM_PM_KEY)
+        }
+
         val titleDraft = outState?.getString(DRAFT_TITLE_KEY) ?: return
 
         editPressed()
@@ -65,17 +78,53 @@ class GpxDetailsView(
     }
 
     fun onSaveInstanceState(outState: Bundle) {
-        if (binding.titleEt.isEnabled) {
+        outState.putBoolean(DRAFT_DATE_AM_PM_KEY, isShowingAmPmDate)
+        if (isEditingTitle) {
             outState.putString(DRAFT_TITLE_KEY, binding.titleEt.text.toString())
         }
     }
 
-    private fun editPressed() {
+    fun setRouteStats(waypointsText: String, distanceText: String) {
+        binding.waypointTv.text = "$waypointsText · $distanceText"
+    }
+
+    fun setTrackPointEditingEnabled(isEnabled: Boolean) {
+        isEditingTrackPoints = isEnabled
+        binding.addWptBtn.text = binding.root.context.getString(
+            if (isEditingTrackPoints) R.string.finish_editing else R.string.edit_track_points
+        )
+    }
+
+    private fun setTitleReadOnly() {
+        isEditingTitle = false
         binding.titleEt.isEnabled = true
+        binding.titleEt.isFocusable = false
+        binding.titleEt.isFocusableInTouchMode = false
+        binding.titleEt.isCursorVisible = false
+        binding.titleEt.clearFocus()
+        binding.titleEt.setBackgroundResource(R.color.nav_bar_surface)
+        binding.titleEt.setHorizontallyScrolling(false)
+    }
+
+    private fun toggleDateFormat() {
+        isShowingAmPmDate = !isShowingAmPmDate
+        updateDateText()
+    }
+
+    private fun updateDateText() {
+        binding.dateTv.text = if (isShowingAmPmDate) dateTextAmPm else dateText24Hour
+    }
+
+    private fun editPressed() {
+        isEditingTitle = true
+        binding.titleEt.isEnabled = true
+        binding.titleEt.isFocusable = true
         binding.titleEt.isFocusableInTouchMode = true
+        binding.titleEt.isCursorVisible = true
         binding.titleEt.requestFocusFromTouch()
         binding.titleEt.setBackgroundResource(R.drawable.rect_rounded_light_accent)
         savedText = binding.titleEt.text.toString()
+        binding.addWptBtn.isEnabled = false
         binding.resumeBtn.setOnClickListener { applyPressed() }
         binding.resumeBtn.setImageResource(R.drawable.ic_check)
         binding.moreBtn.setOnClickListener { cancelPressed() }
@@ -105,26 +154,24 @@ class GpxDetailsView(
     }
 
     private fun applyPressed() {
-        binding.titleEt.isEnabled = false
-        binding.titleEt.clearFocus()
-        binding.titleEt.setBackgroundResource(R.color.nav_bar_surface)
+        setTitleReadOnly()
         binding.resumeBtn.setOnClickListener { resumePressed() }
         binding.resumeBtn.setImageResource(R.drawable.ic_near_me)
         binding.moreBtn.setOnClickListener { morePressed() }
         binding.moreBtn.setImageResource(R.drawable.ic_more)
+        binding.addWptBtn.isEnabled = true
         gpxTitleObservable.onNext(binding.titleEt.text.toString())
     }
 
     private fun cancelPressed() {
-        binding.titleEt.isEnabled = false
-        binding.titleEt.clearFocus()
-        binding.titleEt.setBackgroundResource(R.color.nav_bar_surface)
+        setTitleReadOnly()
         binding.titleEt.setText("")
         binding.titleEt.append(savedText)
         binding.resumeBtn.setOnClickListener { resumePressed() }
         binding.resumeBtn.setImageResource(R.drawable.ic_near_me)
         binding.moreBtn.setOnClickListener { morePressed() }
         binding.moreBtn.setImageResource(R.drawable.ic_more)
+        binding.addWptBtn.isEnabled = true
     }
 
     private fun resumePressed() {

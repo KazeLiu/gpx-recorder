@@ -25,7 +25,9 @@ class RecordingConfiguratorView(
     private val secondsPicker: NumberPicker = root.findViewById(R.id.interval_seconds_picker),
     val routeTitle: String? = null,
     val isTitleEditable: Boolean = true,
-    val isResumingRoute: Boolean = false
+    val isResumingRoute: Boolean = false,
+    val screenTitleTextRes: Int? = null,
+    val doneButtonTextRes: Int? = null
 ) {
 
     init {
@@ -43,7 +45,10 @@ class RecordingConfiguratorView(
             titleEditText.setText(it)
         }
 
-        if (isResumingRoute) {
+        if (screenTitleTextRes != null || doneButtonTextRes != null) {
+            screenTitleTextRes?.let { screenTitle.text = root.context.getText(it) }
+            doneButtonTextRes?.let { doneButton.text = root.context.getText(it) }
+        } else if (isResumingRoute) {
             screenTitle.text = root.context.getText(R.string.resume_recording)
             doneButton.text = root.context.getText(R.string.resume_recording)
         } else {

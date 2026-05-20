@@ -38,6 +38,13 @@ open class Segment(
         points.add(point)
     }
 
+    fun recalculateDistance() {
+        distance = 0f
+        points.zipWithNext { previousPoint, point ->
+            distance += Distance.haversineKm(previousPoint, point)
+        }
+    }
+
     fun getLatLngPoints(thread: Scheduler = Schedulers.computation()): Single<List<LatLng>> {
         val identifier = this.identifier
         return Single.just(identifier)

@@ -2,7 +2,7 @@ package com.iboism.gpxrecorder.model
 
 import io.realm.FieldAttribute
 import io.realm.RealmConfiguration
-private const val SCHEMA_VERSION: Long = 11
+private const val SCHEMA_VERSION: Long = 12
 
 const val REALM_SHARED_PREFERENCES_NAME = "kRealmSharedPrefs"
 const val REALM_INIT_FAILED_KEY = "kRealmInitialized"
@@ -34,6 +34,16 @@ class Schema {
                         realm.schema.create("LastLocation")
                             .addField("lat", Double::class.java, FieldAttribute.REQUIRED)
                             .addField("lon", Double::class.java, FieldAttribute.REQUIRED)
+                    }
+
+                    // 11 -> 12
+                    if (version == 11L) {
+                        version++
+                        realm.schema.get("TrackPoint")
+                            ?.addField("note", String::class.java, FieldAttribute.REQUIRED)
+                            ?.transform { obj ->
+                                obj.setString("note", "")
+                            }
                     }
                 }.build()
         }

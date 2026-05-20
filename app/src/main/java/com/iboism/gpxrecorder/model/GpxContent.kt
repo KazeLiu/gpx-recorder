@@ -75,7 +75,30 @@ open class GpxContent(
         linesMap["properties"] = HashMap<String, Any>()
         linesMap["geometry"] = lineGeometryMap
 
-        map["features"] = listOf(linesMap) + waypointsMapList
+        val trackPointNoteFeatures = trackList
+            .flatMap { it.segments }
+            .flatMap { it.points }
+            .filter { it.note.isNotBlank() }
+            .map { trackPoint ->
+                val pointMap = HashMap<String, Any>()
+
+                val propertiesMap = HashMap<String, Any>()
+                propertiesMap["type"] = "trackPoint"
+                propertiesMap["note"] = trackPoint.note
+                propertiesMap["time"] = trackPoint.time
+
+                val geometryMap = HashMap<String, Any>()
+                geometryMap["type"] = "Point"
+                geometryMap["coordinates"] = arrayOf(trackPoint.lon, trackPoint.lat)
+
+                pointMap["type"] = "Feature"
+                pointMap["properties"] = propertiesMap
+                pointMap["geometry"] = geometryMap
+
+                pointMap
+            }
+
+        map["features"] = listOf(linesMap) + trackPointNoteFeatures + waypointsMapList
         return JSONObject(map).toString()
     }
 

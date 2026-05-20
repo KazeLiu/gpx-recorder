@@ -15,11 +15,26 @@ open class TrackPoint(
     var lat: Double = 0.0,
     var lon: Double = 0.0,
     var ele: Double? = null,
-    var time: String = DateTimeFormatHelper.formatDate()
+    var time: String = DateTimeFormatHelper.formatDate(),
+    var note: String = ""
 ) : RealmObject(), XmlSerializable {
     override fun getXmlString(): String {
         val eleXml = ele?.let { return@let "<ele>${it.toElevationString()}</ele>" } ?: ""
         val timeXml = "<time>$time</time>"
-        return "<trkpt lat=\"$lat\" lon=\"$lon\">$eleXml $timeXml</trkpt>"
+        val noteXml = note.takeIf { it.isNotBlank() }?.let { "<desc>${it.toXmlEscapedString()}</desc>" } ?: ""
+        return "<trkpt lat=\"$lat\" lon=\"$lon\">$eleXml$timeXml$noteXml</trkpt>"
+    }
+
+    private fun String.toXmlEscapedString(): String {
+        return this
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;")
+    }
+
+    companion object Keys {
+        const val primaryKey = "identifier"
     }
 }

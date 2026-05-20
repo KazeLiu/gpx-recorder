@@ -39,6 +39,9 @@ internal class GoogleRouteMapController(
     private var map: GoogleMap? = null
 
     override var shouldDrawEnd = true
+    override var shouldCenterOnLoad = true
+    override var trackPointEditingDelegate: TrackPointEditingDelegate? = null
+    override val supportsTrackPointEditing = false
 
     init {
         container.removeAllViews()
@@ -81,6 +84,10 @@ internal class GoogleRouteMapController(
         }
     }
 
+    override fun setTrackPointEditingEnabled(isEnabled: Boolean) {
+        if (isEnabled) trackPointEditingDelegate?.onTrackPointEditingUnsupported()
+    }
+
     @SuppressLint("MissingPermission")
     private fun setupMapIfNeeded() {
         if (!isMapReady || !isLayoutReady || isMapSetup) return
@@ -95,9 +102,11 @@ internal class GoogleRouteMapController(
             map.isMyLocationEnabled = true
         }
 
-        val lastLocation = LastLocation.get()
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.lat, lastLocation.lon), 17f))
-        loadGpxContent(gpxId)?.let { map.drawContent(it, true) }
+        if (shouldCenterOnLoad) {
+            val lastLocation = LastLocation.get()
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.lat, lastLocation.lon), 17f))
+        }
+        loadGpxContent(gpxId)?.let { map.drawContent(it, shouldCenterOnLoad) }
     }
 
     override fun onGlobalLayout() {

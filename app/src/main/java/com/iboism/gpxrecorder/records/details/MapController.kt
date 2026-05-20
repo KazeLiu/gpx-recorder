@@ -25,6 +25,23 @@ class MapController(private val mapContainer: FrameLayout, private val gpxId: Lo
             delegate.shouldDrawEnd = value
         }
 
+    var shouldCenterOnLoad: Boolean
+        get() = delegate.shouldCenterOnLoad
+        set(value) {
+            delegate.shouldCenterOnLoad = value
+        }
+
+    var trackPointEditingDelegate: TrackPointEditingDelegate?
+        get() = delegate.trackPointEditingDelegate
+        set(value) {
+            delegate.trackPointEditingDelegate = value
+        }
+
+    val supportsTrackPointEditing: Boolean
+        get() = delegate.supportsTrackPointEditing
+
+    fun setTrackPointEditingEnabled(isEnabled: Boolean) = delegate.setTrackPointEditingEnabled(isEnabled)
+
     fun onCreate(savedInstanceState: Bundle?) = delegate.onCreate(savedInstanceState)
     fun onStart() = delegate.onStart()
     fun onResume() = delegate.onResume()
@@ -38,6 +55,10 @@ class MapController(private val mapContainer: FrameLayout, private val gpxId: Lo
 
 internal interface RouteMapController {
     var shouldDrawEnd: Boolean
+    var shouldCenterOnLoad: Boolean
+    var trackPointEditingDelegate: TrackPointEditingDelegate?
+
+    val supportsTrackPointEditing: Boolean
 
     fun onCreate(savedInstanceState: Bundle?)
     fun onStart()
@@ -48,6 +69,12 @@ internal interface RouteMapController {
     fun onSaveInstanceState(outState: Bundle)
     fun redraw()
     fun toggleMapType()
+    fun setTrackPointEditingEnabled(isEnabled: Boolean)
+}
+
+interface TrackPointEditingDelegate {
+    fun onTrackPointEditingChanged()
+    fun onTrackPointEditingUnsupported()
 }
 
 internal fun loadGpxContent(gpxId: Long): GpxContent? {

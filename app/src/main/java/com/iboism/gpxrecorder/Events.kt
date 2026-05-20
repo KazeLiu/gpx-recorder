@@ -5,4 +5,6 @@ class Events {
     data class RecordingStoppedEvent(val gpxId: Long?)
     data class RecordingPausedEvent(val gpxId: Long?)
     data class RecordingResumedEvent(val gpxId: Long?)
+    data class RecordingTrackPointAddedEvent(val gpxId: Long?)
+    data class RecordingIntervalUpdatedEvent(val gpxId: Long?)
 }

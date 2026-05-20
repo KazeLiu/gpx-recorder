@@ -30,6 +30,7 @@
 
     <string name="add_title_hint">Add title…</string>
     <string name="add_waypoint">Add Waypoint</string>
+    <string name="append_track_point">Append Point</string>
     <string name="background_location_justification_desc">This app collects location data to enable the route recorder function even when the app is closed or not in use. The app will attempt to show a notification whenever collecting data but it may not appear depending on the notification preferences on your device.\n\n Your location will ONLY be collected while you are recording a route.</string>
     <string name="background_location_justification_title">Background Location Access</string>
     <string name="background_permission_title">Allow all the time</string>
@@ -98,8 +99,22 @@
     <string name="download">Download</string>
     <string name="download_location_info">Choosing Download will export the files to the Downloads folder of this device.</string>
     <string name="toggle_map_type">Toggle map type</string>
+    <string name="toggle_time_format">Toggle time format</string>
+    <string name="update_recording_interval">Update interval</string>
     <string name="delete_route">Delete route</string>
+    <string name="delete_track_point">Delete point</string>
+    <string name="edit_track_point">Edit track point</string>
+    <string name="edit_track_points">Edit</string>
+    <string name="finish_editing">Done</string>
+    <string name="insert_track_point">Insert point</string>
+    <string name="insert_track_point_hint">Tap to add a track point here</string>
     <string name="rename_route">Rename route</string>
+    <string name="return_to_current_location">Return to current location</string>
+    <string name="save_note">Save</string>
+    <string name="track_point">Track point</string>
+    <string name="track_point_editing_unavailable_title">Editing unavailable</string>
+    <string name="track_point_editing_unavailable_message">Track point editing is available on Amap only for now.</string>
+    <string name="track_point_note_hint">Add note</string>
     <string name="recording_stopped">Recording Stopped</string>
     <string name="recording_timeout_description">The recording service has been stopped by the Android system. Open the app to resume recording your route.</string>
     <string name="resume_recording_alert_title">Resume recording</string>
