@@ -48,7 +48,7 @@
     <string name="expand">Rozbalit</string>
     <string name="failed_to_place_waypoint">Nepodařilo se umístit význačný bod</string>
     <string name="how_often_to_record_track_points">Jak často ukládat průběžné body cesty. (Přibližně)</string>
-    <string name="init_error_message">"Prosím zkontrolujte povolení aplikace k přístupu k úložišti a zkuste znovu.\n\nPoznámka: Tato aplikace nepodporuje root zařízení a musí být nainstalována z Obchodu Play.\n\nPokud problém přetrvává, kontaktujte vývojáře.\n\n appdev.iboism@gmail.com"</string>
+    <string name="init_error_message">"Prosím zkontrolujte povolení aplikace k přístupu k úložišti a zkuste znovu.\n\nPoznámka: Tato aplikace nepodporuje root zařízení a musí být nainstalována z Obchodu Play.\n\nPokud problém přetrvává, kontaktujte vývojáře."</string>
     <string name="init_error_title">Selhalo zavedení místní databáze</string>
     <string name="interval_minutes">Interval</string>
     <string name="legal">Podmínky použití</string>

@@ -87,7 +87,7 @@
 
   <string name="how_often_to_record_track_points">Wie oft werden Trackpunkte aufgezeichnet? (Etwa)</string>
 
-  <string name="init_error_message">Bitte überprüfen Sie die Dateiberechtigungen der Anwendung und versuchen Sie es erneut.   Hinweis: Diese App unterstützt keine gerooteten Geräte und muss über den Google Play Store installiert werden.  Wenn das Problem weiterhin besteht, wenden Sie sich an den Entwickler.  appdev.iboism\@gmail.com</string>
+  <string name="init_error_message">Bitte überprüfen Sie die Dateiberechtigungen der Anwendung und versuchen Sie es erneut.   Hinweis: Diese App unterstützt keine gerooteten Geräte und muss über den Google Play Store installiert werden.  Wenn das Problem weiterhin besteht, wenden Sie sich an den Entwickler.</string>
 
   <string name="init_error_title">Die lokale Datenbank konnte nicht initialisiert werden</string>
 

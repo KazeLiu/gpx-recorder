@@ -89,7 +89,7 @@
 
   <string name="how_often_to_record_track_points">À quelle fréquence enregistrer les points de trace. (Environ)</string>
 
-  <string name="init_error_message">Veuillez vérifier les autorisations du fichier d\'application et réessayer.   Remarque: Cette application ne prend pas en charge les appareils rootés et doit être installée à partir du Google Play Store.  Si ce problème persiste, contactez le développeur.  appdev.iboism\@gmail.com</string>
+  <string name="init_error_message">Veuillez vérifier les autorisations du fichier d\'application et réessayer.   Remarque: Cette application ne prend pas en charge les appareils rootés et doit être installée à partir du Google Play Store.  Si ce problème persiste, contactez le développeur.</string>
 
   <string name="init_error_title">Échec de l\'initialisation de la base de données locale</string>
 

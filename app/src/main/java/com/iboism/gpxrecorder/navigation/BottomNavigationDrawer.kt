@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iboism.gpxrecorder.databinding.BottomNavigationDrawerLayoutBinding
 
 class BottomNavigationDrawer: BottomSheetDialogFragment() {
-    private val navigationHelper: NavigationHelper by lazy { NavigationHelper(requireActivity()) }
+    private val navigationHelper: NavigationHelper by lazy { NavigationHelper(requireActivity() as AppCompatActivity) }
     private lateinit var binding: BottomNavigationDrawerLayoutBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -18,6 +19,10 @@ class BottomNavigationDrawer: BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.navView.setNavigationItemSelectedListener(navigationHelper)
+        binding.navView.setNavigationItemSelectedListener {
+            navigationHelper.onNavigationItemSelected(it).also { handled ->
+                if (handled) dismiss()
+            }
+        }
     }
 }

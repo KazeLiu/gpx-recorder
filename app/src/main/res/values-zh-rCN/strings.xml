@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <plurals name="point_count">
+        <item quantity="other">%1$d 个轨迹点</item>
+    </plurals>
+
+    <plurals name="waypoint_count">
+        <item quantity="other">%d 个航点</item>
+    </plurals>
+
+    <!-- Alert stuff -->
+    <string name="action_settings">设置</string>
+    <string name="title_activity_recording_configuration">新建记录</string>
+    <string name="denied_alert_title">需要权限</string>
+    <string name="denied_alert_message">未授予位置权限，无法记录 GPX 轨迹</string>
+    <string name="denied_alert_button">授予权限</string>
+
+    <!-- Strings related to Settings -->
+    <string name="file_share_failed">尝试分享文件时出了点问题。</string>
+    <string name="file_save_failed">尝试保存文件时出了点问题。</string>
+    <string name="done">完成</string>
+    <string name="add_note_hint">添加备注…</string>
+    <string name="add_title_hint">添加标题…</string>
+    <string name="add_waypoint">添加航点</string>
+    <string name="background_location_justification_desc">此应用会收集位置数据，以便在应用关闭或未使用时也能记录路线。应用会在收集数据时尝试显示通知，但是否显示取决于您设备上的通知偏好设置。\n\n您的位置只会在您正在记录路线时被收集。</string>
+    <string name="background_location_justification_title">后台位置访问权限</string>
+    <string name="background_permission_title">始终允许</string>
+    <string name="battery_drain_warning">小于 1 分钟的间隔可能增加耗电</string>
+    <string name="calculating_placeholder">正在计算..</string>
+    <string name="cannot_create_waypoint">当前无法创建航点</string>
+    <string name="channel_description">控制当前记录会话</string>
+    <string name="channel_name">记录</string>
+    <string name="clear_all_alert_button">全部清除</string>
+    <string name="clear_all_alert_message">此操作将移除所有记录并取消当前记录</string>
+    <string name="clear_all_alert_title">警告</string>
+    <string name="date">日期</string>
+    <string name="delete">删除</string>
+    <string name="delete_recording_alert_message">此操作无法撤销</string>
+    <string name="delete_recording_alert_title">确定要删除这条路线吗？</string>
+    <string name="delete_recordings">删除记录</string>
+    <string name="denied_alert_message_background">如果未授予“%1$s”位置权限，应用将无法记录您的路线。应用只会在您记录路线时访问位置。</string>
+    <string name="developer_contact">联系开发者</string>
+    <string name="distance_km">%.2f 公里</string>
+    <string name="edit_title_content_description">编辑标题</string>
+    <string name="enter_title">输入标题</string>
+    <string name="error">错误</string>
+    <string name="expand">展开</string>
+    <string name="failed_to_place_waypoint">航点放置失败</string>
+    <string name="how_often_to_record_track_points">每隔多久记录一次轨迹点。（约）</string>
+    <string name="init_error_message">请检查应用文件权限后重试。注意：此应用不支持已 root 的设备，且必须从 Google Play 商店安装。如果问题仍然存在，请联系开发者。</string>
+    <string name="init_error_title">本地数据库初始化失败</string>
+    <string name="interval_minutes">间隔</string>
+    <string name="legal">法律信息</string>
+    <string name="new_recording">新建记录</string>
+    <string name="notification_recording_in_progress">正在记录位置</string>
+    <string name="notification_recording_paused">位置记录已暂停</string>
+    <string name="okay">确定</string>
+    <string name="open_source_license_info">开源许可信息</string>
+    <string name="pause_recording">暂停</string>
+    <string name="points">轨迹点</string>
+    <string name="privacy_policy">隐私政策</string>
+    <string name="recording_in_progress">正在记录</string>
+    <string name="resume_recording">继续</string>
+    <string name="save">保存…</string>
+    <string name="share">分享</string>
+    <string name="shortcut_label">开始记录</string>
+    <string name="start">开始</string>
+    <string name="stop_recording">停止</string>
+    <string name="title">标题</string>
+    <string name="email">电子邮件</string>
+    <string name="hour_initial">时</string>
+    <string name="minute_initial">分</string>
+    <string name="second_initial">秒</string>
+    <string name="export_file">导出文件</string>
+    <string name="file_format">文件格式</string>
+    <string name="recorded_routes_will_show_up_here">已记录的路线会显示在这里</string>
+    <string name="start_recording_button">开始记录</string>
+    <string name="route_deleted">路线已删除</string>
+    <string name="tap_to_undo">点按撤销</string>
+    <string name="use_iso_date_for_filename">文件名使用 ISO 日期</string>
+    <string name="select">选择</string>
+    <string name="cancel">取消</string>
+    <string name="export">导出</string>
+    <string name="export_selected">导出选中项</string>
+    <string name="select_all">全选</string>
+    <string name="deselect_all">取消全选</string>
+    <string name="download">下载</string>
+    <string name="download_location_info">选择“下载”会将文件导出到此设备的“下载”文件夹。</string>
+    <string name="toggle_map_type">切换地图类型</string>
+    <string name="delete_route">删除路线</string>
+    <string name="rename_route">重命名路线</string>
+    <string name="recording_stopped">记录已停止</string>
+    <string name="recording_timeout_description">记录服务已被 Android 系统停止。打开应用以继续记录您的路线。</string>
+    <string name="resume_recording_alert_title">继续记录</string>
+    <string name="resume_recording_alert_message">如果当前正在记录路线，该记录会被停止。要继续记录这条路线吗？</string>
+    <string name="continue_recording">继续</string>
+    <string name="share_chooser_title">选择应用</string>
+    <string name="map_marker_start">起点</string>
+    <string name="map_marker_end">终点</string>
+    <string name="default_recording_title">未命名</string>
+    <string name="default_waypoint_title">航点</string>
+    <string name="settings">设置</string>
+    <string name="language">语言</string>
+    <string name="language_english">English</string>
+    <string name="language_simplified_chinese">简体中文</string>
+    <string name="map_provider">地图服务</string>
+    <string name="map_provider_google">Google 地图</string>
+    <string name="map_provider_amap">高德地图</string>
+    <string name="back">返回</string>
+</resources>

@@ -5,6 +5,10 @@
 
     <group>
         <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings"/>
+        <item
             android:id="@+id/nav_delete_recordings"
             android:icon="@drawable/ic_delete_sweep"
             android:title="@string/delete_recordings"/>
@@ -16,10 +20,6 @@
                 android:id="@+id/nav_github"
                 android:icon="@drawable/ic_github"
                 android:title="@string/github" />
-            <item
-                android:id="@+id/nav_email"
-                android:icon="@drawable/ic_mail"
-                android:title="@string/email"/>
         </menu>
     </item>
     <item android:title="@string/legal">

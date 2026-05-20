@@ -52,7 +52,7 @@ class CreateWaypointDialogActivity : AppCompatActivity() {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             val gpxContent = GpxContent.withId(gpxId, it)
-            val dist = gpxContent?.trackList?.first()?.segments?.first()?.distance?.toDouble() ?: 0.0
+            val dist = gpxContent?.totalDistanceKm()?.toDouble() ?: 0.0
             binding.noteEditText.text.insert(0, "@%.2fkm".format(dist))
         }
         realm.close()

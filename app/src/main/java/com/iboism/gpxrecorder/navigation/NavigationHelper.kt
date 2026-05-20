@@ -1,33 +1,33 @@
 package com.iboism.gpxrecorder.navigation
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.recording.LocationRecorderService
+import com.iboism.gpxrecorder.settings.SettingsFragment
 import io.realm.Realm
 
 /**
  * Created by Brad on 2/17/2018.
  */
-class NavigationHelper(private val activity: Activity) : NavigationView.OnNavigationItemSelectedListener {
+class NavigationHelper(private val activity: AppCompatActivity) : NavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_github ->
-                activity.launchExternalIntent(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.github.com/BradPatras/gpx-recorder/")))
+            R.id.nav_settings ->
+                activity.supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.none, R.anim.none, R.anim.slide_out_right)
+                    .replace(R.id.content_container, SettingsFragment.newInstance())
+                    .addToBackStack("settings")
+                    .commit()
 
-            R.id.nav_email -> {
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("appdev.iboism@gmail.com"))
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Gpx Recorder Developer Contact")
-                intent.setDataAndType(Uri.parse("mailto:appdev.iboism@gmail.com"), "plain/text")
-                activity.launchExternalIntent(intent)
-            }
+            R.id.nav_github ->
+                activity.launchExternalIntent(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/KazeLiu/gpx-recorder/")))
 
             R.id.nav_delete_recordings -> {
                 AlertDialog.Builder(activity)
@@ -55,7 +55,7 @@ class NavigationHelper(private val activity: Activity) : NavigationView.OnNaviga
     }
 
     // If the user's device is unable to launch the intent, fail silently
-    private fun Activity.launchExternalIntent(intent: Intent) {
+    private fun AppCompatActivity.launchExternalIntent(intent: Intent) {
         try {
             this.startActivity(intent)
         } catch (e: Exception) {

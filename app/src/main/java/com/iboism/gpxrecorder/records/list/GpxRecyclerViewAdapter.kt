@@ -189,12 +189,11 @@ class GpxRecyclerViewAdapter(
         viewHolder.rootView.x = 0f
         viewHolder.dateView.text = DateTimeFormatHelper.toReadableString(gpx.date)
         viewHolder.titleView.text = gpx.title
-        viewHolder.waypointCountView.text = context.resources.getQuantityString(R.plurals.waypoint_count, gpx.waypointList.size, gpx.waypointList.size)
+        val pointCount = gpx.trackPointCount()
+        viewHolder.waypointCountView.text = context.resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         viewHolder.checkbox.isChecked = selectedIds.contains(gpx.identifier)
         viewHolder.checkbox.visibility = if (isSelecting) View.VISIBLE else View.GONE
-        val segment = gpx.trackList.firstOrNull()?.segments?.firstOrNull()
-        val distance = segment?.distance ?: 0f
-        viewHolder.distanceView.text = context.resources.getString(R.string.distance_km, distance)
+        viewHolder.distanceView.text = context.resources.getString(R.string.distance_km, gpx.totalDistanceKm())
     }
 
     private fun bindDeletedViewHolder(viewHolder: DeletedRouteRowViewHolder, position: Int) {

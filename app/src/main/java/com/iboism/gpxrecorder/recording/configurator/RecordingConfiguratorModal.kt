@@ -57,7 +57,7 @@ class RecordingConfiguratorModal : Fragment() {
                 listener?.configurationCreated (
                     gpxId = gpxId,
                     configuration = RecordingConfiguration(
-                        title = configuratorView.titleEditText.text.toString().takeIf { it.isNotEmpty() } ?: "Untitled",
+                        title = configuratorView.titleEditText.text.toString().takeIf { it.isNotEmpty() } ?: context.getString(R.string.default_recording_title),
                         interval = configuratorView.getIntervalMillis()
                     ))
                 this@RecordingConfiguratorModal.parentFragmentManager.popBackStack()

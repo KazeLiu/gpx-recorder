@@ -4,8 +4,8 @@
         android:icon="@drawable/ic_route"
         android:shortcutShortLabel="@string/shortcut_label">
         <intent
-            android:action="com.iboism.gpxrecorder.START_RECORDING"
-            android:targetPackage="com.iboism.gpxrecorder"
+            android:action="com.kaze.gpxrecorder.START_RECORDING"
+            android:targetPackage="com.kaze.gpxrecorder"
             android:targetClass="com.iboism.gpxrecorder.MainActivity" />
     </shortcut>
 </shortcuts>

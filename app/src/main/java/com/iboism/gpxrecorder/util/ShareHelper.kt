@@ -3,6 +3,8 @@ package com.iboism.gpxrecorder.util
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
+import com.iboism.gpxrecorder.BuildConfig
+import com.iboism.gpxrecorder.R
 import java.io.File
 
 /**
@@ -10,7 +12,7 @@ import java.io.File
  */
 class ShareHelper(val context: Context) {
     fun shareFiles(gpxSharedFiles: List<File>) {
-        val contentUris = gpxSharedFiles.map { FileProvider.getUriForFile(context, "com.iboism.gpxrecorder.fileprovider", it) }
+        val contentUris = gpxSharedFiles.map { FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it) }
 
         if (contentUris.isEmpty()) return
 
@@ -26,6 +28,6 @@ class ShareHelper(val context: Context) {
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUris.first())
         }
-        context.startActivity(Intent.createChooser(shareIntent, "Choose an app"))
+        context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_chooser_title)))
     }
 }

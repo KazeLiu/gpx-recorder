@@ -1,6 +1,7 @@
 package com.iboism.gpxrecorder.model
 
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
+import com.iboism.gpxrecorder.util.Distance
 import com.iboism.gpxrecorder.util.UUIDHelper
 import io.realm.Realm
 import io.realm.RealmList
@@ -76,6 +77,24 @@ open class GpxContent(
 
         map["features"] = listOf(linesMap) + waypointsMapList
         return JSONObject(map).toString()
+    }
+
+    fun trackPointCount(): Int {
+        return trackList.sumOf { track ->
+            track.segments.sumOf { segment -> segment.points.size }
+        }
+    }
+
+    fun totalDistanceKm(): Float {
+        var total = 0f
+        trackList.forEach { track ->
+            track.segments.forEach { segment ->
+                segment.points.zipWithNext { previousPoint, point ->
+                    total += Distance.haversineKm(previousPoint, point)
+                }
+            }
+        }
+        return total
     }
 
     companion object Keys {

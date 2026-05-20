@@ -96,14 +96,15 @@ class GpxDetailsFragment : Fragment() {
         }
 
         gpxContent.addChangeListener(listener)
-        val distance = gpxContent.trackList.first()?.segments?.first()?.distance ?: 0f
+        val distance = gpxContent.totalDistanceKm()
+        val pointCount = gpxContent.trackPointCount()
 
         detailsView = GpxDetailsView(
             binding = binding,
             titleText = gpxContent.title,
             distanceText = resources.getString(R.string.distance_km, distance),
             dateText = DateTimeFormatHelper.toReadableString(gpxContent.date),
-            waypointsText = resources.getQuantityString(R.plurals.waypoint_count, gpxContent.waypointList.size, gpxContent.waypointList.size)
+            waypointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         )
 
         realm.close()
@@ -121,10 +122,9 @@ class GpxDetailsFragment : Fragment() {
         )
 
         binding.mapView.let {
-            it.onCreate(savedInstanceState)
             val controller = MapController(it, gpxId.value)
             mapController = controller
-            it.getMapAsync(controller)
+            controller.onCreate(savedInstanceState)
         }
     }
 
@@ -178,7 +178,7 @@ class GpxDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.mapView.onResume()
+        mapController?.onResume()
     }
 
     override fun onDestroy() {
@@ -188,29 +188,28 @@ class GpxDetailsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        binding.detailRoot.removeAllViews()
-        binding.mapView.onDestroy()
         mapController?.onDestroy()
+        binding.detailRoot.removeAllViews()
         super.onDestroyView()
     }
 
     override fun onPause() {
         super.onPause()
-        binding.mapView.onPause()
+        mapController?.onPause()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        binding.mapView.onLowMemory()
+        mapController?.onLowMemory()
     }
 
     override fun onStart() {
         super.onStart()
-        binding.mapView.onStart()
+        mapController?.onStart()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        binding.mapView.onSaveInstanceState(outState)
+        mapController?.onSaveInstanceState(outState)
         detailsView.onSaveInstanceState(outState)
         super.onSaveInstanceState(outState)
     }

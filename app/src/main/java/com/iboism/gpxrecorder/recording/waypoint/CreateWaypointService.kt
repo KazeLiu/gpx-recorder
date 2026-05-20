@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.google.android.gms.location.LocationResult
+import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.Waypoint
 import io.realm.Realm
@@ -15,27 +16,28 @@ import io.realm.Realm
 class CreateWaypointService : BroadcastReceiver()  {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null) return
+        val appContext = context ?: return
         val (gpxId, title, note) = harvestParameters(intent) ?: return
 
-        createWaypoint(LocationResult.extractResult(intent), title, note)?.let { waypoint ->
+        createWaypoint(appContext, LocationResult.extractResult(intent), title, note)?.let { waypoint ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val gpxContent = GpxContent.withId(gpxId, it)
-                waypoint.dist = gpxContent?.trackList?.first()?.segments?.first()?.distance?.toDouble() ?: 0.0
+                waypoint.dist = gpxContent?.totalDistanceKm()?.toDouble() ?: 0.0
                 gpxContent?.waypointList?.add(waypoint)
             }
             realm.close()
         }
     }
 
-    private fun createWaypoint(locationResult: LocationResult?, title: String, note: String) : Waypoint? {
+    private fun createWaypoint(context: Context, locationResult: LocationResult?, title: String, note: String) : Waypoint? {
         val loc = locationResult?.lastLocation ?: return null
 
         return Waypoint(
             lat = loc.latitude,
             lon = loc.longitude,
             ele = loc.altitude.takeIf { loc.hasAltitude() },
-            title = title,
+            title = title.ifBlank { context.getString(R.string.default_waypoint_title) },
             desc = note
         )
     }

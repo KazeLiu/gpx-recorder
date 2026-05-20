@@ -129,10 +129,10 @@ class GpxDetailsView(
 
     private fun resumePressed() {
         AlertDialog.Builder(binding.root.context)
-            .setTitle("Resume recording")
-            .setMessage("If a route recording is progress, it will be stopped.  Would you like to continue recording this route?")
+            .setTitle(R.string.resume_recording_alert_title)
+            .setMessage(R.string.resume_recording_alert_message)
             .setCancelable(true)
-            .setPositiveButton("Continue") { _, _ ->
+            .setPositiveButton(R.string.continue_recording) { _, _ ->
                 resumeRecordingObservable.onNext(Unit)
             }.create().show()
     }

@@ -15,7 +15,7 @@ class Keys {
         const val StartService = "kStartService"
 
         // App shortcut action
-        const val ShortcutAction = "com.iboism.gpxrecorder.START_RECORDING"
+        const val ShortcutAction = "com.kaze.gpxrecorder.START_RECORDING"
 
         // Shared Preferences
         const val HasShownLocationJustification = "kHasShownLocationJustification"

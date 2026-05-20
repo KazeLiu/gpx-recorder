@@ -58,7 +58,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.stopBtn.setOnClickListener(this::stopButtonClicked)
 
         val moreMenu = PopupMenu(binding.root.context, binding.moreBtn)
-        val mapToggleMenuItem: MenuItem = moreMenu.menu.add("Toggle map type")
+        val mapToggleMenuItem: MenuItem = moreMenu.menu.add(R.string.toggle_map_type)
 
         moreMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem) {
@@ -74,11 +74,10 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         updateUI(gpxId)
 
         binding.mapView.let {
-            it.onCreate(savedInstanceState)
             val controller = MapController(it, gpxId)
-            mapController?.shouldDrawEnd = false
-            it.getMapAsync(controller)
+            controller.shouldDrawEnd = false
             mapController = controller
+            controller.onCreate(savedInstanceState)
         }
     }
 
@@ -114,7 +113,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
 
     override fun onResume() {
         super.onResume()
-        binding.mapView.onResume()
+        mapController?.onResume()
 
         intervalObserver = observableInterval.subscribe {
             mapController?.redraw()
@@ -122,29 +121,28 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     }
 
     override fun onDestroyView() {
-        binding.mapView.onDestroy()
         mapController?.onDestroy()
         super.onDestroyView()
     }
 
     override fun onPause() {
         super.onPause()
-        binding.mapView.onPause()
+        mapController?.onPause()
         intervalObserver?.dispose()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        binding.mapView.onLowMemory()
+        mapController?.onLowMemory()
     }
 
     override fun onStart() {
         super.onStart()
-        binding.mapView.onStart()
+        mapController?.onStart()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        binding.mapView.onSaveInstanceState(outState)
+        mapController?.onSaveInstanceState(outState)
         super.onSaveInstanceState(outState)
     }
 
