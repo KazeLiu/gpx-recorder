@@ -21,7 +21,7 @@ android {
         minSdkVersion 29
         targetSdkVersion 36
         versionCode 52
-        versionName "2.19"
+        versionName "1.0"
         resValue "string", "amap_api_key", localProperties.getProperty("AMAP_API_KEY", "")
     }
 
