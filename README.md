@@ -1,142 +1,68 @@
-# gpx-recorder 🛰 🗺
+# GPX 记录器
 
-Android app to record gps routes in the background and allow user to export routes to GPX or GeoJSON files
+一款面向 Android 的离线轨迹记录应用，可以在后台记录 GPS 路线，并将路线导出为 GPX 或 GeoJSON 文件。
 
-[Google Play Store link](https://play.google.com/store/apps/details?id=com.iboism.gpxrecorder)
+这个版本重点面向中国国内用户做了体验优化：应用默认使用中文界面，默认地图服务切换为高德地图，并围绕国内地图坐标、定位展示、24 小时时间格式和录制中操作做了适配。
 
-<img src="sc-1.png" width=150/> &nbsp;&nbsp;&nbsp; <img src="sc-2.png" width=150/>
+<img src="sc/MuMu-20260521-164347-203.png" width=150/> &nbsp;&nbsp;&nbsp; <img src="sc/MuMu-20260521-164357-224.png" width=150/> &nbsp;&nbsp;&nbsp; <img src="sc/MuMu-20260521-164411-943.png" width=150/> &nbsp;&nbsp;&nbsp; <img src="sc/MuMu-20260521-164420-230.png" width=150/> &nbsp;&nbsp;&nbsp; <img src="sc/MuMu-20260521-164426-146.png" width=150/>
 
-## Libs and stuff 
+## 近期优化
 
-- [Realm](https://www.realm.io) for data persistence
-- [Dexter](https://github.com/Karumi/Dexter) for permissions
-- [FusedLocationProvider](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) for location services
-- [Apache Commons IO](https://commons.apache.org/proper/commons-io/) for file writing
-- [RxJava](https://github.com/ReactiveX/RxJava) for handling everything asynchronous
-- [EventBus](https://github.com/greenrobot/EventBus) For assisting with Service↔️App communication
-<br><br>
+- 默认使用中文和高德地图，更适合国内用户直接安装后使用。
+- 支持高德地图轨迹点编辑，可插入、拖动、删除坐标点，并为坐标点添加备注。
+- 录制中可以追加当前位置坐标点、调整记录间隔，并显示距离下一个轨迹点的倒计时。
+- 默认使用 24 小时时间格式，路线详情页也可以切换时间展示方式。
+- 优化录制页、路线列表、详情页和导出流程的界面风格，补充深色模式切换。
+- 支持将路线导出为 GPX 或 GeoJSON，轨迹点备注会写入导出内容。
 
-## Arch Notes
-### Background Recording
-To record location in the background, the app uses a [foreground service](https://developer.android.com/guide/components/foreground-services) class, [LocationRecorderService](https://github.com/BradPatras/gpx-recorder/blob/7ba14c9e5d526b578ae5ad00b2dbfdf61f5a8f48/app/src/main/java/com/iboism/gpxrecorder/recording/LocationRecorderService.kt#L26).  The nice thing about using foreground services is that it's much less likely to be killed by over-zealous system optimization initiatives. The main requirement of a foreground service is that you must display a notification as long as it's running. This requirement works perfectly for this app because it allows us to provide the user with route recording actions such as pausing/stopping/adding a waypoint without needing to open the app. 
+## 主要功能
 
-Internally the `LocationRecorderService` utilizes the [FusedLocationProvider](https://developers.google.com/location-context/fused-location-provider) library from google.  The interface is pretty simple, you feed it a [configuration](https://github.com/BradPatras/gpx-recorder/blob/7ba14c9e5d526b578ae5ad00b2dbfdf61f5a8f48/app/src/main/java/com/iboism/gpxrecorder/model/RecordingConfiguration.kt#L18), start the location request, and then handle the location updates as they roll in.
+- 后台持续记录 GPS 轨迹。
+- 前台服务通知提供录制控制，方便暂停、继续或停止记录。
+- 本地保存路线数据，不依赖云端服务。
+- 路线详情页展示地图、距离、点数、开始时间和轨迹信息。
+- 支持恢复已有路线继续记录。
+- 支持保存或分享导出的 GPX/GeoJSON 文件。
+- 支持浅色/深色主题切换。
 
-The foreground service is controlled in two ways: 
-#### Android Intents
-When a user taps on a button on the foreground service notification, the service receives an intent. It checks the intent's extras for keys and performs the [corresponding action](https://github.com/BradPatras/gpx-recorder/blob/7ba14c9e5d526b578ae5ad00b2dbfdf61f5a8f48/app/src/main/java/com/iboism/gpxrecorder/recording/LocationRecorderService.kt#L61).
+## 技术栈
+
+- [Realm](https://www.realm.io)：本地数据持久化。
+- [Dexter](https://github.com/Karumi/Dexter)：运行时权限处理。
+- [FusedLocationProvider](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient)：定位服务。
+- [高德地图 SDK](https://lbs.amap.com/)：国内地图展示与轨迹编辑体验。
+- [Apache Commons IO](https://commons.apache.org/proper/commons-io/)：文件写入。
+- [RxJava](https://github.com/ReactiveX/RxJava)：异步事件处理。
+- [EventBus](https://github.com/greenrobot/EventBus)：辅助 Service 与界面之间通信。
+
+## 架构说明
+
+### 后台记录
+
+应用通过 `LocationRecorderService` 这个前台服务在后台记录位置。前台服务需要在运行期间常驻通知栏，这一点正好用于提供录制控制入口，例如暂停、继续、停止记录或追加当前坐标点。
+
+`LocationRecorderService` 内部使用 Google 的 `FusedLocationProvider` 获取定位更新。启动记录时，应用会根据用户选择的记录间隔创建定位配置，然后持续接收并写入轨迹点。
+
+### 服务控制
+
+录制服务主要通过两种方式控制：
+
+#### Android Intent
+
+用户点击通知栏中的操作按钮时，系统会把对应 Intent 发送给服务。服务读取 Intent extras 后执行对应操作，例如暂停、继续或停止记录。
 
 #### Service Binding
-The app can't directly access the running service like a normal static instance or class, a connection must be made using a [Service Binding](https://github.com/BradPatras/gpx-recorder/blob/master/app/src/main/java/com/iboism/gpxrecorder/recording/RecorderServiceConnection.kt).  Once a connection is established, functions of the service can be accessed through the connection.
 
-[EventBus](https://github.com/greenrobot/EventBus) is also used to allow the service to notify the app when important things happen that may require UI to be updated.
+应用界面需要通过 Service Binding 连接正在运行的服务。连接建立后，录制页可以读取当前录制状态、记录间隔、下一个轨迹点倒计时，并调用追加坐标点或更新记录间隔等方法。
 
-### Route Storage
-The routes are all stored locally with a [Realm](https://www.realm.io) database. The format of realm object storage makes it really straightforward to store the nested data that makes up a route.  `Routes` have `Waypoints` and `Tracks` which are made up of `Segments` which are made up of `TrackPoints`.  The app is entirely offline focused so the realm database is the source of truth and all updates to the UI related to routes happen as a result of the database being updated.
+`EventBus` 用于在服务状态变化时通知界面刷新，例如新增轨迹点、暂停、继续或更新记录间隔。
 
-A Route is converted to the `gpx` or `geojson` file format on-demand and the app **only** knows how to do `Route` -> `.gpx`/`geojson` conversions.  Converting files back into `Route` objects is not currently a feature.
+### 路线存储
 
-## Releases
-Releases are now documented using this repo's `Releases` page.
-<details>
-<summary>Older releases</summary>
+路线全部保存在本地 Realm 数据库中。路线数据结构由 `Route`、`Waypoint`、`Track`、`Segment` 和 `TrackPoint` 组成，适合表达 GPX 中嵌套的轨迹结构。
 
-### - 2.11 | Dec 5, 2023
-- Fixed [#43](https://github.com/BradPatras/gpx-recorder/issues/43), [#44](https://github.com/BradPatras/gpx-recorder/issues/44), [#45](https://github.com/BradPatras/gpx-recorder/issues/45), [#46](https://github.com/BradPatras/gpx-recorder/issues/46)
-<br><br>
-### - 2.10 | Sep 25, 2023
-- Migrated from deprecated startActivityForResult
-<br><br>
-### - 2.9 | Aug 16, 2023
-- Czech translations added (thanks to @pocitas for contributing!)
-- French, Spanish, German translations added (auto-generated)
-<br><br>
-### - 2.8 | Jun 13, 2023
-- Fixed crashes around navigation
-- UI tweaks
-  - Sped up animations
-  - Updated verbiage in resume workflow
-<br><br>
-### - 2.7 | Jun 10, 2023
-- Updated foreground service code to adhere to new Android requirements
-- Fixed some styling issues
-<br><br>
-### - 2.6 | Sep 12, 2022
-- Fixed a crash related to realm library update
-- Add waypoint to stopped route feature
-<br><br>
-### - 2.5 | Sep 4, 2022
-- Resume route feature
-- GeoJSON export format support
-- UI component updates
-- Dark mode support (color system rework)
-<br><br>
-### - 2.4 | Feb 20, 2022
-- Updated dependency versions
-- Added licenses info
-- Migrated from Kotlin synthetics to view binding
-<br><br>
-### - 2.3 | Aug 13, 2021
-- Fixed time zone issue - timestamps are always in UTC now
-- Reduced waypoint location max wait time to 5 seconds
-<br><br>
-### - 2.2 | Oct 10, 2020
-- Updated target to Android 11
-- Added "Save to device" option when exporting route.
-- Updated background location permission request flow for Android 10 and 11
-<br><br>
-### - 2.1 | Dec 22, 2019
-- Moved recording controls to a list cell
-- Added recorder page to allow viewing route while recording
-<br><br>
-### - 2.0 | July 5, 2019
-- Removed route previews from list
-- Removed Glide library from project
-- Added warnings for route deletion
-- Added map type toggle
-- Implemented bottom app bar and bottom menu sheet
-- Added currently recording route controls to main app screen
-<br><br>
-### - 1.8 | March 19, 2019
-- Switched all route preview loading and caching to Glide using DataFetcher and ModelLoader subclasses
-- Added link to legal
-<br><br>
-### - 1.7 | February 23, 2019
-- Swapped interval selector to Number Pickers
-- Persist last selected interval as default
-- Fixed memory leaks
-<br><br>
-### - 1.6 | November 3, 2018
-- Added App Shortcut for starting a new recording
-- Use localized date and time formats
-- Added export button to details page
-- Added warning to rooted users that the app may not function properly
-<br><br>
-### - 1.5 | October 21, 2018
-- Reduced app size by 65%
-- Fixed more issues with Android 9
-<br><br>
-### - 1.4 | October 16, 2018
-- Revert app bundle and apk size changes due to build crashes
-- Fix Android 9 issues
-<br><br>
-### - 1.4 | October 15, 2018
-- Updates for Android Pie
-- Fix for rooted devices
-<br><br>
-### - 1.3 | October 14, 2018
-- Fix for crash on detail page on specific devices
-- Reduced app install size by about 65%
-<br><br>
-### - 1.2 | September 8, 2018
-- Fixed an issue where the app was taking a large amount of disk space
-- Misc. improvements and optimizations
-<br><br>
-### - 1.1 | August 16, 2018
-- Rewrote the route list to be more reliable. 
-- Added additional error handling for devices that cannot initialize the local database.
-- Fixed crashes
-<br><br>
-### - 1.0 | July 5, 2018
-- Initial release!
-</details>
+应用以本地数据库作为唯一数据源，路线列表、详情页和地图展示都会根据数据库内容刷新。当前支持将路线转换为 `.gpx` 或 `.geojson` 文件；暂不支持从外部 GPX/GeoJSON 文件反向导入路线。
+
+## 发布说明
+
+当前发布记录维护在本仓库的 GitHub Releases 页面中。
