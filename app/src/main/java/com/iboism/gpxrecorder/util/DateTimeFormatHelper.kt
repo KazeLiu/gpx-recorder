@@ -12,6 +12,8 @@ import java.util.TimeZone
 class DateTimeFormatHelper {
     companion object {
         private const val datePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        private const val readable24HourTimePattern = "HH:mm"
+        private const val readableAmPmTimePattern = "a h:mm"
 
         private val dateFormatter: SimpleDateFormat
             get() {
@@ -29,18 +31,15 @@ class DateTimeFormatHelper {
         }
 
         fun toReadableString(dateString: String): String {
-            val date = dateFormatter.parse(dateString) ?: return ""
-            return SimpleDateFormat
-                .getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT)
-                .format(date)
+            return toReadableString24Hour(dateString)
         }
 
         fun toReadableString24Hour(dateString: String): String {
-            return toReadableStringWithTimePattern(dateString, "HH:mm")
+            return toReadableStringWithTimePattern(dateString, readable24HourTimePattern)
         }
 
         fun toReadableStringAmPm(dateString: String): String {
-            return toReadableStringWithTimePattern(dateString, "a h:mm")
+            return toReadableStringWithTimePattern(dateString, readableAmPmTimePattern)
         }
 
         private fun toReadableStringWithTimePattern(dateString: String, timePattern: String): String {
