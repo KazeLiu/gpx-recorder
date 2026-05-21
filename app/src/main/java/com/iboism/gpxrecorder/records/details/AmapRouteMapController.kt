@@ -5,8 +5,11 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Point
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
@@ -38,6 +41,8 @@ import com.iboism.gpxrecorder.model.TrackPoint
 import com.iboism.gpxrecorder.model.Waypoint
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import com.iboism.gpxrecorder.util.DP
+import kotlin.math.abs
+import kotlin.math.hypot
 import kotlin.math.roundToInt
 
 internal class AmapRouteMapController(
@@ -56,8 +61,14 @@ internal class AmapRouteMapController(
     override var trackPointEditingDelegate: TrackPointEditingDelegate? = null
     override val supportsTrackPointEditing = true
     private var isTrackPointEditingEnabled = false
-    private var activeDraggedTrackPointMarker: Marker? = null
-    private var latestDraggedTrackPointPosition: LatLng? = null
+    private val longPressHandler = Handler(Looper.getMainLooper())
+    private val touchSlop = ViewConfiguration.get(container.context).scaledTouchSlop
+    private var pendingManualDrag: PendingManualDrag? = null
+    private var activeManualDrag: ActiveManualDrag? = null
+    private val trackPointMarkerIconSize: Pair<Int, Int> by lazy {
+        val bitmap = bitmapFromVector(mapView.context, R.drawable.ic_draggable_track_point)
+        (bitmap.width to bitmap.height).also { bitmap.recycle() }
+    }
 
     init {
         MapsInitializer.updatePrivacyShow(container.context, true, true)
@@ -101,6 +112,8 @@ internal class AmapRouteMapController(
     }
 
     override fun onDestroy() {
+        cancelPendingManualDrag()
+        finishActiveManualDrag(shouldSave = false)
         mapView.viewTreeObserver.removeOnGlobalLayoutListener(this)
         map?.clear()
         mapView.onDestroy()
@@ -119,8 +132,8 @@ internal class AmapRouteMapController(
     override fun setTrackPointEditingEnabled(isEnabled: Boolean) {
         if (isTrackPointEditingEnabled == isEnabled) return
         isTrackPointEditingEnabled = isEnabled
-        activeDraggedTrackPointMarker = null
-        latestDraggedTrackPointPosition = null
+        cancelPendingManualDrag()
+        finishActiveManualDrag(shouldSave = false)
         map?.disableAutoCenteringLocation()
         redraw()
     }
@@ -139,17 +152,6 @@ internal class AmapRouteMapController(
             map.isMyLocationEnabled = true
         }
         map.setOnMarkerClickListener { marker -> onMarkerClick(marker) }
-        map.setOnMarkerDragListener(object : AMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {
-                onMarkerDragStarted(marker)
-            }
-
-            override fun onMarkerDrag(marker: Marker) = Unit
-
-            override fun onMarkerDragEnd(marker: Marker) {
-                onMarkerDragFinished(marker)
-            }
-        })
         map.setOnMapTouchListener { event -> onMapTouch(event) }
 
         if (shouldCenterOnLoad) {
@@ -253,12 +255,12 @@ internal class AmapRouteMapController(
                     val marker = this.addMarker(
                         MarkerOptions()
                             .position(toAmapLatLng(point))
-                            .setFlat(true)
+                            .setFlat(false)
                             .title(mapView.context.getString(R.string.track_point))
                             .snippet(point.note.ifBlank { DateTimeFormatHelper.toReadableString(point.time) })
                             .icon(getBitmapDescriptor(R.drawable.ic_draggable_track_point))
-                            .draggable(true)
-                            .anchor(.5f, .5f)
+                            .draggable(false)
+                            .anchor(TRACK_POINT_IDLE_ANCHOR_U, TRACK_POINT_IDLE_ANCHOR_V)
                     )
                     marker.setObject(EditableMarker.TrackPoint(point.identifier))
                 }
@@ -287,6 +289,100 @@ internal class AmapRouteMapController(
         }
     }
 
+    private fun onMapTouch(event: MotionEvent) {
+        if (!isTrackPointEditingEnabled) return
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> prepareManualDrag(event)
+            MotionEvent.ACTION_MOVE -> updateManualDrag(event)
+            MotionEvent.ACTION_UP -> finishManualDragTouch(event, shouldSave = true)
+            MotionEvent.ACTION_CANCEL -> finishManualDragTouch(event, shouldSave = false)
+        }
+    }
+
+    private fun prepareManualDrag(event: MotionEvent) {
+        cancelPendingManualDrag()
+        if (activeManualDrag != null) return
+        val marker = findEditableTrackPointMarkerAt(event.x, event.y) ?: return
+        val markerObject = marker.getObject() as? EditableMarker.TrackPoint ?: return
+        pendingManualDrag = PendingManualDrag(marker, markerObject.pointId, event.x, event.y).also { pending ->
+            pending.startRunnable = Runnable {
+                if (pendingManualDrag !== pending) return@Runnable
+                pendingManualDrag = null
+                activeManualDrag = ActiveManualDrag(pending.marker, pending.pointId)
+                map?.uiSettings?.setAllGesturesEnabled(false)
+                pending.marker.setToTop()
+                moveActiveMarkerTo(pending.startX, pending.startY)
+            }
+            longPressHandler.postDelayed(pending.startRunnable!!, ViewConfiguration.getLongPressTimeout().toLong())
+        }
+    }
+
+    private fun updateManualDrag(event: MotionEvent) {
+        val pending = pendingManualDrag
+        if (pending != null && movedBeyondTouchSlop(pending.startX, pending.startY, event.x, event.y)) {
+            cancelPendingManualDrag()
+            return
+        }
+        if (activeManualDrag != null) {
+            moveActiveMarkerTo(event.x, event.y)
+        }
+    }
+
+    private fun finishManualDragTouch(event: MotionEvent, shouldSave: Boolean) {
+        cancelPendingManualDrag()
+        if (activeManualDrag != null) {
+            moveActiveMarkerTo(event.x, event.y)
+            finishActiveManualDrag(shouldSave)
+        }
+    }
+
+    private fun moveActiveMarkerTo(screenX: Float, screenY: Float) {
+        val marker = activeManualDrag?.marker ?: return
+        val position = map?.projection?.fromScreenLocation(
+            Point(screenX.roundToInt(), screenY.roundToInt())
+        ) ?: return
+        marker.position = position
+    }
+
+    private fun finishActiveManualDrag(shouldSave: Boolean) {
+        val drag = activeManualDrag ?: return
+        activeManualDrag = null
+        map?.uiSettings?.setAllGesturesEnabled(true)
+        if (!shouldSave) return
+        val wgsLatLng = toWgsLatLng(drag.marker.position)
+        TrackPointEditor.movePoint(drag.pointId, wgsLatLng.first, wgsLatLng.second)
+        redraw()
+        trackPointEditingDelegate?.onTrackPointEditingChanged()
+    }
+
+    private fun cancelPendingManualDrag() {
+        pendingManualDrag?.startRunnable?.let { longPressHandler.removeCallbacks(it) }
+        pendingManualDrag = null
+    }
+
+    private fun movedBeyondTouchSlop(startX: Float, startY: Float, x: Float, y: Float): Boolean {
+        return abs(x - startX) > touchSlop || abs(y - startY) > touchSlop
+    }
+
+    private fun findEditableTrackPointMarkerAt(screenX: Float, screenY: Float): Marker? {
+        val projection = map?.projection ?: return null
+        val (iconWidth, iconHeight) = trackPointMarkerIconSize
+        return map?.mapScreenMarkers
+            ?.asSequence()
+            ?.filter { it.getObject() is EditableMarker.TrackPoint }
+            ?.mapNotNull { marker ->
+                val markerScreen = projection.toScreenLocation(marker.position)
+                val left = markerScreen.x - iconWidth * marker.anchorU
+                val top = markerScreen.y - iconHeight * marker.anchorV
+                val right = left + iconWidth
+                val bottom = top + iconHeight
+                if (screenX !in left..right || screenY !in top..bottom) return@mapNotNull null
+                marker to hypot((markerScreen.x - screenX).toDouble(), (markerScreen.y - screenY).toDouble())
+            }
+            ?.minByOrNull { it.second }
+            ?.first
+    }
+
     private fun onMarkerClick(marker: Marker): Boolean {
         if (!isTrackPointEditingEnabled) return false
         return when (val markerObject = marker.getObject()) {
@@ -303,37 +399,6 @@ internal class AmapRouteMapController(
             }
             else -> false
         }
-    }
-
-    private fun onMarkerDragStarted(marker: Marker) {
-        if (!isTrackPointEditingEnabled) return
-        if (marker.getObject() !is EditableMarker.TrackPoint) return
-        activeDraggedTrackPointMarker = marker
-        latestDraggedTrackPointPosition = marker.position
-        marker.setToTop()
-    }
-
-    private fun onMapTouch(event: MotionEvent) {
-        if (!isTrackPointEditingEnabled) return
-        val marker = activeDraggedTrackPointMarker ?: return
-        if (event.actionMasked != MotionEvent.ACTION_MOVE && event.actionMasked != MotionEvent.ACTION_UP) return
-        val dragPosition = map?.projection?.fromScreenLocation(
-            Point(event.x.roundToInt(), event.y.roundToInt())
-        ) ?: return
-        marker.position = dragPosition
-        latestDraggedTrackPointPosition = dragPosition
-    }
-
-    private fun onMarkerDragFinished(marker: Marker) {
-        if (!isTrackPointEditingEnabled) return
-        val markerObject = marker.getObject() as? EditableMarker.TrackPoint ?: return
-        val finalPosition = latestDraggedTrackPointPosition ?: marker.position
-        val wgsLatLng = toWgsLatLng(finalPosition)
-        activeDraggedTrackPointMarker = null
-        latestDraggedTrackPointPosition = null
-        TrackPointEditor.movePoint(markerObject.pointId, wgsLatLng.first, wgsLatLng.second)
-        redraw()
-        trackPointEditingDelegate?.onTrackPointEditingChanged()
     }
 
     private fun showTrackPointDialog(pointId: Long) {
@@ -453,5 +518,23 @@ internal class AmapRouteMapController(
     private sealed class EditableMarker {
         data class TrackPoint(val pointId: Long) : EditableMarker()
         data class InsertPoint(val previousPointId: Long) : EditableMarker()
+    }
+
+    private data class PendingManualDrag(
+        val marker: Marker,
+        val pointId: Long,
+        val startX: Float,
+        val startY: Float,
+        var startRunnable: Runnable? = null
+    )
+
+    private data class ActiveManualDrag(
+        val marker: Marker,
+        val pointId: Long
+    )
+
+    private companion object {
+        const val TRACK_POINT_IDLE_ANCHOR_U = .5f
+        const val TRACK_POINT_IDLE_ANCHOR_V = .5f
     }
 }
