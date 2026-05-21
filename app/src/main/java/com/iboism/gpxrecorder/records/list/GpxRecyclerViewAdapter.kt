@@ -1,6 +1,8 @@
 package com.iboism.gpxrecorder.records.list
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import org.greenrobot.eventbus.Subscribe
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 /**
@@ -28,6 +31,7 @@ import java.util.concurrent.TimeUnit
  */
 private const val VIEW_TYPE_DELETED = 1
 private const val VIEW_TYPE_CURRENT = 2
+private const val ACTIVE_RECORDING_TICK_MILLIS = 1_000L
 
 class GpxRecyclerViewAdapter(
     val context: Context,
@@ -37,6 +41,20 @@ class GpxRecyclerViewAdapter(
     private var hiddenRowIdentifiers: MutableList<Long> = mutableListOf()
     private var currentlyRecordingRouteId: Long? = null
     private var serviceConnection: RecorderServiceConnection = RecorderServiceConnection(this)
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var isActiveRecordingTickerRunning = false
+    private val activeRecordingTicker = object : Runnable {
+        override fun run() {
+            val gpxId = currentlyRecordingRouteId
+            if (gpxId == null) {
+                stopActiveRecordingTicker()
+                return
+            }
+
+            notifyRouteIdChanged(gpxId)
+            mainHandler.postDelayed(this, ACTIVE_RECORDING_TICK_MILLIS)
+        }
+    }
     var contentViewerOpener: ((gpxId: Long) -> Unit)? = null
     var currentRecordingOpener: (() -> Unit)? = null
     var isSelecting: Boolean = false
@@ -54,13 +72,17 @@ class GpxRecyclerViewAdapter(
 
     override fun onServiceConnected(serviceConnection: RecorderServiceConnection) {
         currentlyRecordingRouteId = serviceConnection.service?.gpxId
-        currentlyRecordingRouteId?.let { notifyItemChanged(it) }
+        currentlyRecordingRouteId?.let {
+            notifyRouteIdChanged(it)
+            startActiveRecordingTicker()
+        }
     }
 
     override fun onServiceDisconnected() {
         val changedId = currentlyRecordingRouteId
         currentlyRecordingRouteId = null
-        changedId?.let { notifyItemChanged(it) }
+        stopActiveRecordingTicker()
+        changedId?.let { notifyRouteIdChanged(it) }
     }
 
     @Subscribe(sticky = true)
@@ -72,11 +94,19 @@ class GpxRecyclerViewAdapter(
     fun onServiceStoppedEvent(event: Events.RecordingStoppedEvent) {
         val changedId = currentlyRecordingRouteId
         currentlyRecordingRouteId = null
-        changedId?.let { notifyItemChanged(it) }
+        stopActiveRecordingTicker()
+        changedId?.let { notifyRouteIdChanged(it) }
+    }
+
+    @Subscribe
+    fun onRecordingTrackPointAddedEvent(event: Events.RecordingTrackPointAddedEvent) {
+        val activeId = currentlyRecordingRouteId ?: return
+        if (event.gpxId == activeId) notifyRouteIdChanged(activeId)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
+        stopActiveRecordingTicker()
         serviceConnection.disconnect(context)
     }
 
@@ -137,15 +167,26 @@ class GpxRecyclerViewAdapter(
         return  holder
     }
 
-    private fun notifyItemChanged(id: Long) {
+    private fun notifyRouteIdChanged(id: Long) {
         val itemIndex = data?.indexOfFirst { it.identifier == id } ?: return
 
         notifyItemChanged(itemIndex)
     }
 
+    private fun startActiveRecordingTicker() {
+        if (isActiveRecordingTickerRunning) return
+        isActiveRecordingTickerRunning = true
+        mainHandler.postDelayed(activeRecordingTicker, ACTIVE_RECORDING_TICK_MILLIS)
+    }
+
+    private fun stopActiveRecordingTicker() {
+        isActiveRecordingTickerRunning = false
+        mainHandler.removeCallbacks(activeRecordingTicker)
+    }
+
     private fun playPauseButtonClicked(view: View) {
         serviceConnection.service?.let { recordingService ->
-            currentlyRecordingRouteId?.let { notifyItemChanged(it) }
+            currentlyRecordingRouteId?.let { notifyRouteIdChanged(it) }
             if (recordingService.isPaused) {
                 recordingService.resumeRecording()
             } else {
@@ -175,7 +216,15 @@ class GpxRecyclerViewAdapter(
 
     private fun bindCurrentViewHolder(viewHolder: ActiveRouteRowViewHolder, position: Int) {
         val gpx = getItem(position) ?: return
+        val context = viewHolder.rootView.context
+        val startedAt = DateTimeFormatHelper.parseDate(gpx.date)
+        val durationText = startedAt?.let {
+            ActiveRecordingStatsFormatter.formatElapsedMillis(Date().time - it.time)
+        } ?: context.getString(R.string.unknown_recording_duration)
+        val pointCount = gpx.trackPointCount()
+        val pointCountText = context.resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         viewHolder.routeTitle.text = gpx.title
+        viewHolder.statsText.text = context.getString(R.string.active_recording_stats, durationText, pointCountText)
         viewHolder.setPaused(serviceConnection.service?.isPaused == true)
     }
 

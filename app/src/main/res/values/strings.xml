@@ -129,6 +129,7 @@
     <string name="stop_recording_confirm_title">Stop recording?</string>
     <string name="stop_recording_confirm_message">This route will be saved to the list after stopping.</string>
     <string name="unknown_recording_duration">Unknown</string>
+    <string name="active_recording_stats">Recorded %1$s · %2$s</string>
     <string name="share_chooser_title">Choose an app</string>
     <string name="map_marker_start">Start</string>
     <string name="map_marker_end">End</string>

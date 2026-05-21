@@ -117,6 +117,7 @@
     <string name="stop_recording_confirm_title">停止记录？</string>
     <string name="stop_recording_confirm_message">停止后，本次轨迹会保存到列表。</string>
     <string name="unknown_recording_duration">未知</string>
+    <string name="active_recording_stats">已记录 %1$s · %2$s</string>
     <string name="share_chooser_title">选择应用</string>
     <string name="map_marker_start">起点</string>
     <string name="map_marker_end">终点</string>

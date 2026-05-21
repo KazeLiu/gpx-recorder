@@ -10,6 +10,7 @@ class ActiveRouteRowViewHolder(binding: ListRowActiveRouteBinding): RecyclerView
     val rootView = binding.root
     val headerText: TextView = binding.currentRecHeader
     val routeTitle: TextView = binding.routeTitleTv
+    val statsText: TextView = binding.recordingStatsTv
     val playPauseButton: MaterialButton = binding.playpauseBtn
     val stopButton: MaterialButton = binding.stopBtn
 

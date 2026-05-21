@@ -43,11 +43,27 @@
         android:textAlignment="viewStart"
         android:textColor="@color/md_onPrimaryContainer"
         android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@id/recording_actions"
+        app:layout_constraintBottom_toTopOf="@id/recording_stats_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/current_rec_header"
         android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/recording_stats_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:fontFeatureSettings="tnum"
+        android:maxLines="1"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="@color/md_onPrimaryContainer"
+        app:layout_constraintBottom_toTopOf="@id/recording_actions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/route_title_tv" />
 
     <LinearLayout
         android:id="@+id/recording_actions"
@@ -58,7 +74,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_title_tv">
+        app:layout_constraintTop_toBottomOf="@+id/recording_stats_tv">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/playpause_btn"
