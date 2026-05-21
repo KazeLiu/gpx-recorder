@@ -133,6 +133,7 @@
     <string name="language">Language</string>
     <string name="language_english">English</string>
     <string name="language_simplified_chinese">Simplified Chinese</string>
+    <string name="dark_mode">Dark mode</string>
     <string name="map_provider">Map service</string>
     <string name="map_provider_google">Google Maps</string>
     <string name="map_provider_amap">Amap</string>

@@ -18,6 +18,7 @@ import com.iboism.gpxrecorder.recording.RecorderFragment
 import com.iboism.gpxrecorder.recording.configurator.RecordingConfiguratorModal
 import com.iboism.gpxrecorder.records.list.GpxListFragment
 import com.iboism.gpxrecorder.settings.LocalePreference
+import com.iboism.gpxrecorder.settings.ThemePreference
 import com.iboism.gpxrecorder.util.PermissionHelper
 import io.realm.Realm
 import io.realm.RealmList
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
     private val recorderFragmentTag = "recorder"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemePreference.applyStored(this)
         LocalePreference.applyStored(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)

@@ -19,12 +19,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.JointType.ROUND
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
+import com.iboism.gpxrecorder.settings.ThemePreference
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 
 internal class GoogleRouteMapController(
@@ -78,10 +80,11 @@ internal class GoogleRouteMapController(
     override fun toggleMapType() {
         map?.let {
             it.mapType = if (it.mapType == GoogleMap.MAP_TYPE_SATELLITE) {
-                GoogleMap.MAP_TYPE_TERRAIN
+                normalMapType()
             } else {
                 GoogleMap.MAP_TYPE_SATELLITE
             }
+            applyMapStyle(it)
         }
     }
 
@@ -98,7 +101,8 @@ internal class GoogleRouteMapController(
         MapsInitializer.initialize(mapView.context)
         map.uiSettings.isCompassEnabled = true
         map.uiSettings.isMapToolbarEnabled = true
-        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+        map.mapType = normalMapType()
+        applyMapStyle(map)
         if (mapView.context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.isMyLocationEnabled = true
         }
@@ -196,6 +200,23 @@ internal class GoogleRouteMapController(
                 17f
             )
         )
+    }
+
+    private fun normalMapType(): Int {
+        return if (ThemePreference.isDarkModeEnabled(mapView.context)) {
+            GoogleMap.MAP_TYPE_NORMAL
+        } else {
+            GoogleMap.MAP_TYPE_TERRAIN
+        }
+    }
+
+    private fun applyMapStyle(map: GoogleMap) {
+        if (map.mapType == GoogleMap.MAP_TYPE_SATELLITE || !ThemePreference.isDarkModeEnabled(mapView.context)) {
+            map.setMapStyle(null)
+            return
+        }
+
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(mapView.context, R.raw.google_map_dark_style))
     }
 
     private fun getBitmapDescriptor(@DrawableRes id: Int): BitmapDescriptor {

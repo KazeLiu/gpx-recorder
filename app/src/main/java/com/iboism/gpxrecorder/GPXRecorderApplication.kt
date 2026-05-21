@@ -7,6 +7,7 @@ import com.getkeepsafe.relinker.MissingLibraryException
 import com.iboism.gpxrecorder.extensions.setRealmInitFailure
 import com.iboism.gpxrecorder.model.Schema
 import com.iboism.gpxrecorder.recording.CHANNEL_ID
+import com.iboism.gpxrecorder.settings.ThemePreference
 import io.realm.Realm
 import io.realm.exceptions.RealmException
 
@@ -18,6 +19,7 @@ class GPXRecorderApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        ThemePreference.applyStored(this)
 
         try {
             initializeRealm()

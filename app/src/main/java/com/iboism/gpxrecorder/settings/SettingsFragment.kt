@@ -21,6 +21,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.backButton.setOnClickListener { parentFragmentManager.popBackStack() }
         setupLanguageOptions()
+        setupThemeOptions()
         setupMapProviderOptions()
         setupFutureSettings()
     }
@@ -47,6 +48,16 @@ class SettingsFragment : Fragment() {
         val selectedTag = LocalePreference.getLanguageTag(requireContext())
         val selectedOption = languageOptions.firstOrNull { it.languageTag == selectedTag } ?: languageOptions.first()
         binding.languageValue.text = getString(selectedOption.labelRes)
+    }
+
+    private fun setupThemeOptions() {
+        binding.darkModeSwitch.isChecked = ThemePreference.isDarkModeEnabled(requireContext())
+        binding.darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            ThemePreference.setDarkModeEnabled(requireContext(), isChecked)
+        }
+        binding.darkModeRow.setOnClickListener {
+            binding.darkModeSwitch.isChecked = !binding.darkModeSwitch.isChecked
+        }
     }
 
     private fun setupMapProviderOptions() {

@@ -42,6 +42,7 @@ import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
 import com.iboism.gpxrecorder.model.TrackPoint
+import com.iboism.gpxrecorder.settings.ThemePreference
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import com.iboism.gpxrecorder.util.DP
 import kotlin.math.abs
@@ -125,7 +126,7 @@ internal class AmapRouteMapController(
     override fun toggleMapType() {
         map?.let {
             it.mapType = if (it.mapType == AMap.MAP_TYPE_SATELLITE) {
-                AMap.MAP_TYPE_NORMAL
+                normalMapType()
             } else {
                 AMap.MAP_TYPE_SATELLITE
             }
@@ -149,7 +150,7 @@ internal class AmapRouteMapController(
 
         map.uiSettings.isCompassEnabled = true
         map.uiSettings.isMyLocationButtonEnabled = false
-        map.mapType = AMap.MAP_TYPE_NORMAL
+        map.mapType = normalMapType()
         if (mapView.context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.disableAutoCenteringLocation()
             map.isMyLocationEnabled = true
@@ -485,6 +486,14 @@ internal class AmapRouteMapController(
 
     private fun android.location.Location.isZeroCoordinate(): Boolean {
         return latitude == 0.0 && longitude == 0.0
+    }
+
+    private fun normalMapType(): Int {
+        return if (ThemePreference.isDarkModeEnabled(mapView.context)) {
+            AMap.MAP_TYPE_NIGHT
+        } else {
+            AMap.MAP_TYPE_NORMAL
+        }
     }
 
     private fun AMap.disableAutoCenteringLocation() {
