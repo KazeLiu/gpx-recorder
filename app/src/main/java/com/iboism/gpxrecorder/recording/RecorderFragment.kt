@@ -78,6 +78,8 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             val controller = MapController(it, gpxId)
             controller.shouldDrawEnd = false
             controller.shouldCenterOnLoad = false
+            controller.shouldCenterOnCurrentLocationOnLoad = true
+            controller.showCurrentLocationButton = true
             mapController = controller
             controller.onCreate(savedInstanceState)
         }

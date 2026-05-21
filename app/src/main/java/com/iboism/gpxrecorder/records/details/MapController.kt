@@ -31,6 +31,18 @@ class MapController(private val mapContainer: FrameLayout, private val gpxId: Lo
             delegate.shouldCenterOnLoad = value
         }
 
+    var showCurrentLocationButton: Boolean
+        get() = delegate.showCurrentLocationButton
+        set(value) {
+            delegate.showCurrentLocationButton = value
+        }
+
+    var shouldCenterOnCurrentLocationOnLoad: Boolean
+        get() = delegate.shouldCenterOnCurrentLocationOnLoad
+        set(value) {
+            delegate.shouldCenterOnCurrentLocationOnLoad = value
+        }
+
     var trackPointEditingDelegate: TrackPointEditingDelegate?
         get() = delegate.trackPointEditingDelegate
         set(value) {
@@ -56,6 +68,8 @@ class MapController(private val mapContainer: FrameLayout, private val gpxId: Lo
 internal interface RouteMapController {
     var shouldDrawEnd: Boolean
     var shouldCenterOnLoad: Boolean
+    var showCurrentLocationButton: Boolean
+    var shouldCenterOnCurrentLocationOnLoad: Boolean
     var trackPointEditingDelegate: TrackPointEditingDelegate?
 
     val supportsTrackPointEditing: Boolean

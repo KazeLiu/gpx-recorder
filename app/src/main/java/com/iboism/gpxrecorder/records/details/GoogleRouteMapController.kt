@@ -40,6 +40,8 @@ internal class GoogleRouteMapController(
 
     override var shouldDrawEnd = true
     override var shouldCenterOnLoad = true
+    override var showCurrentLocationButton = false
+    override var shouldCenterOnCurrentLocationOnLoad = false
     override var trackPointEditingDelegate: TrackPointEditingDelegate? = null
     override val supportsTrackPointEditing = false
 
@@ -107,6 +109,9 @@ internal class GoogleRouteMapController(
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.lat, lastLocation.lon), 17f))
         }
         loadGpxContent(gpxId)?.let { map.drawContent(it, shouldCenterOnLoad) }
+        if (shouldCenterOnCurrentLocationOnLoad) {
+            moveCameraToLastLocation()
+        }
     }
 
     override fun onGlobalLayout() {
@@ -194,6 +199,16 @@ internal class GoogleRouteMapController(
                 .icon(getBitmapDescriptor(R.drawable.ic_waypoint_pt))
                 .anchor(.5f, .5f))
         }
+    }
+
+    private fun moveCameraToLastLocation() {
+        val lastLocation = LastLocation.get()
+        map?.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(lastLocation.lat, lastLocation.lon),
+                17f
+            )
+        )
     }
 
     private fun getBitmapDescriptor(@DrawableRes id: Int): BitmapDescriptor {

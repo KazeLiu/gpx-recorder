@@ -50,7 +50,7 @@ internal class AmapRouteMapController(
     private val gpxId: Long
 ) : RouteMapController, ViewTreeObserver.OnGlobalLayoutListener {
     private val mapView: MapView
-    private val currentLocationButton: ImageButton
+    private var currentLocationButton: ImageButton? = null
     private val coordinateConverter: CoordinateConverter
     private var isLayoutReady = false
     private var isMapSetup = false
@@ -58,6 +58,12 @@ internal class AmapRouteMapController(
 
     override var shouldDrawEnd = true
     override var shouldCenterOnLoad = true
+    override var showCurrentLocationButton = false
+        set(value) {
+            field = value
+            updateCurrentLocationButton()
+        }
+    override var shouldCenterOnCurrentLocationOnLoad = false
     override var trackPointEditingDelegate: TrackPointEditingDelegate? = null
     override val supportsTrackPointEditing = true
     private var isTrackPointEditingEnabled = false
@@ -83,14 +89,7 @@ internal class AmapRouteMapController(
             mapView,
             FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         )
-        currentLocationButton = ImageButton(container.context).apply {
-            setImageResource(R.drawable.ic_near_me)
-            setBackgroundColor(ContextCompat.getColor(container.context, R.color.nav_bar_surface))
-            contentDescription = container.context.getString(R.string.return_to_current_location)
-            alpha = .92f
-            setOnClickListener { moveCameraToCurrentLocation() }
-        }
-        container.addView(currentLocationButton, currentLocationButtonLayoutParams())
+        updateCurrentLocationButton()
         mapView.viewTreeObserver.addOnGlobalLayoutListener(this)
     }
 
@@ -159,6 +158,9 @@ internal class AmapRouteMapController(
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(toAmapLatLng(lastLocation.lat, lastLocation.lon), 17f))
         }
         loadGpxContent(gpxId)?.let { map.drawContent(it, shouldCenterOnLoad) }
+        if (shouldCenterOnCurrentLocationOnLoad) {
+            moveCameraToCurrentLocation()
+        }
     }
 
     override fun onGlobalLayout() {
@@ -497,6 +499,26 @@ internal class AmapRouteMapController(
     private fun AMap.disableAutoCenteringLocation() {
         this.myLocationStyle = MyLocationStyle()
             .myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW)
+    }
+
+    private fun updateCurrentLocationButton() {
+        if (!showCurrentLocationButton) {
+            currentLocationButton?.let { container.removeView(it) }
+            currentLocationButton = null
+            return
+        }
+
+        if (currentLocationButton != null) return
+
+        currentLocationButton = ImageButton(container.context).apply {
+            setImageResource(R.drawable.ic_near_me)
+            setBackgroundColor(ContextCompat.getColor(container.context, R.color.nav_bar_surface))
+            contentDescription = container.context.getString(R.string.return_to_current_location)
+            alpha = .92f
+            setOnClickListener { moveCameraToCurrentLocation() }
+        }.also {
+            container.addView(it, currentLocationButtonLayoutParams())
+        }
     }
 
     private fun currentLocationButtonLayoutParams(): FrameLayout.LayoutParams {
