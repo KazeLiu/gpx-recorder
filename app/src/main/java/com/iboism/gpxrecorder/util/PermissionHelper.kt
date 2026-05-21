@@ -26,8 +26,8 @@ class PermissionHelper {
                 .getDefault(context)
                 .getBoolean(Keys.HasShownLocationJustification, false)
 
-            // If we haven't shown background location access justification yet, do that before
-            // requesting permission.
+            // If we haven't shown the location access justification yet, do that before
+            // requesting foreground location permission.
             if (!hasShownJustification) {
                 Alerts(activity)
                     .backgroundLocationJustificationAlert { checkLocationPermissions(activity, onAllowed) }.show()
@@ -41,10 +41,6 @@ class PermissionHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
 
             permissions.addAll(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))

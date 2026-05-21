@@ -249,6 +249,10 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             )
         }
         binding.currentRecHeader.text = recordingStatusParts.joinToString(" · ")
+        binding.locationStatusChip.text = serviceConnection.service
+            ?.locationStatus
+            ?.displayText(requireContext())
+            ?: getString(R.string.location_status_waiting)
         binding.trackPointCountTv.text = resources.getQuantityString(
             R.plurals.point_count,
             trackPointCount,
@@ -337,6 +341,11 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     @Subscribe
     fun onRecordingIntervalUpdatedEvent(event: Events.RecordingIntervalUpdatedEvent) {
         updateUI(gpxId)
+    }
+
+    @Subscribe
+    fun onRecordingLocationStatusUpdatedEvent(event: Events.RecordingLocationStatusUpdatedEvent) {
+        updateUI(gpxId, shouldRedrawMap = false)
     }
 
     private fun requestServiceConnectionIfNeeded() {

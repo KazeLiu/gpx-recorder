@@ -34,15 +34,15 @@ import com.amap.api.maps.model.Marker
 import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.maps.model.PolylineOptions
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
 import com.iboism.gpxrecorder.model.TrackPoint
+import com.iboism.gpxrecorder.recording.location.AmapRecordingLocationProvider
 import com.iboism.gpxrecorder.settings.ThemePreference
+import com.iboism.gpxrecorder.util.AmapCoordinateConverter
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import com.iboism.gpxrecorder.util.DP
 import kotlin.math.abs
@@ -453,25 +453,23 @@ internal class AmapRouteMapController(
             return
         }
 
-        LocationServices.getFusedLocationProviderClient(mapView.context)
-            .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-            .addOnSuccessListener { location ->
-                if (location == null || location.isZeroCoordinate()) {
+        AmapRecordingLocationProvider(mapView.context.applicationContext).requestCurrentLocation(
+            onLocation = { location ->
+                if (location.lat == 0.0 && location.lon == 0.0) {
                     moveCameraToLastLocation()
-                    return@addOnSuccessListener
+                    return@requestCurrentLocation
                 }
 
-                LastLocation.put(lat = location.latitude, lon = location.longitude)
+                LastLocation.put(lat = location.lat, lon = location.lon)
                 map?.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
-                        toAmapLatLng(location.latitude, location.longitude),
+                        toAmapLatLng(location.lat, location.lon),
                         17f
                     )
                 )
-            }
-            .addOnFailureListener {
-                moveCameraToLastLocation()
-            }
+            },
+            onStatusChanged = {}
+        )
     }
 
     private fun moveCameraToLastLocation() {
@@ -482,10 +480,6 @@ internal class AmapRouteMapController(
                 17f
             )
         )
-    }
-
-    private fun android.location.Location.isZeroCoordinate(): Boolean {
-        return latitude == 0.0 && longitude == 0.0
     }
 
     private fun normalMapType(): Int {

@@ -3,6 +3,10 @@
         <item quantity="one">%1$d point</item>
         <item quantity="other">%1$d points</item>
     </plurals>
+    <plurals name="satellite_count">
+        <item quantity="one">%1$d sat</item>
+        <item quantity="other">%1$d sats</item>
+    </plurals>
 
     <string name="app_name" translatable="false">迹录</string>
     <string name="google_maps_key" translatable="false"></string>
@@ -26,8 +30,8 @@
 
     <string name="add_title_hint">Add title…</string>
     <string name="append_track_point">Append Point</string>
-    <string name="background_location_justification_desc">This app collects location data to enable the route recorder function even when the app is closed or not in use. The app will attempt to show a notification whenever collecting data but it may not appear depending on the notification preferences on your device.\n\n Your location will ONLY be collected while you are recording a route.</string>
-    <string name="background_location_justification_title">Background Location Access</string>
+    <string name="background_location_justification_desc">This app collects location data to record your route. The app will show a notification while recording.\n\nYour location will ONLY be collected while you are recording a route.</string>
+    <string name="background_location_justification_title">Location Access</string>
     <string name="background_permission_title">Allow all the time</string>
     <string name="battery_drain_warning">Intervals shorter than 1 minute may cause battery drain</string>
     <string name="calculating_placeholder">calculating..</string>
@@ -137,6 +141,24 @@
     <string name="map_provider">Map service</string>
     <string name="map_provider_google">Google Maps</string>
     <string name="map_provider_amap">Amap</string>
+    <string name="location_status_waiting">Waiting for location</string>
+    <string name="location_status_accuracy">%1$dm</string>
+    <string name="location_status_error">%1$s · %2$s</string>
+    <string name="location_provider_google">Google</string>
+    <string name="location_provider_amap">Amap</string>
+    <string name="location_method_waiting">Locating</string>
+    <string name="location_method_fused">Fused</string>
+    <string name="location_method_gps">GNSS</string>
+    <string name="location_method_wifi">Wi-Fi</string>
+    <string name="location_method_cell">Cell</string>
+    <string name="location_method_network">Network</string>
+    <string name="location_method_cache">Cache</string>
+    <string name="location_method_amap_network">Amap network</string>
+    <string name="location_method_unknown">Unknown</string>
+    <string name="location_signal_strong">Strong</string>
+    <string name="location_signal_medium">Medium</string>
+    <string name="location_signal_weak">Weak</string>
+    <string name="location_signal_unknown">Signal unknown</string>
     <string name="back">Back</string>
 
 </resources>

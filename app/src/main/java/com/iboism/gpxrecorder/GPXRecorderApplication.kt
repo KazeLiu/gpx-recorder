@@ -3,6 +3,8 @@ package com.iboism.gpxrecorder
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.maps.MapsInitializer
 import com.getkeepsafe.relinker.MissingLibraryException
 import com.iboism.gpxrecorder.extensions.setRealmInitFailure
 import com.iboism.gpxrecorder.model.Schema
@@ -20,6 +22,7 @@ class GPXRecorderApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         ThemePreference.applyStored(this)
+        initializeAmap()
 
         try {
             initializeRealm()
@@ -31,6 +34,16 @@ class GPXRecorderApplication: Application() {
         }
 
         createNotificationChannel()
+    }
+
+    private fun initializeAmap() {
+        val apiKey = getString(R.string.amap_api_key)
+        MapsInitializer.updatePrivacyShow(applicationContext, true, true)
+        MapsInitializer.updatePrivacyAgree(applicationContext, true)
+        MapsInitializer.setApiKey(apiKey)
+        AMapLocationClient.updatePrivacyShow(applicationContext, true, true)
+        AMapLocationClient.updatePrivacyAgree(applicationContext, true)
+        AMapLocationClient.setApiKey(apiKey)
     }
 
     private fun initializeRealm() {

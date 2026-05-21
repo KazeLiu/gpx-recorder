@@ -16,6 +16,9 @@ import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.extensions.hideSoftKeyBoard
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.RecordingConfiguration
+import com.iboism.gpxrecorder.recording.location.AmapRecordingLocationProvider
+import com.iboism.gpxrecorder.settings.MapProvider
+import com.iboism.gpxrecorder.settings.MapProviderPreference
 import com.iboism.gpxrecorder.util.PermissionHelper
 import com.iboism.gpxrecorder.util.circularRevealOnNextLayout
 import com.iboism.gpxrecorder.util.toReadableString
@@ -89,14 +92,25 @@ class RecordingConfiguratorModal : Fragment() {
     @SuppressLint("MissingPermission")
     private fun cacheLastLocation() {
         PermissionHelper.checkLocationPermissions(requireActivity()) {
-            LocationServices
-                .getFusedLocationProviderClient(requireActivity())
-                .lastLocation
-                .addOnSuccessListener { loc ->
-                    loc?.let {
-                        LastLocation.put(lat = it.latitude, lon = it.longitude)
-                    }
+            when (MapProviderPreference.getProvider(requireContext())) {
+                MapProvider.Google -> {
+                    LocationServices
+                        .getFusedLocationProviderClient(requireActivity())
+                        .lastLocation
+                        .addOnSuccessListener { loc ->
+                            loc?.let {
+                                LastLocation.put(lat = it.latitude, lon = it.longitude)
+                            }
+                        }
                 }
+                MapProvider.Amap -> {
+                    AmapRecordingLocationProvider(requireContext().applicationContext)
+                        .requestCurrentLocation(
+                            onLocation = { LastLocation.put(lat = it.lat, lon = it.lon) },
+                            onStatusChanged = {}
+                        )
+                }
+            }
         }
     }
 

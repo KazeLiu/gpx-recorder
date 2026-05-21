@@ -3,6 +3,9 @@
     <plurals name="point_count">
         <item quantity="other">%1$d 个轨迹点</item>
     </plurals>
+    <plurals name="satellite_count">
+        <item quantity="other">%1$d 星</item>
+    </plurals>
 
     <!-- Alert stuff -->
     <string name="action_settings">设置</string>
@@ -18,8 +21,8 @@
     <string name="add_note_hint">添加备注…</string>
     <string name="add_title_hint">添加标题…</string>
     <string name="append_track_point">追加坐标点</string>
-    <string name="background_location_justification_desc">此应用会收集位置数据，以便在应用关闭或未使用时也能记录路线。应用会在收集数据时尝试显示通知，但是否显示取决于您设备上的通知偏好设置。\n\n您的位置只会在您正在记录路线时被收集。</string>
-    <string name="background_location_justification_title">后台位置访问权限</string>
+    <string name="background_location_justification_desc">此应用会收集位置数据以记录您的路线。记录期间，应用会显示通知。\n\n您的位置只会在您正在记录路线时被收集。</string>
+    <string name="background_location_justification_title">位置访问权限</string>
     <string name="background_permission_title">始终允许</string>
     <string name="battery_drain_warning">小于 1 分钟的间隔可能增加耗电</string>
     <string name="calculating_placeholder">正在计算..</string>
@@ -126,5 +129,23 @@
     <string name="map_provider">地图服务</string>
     <string name="map_provider_google">Google 地图</string>
     <string name="map_provider_amap">高德地图</string>
+    <string name="location_status_waiting">等待定位</string>
+    <string name="location_status_accuracy">精度 %1$dm</string>
+    <string name="location_status_error">%1$s · %2$s</string>
+    <string name="location_provider_google">Google</string>
+    <string name="location_provider_amap">高德</string>
+    <string name="location_method_waiting">定位中</string>
+    <string name="location_method_fused">融合定位</string>
+    <string name="location_method_gps">卫星定位</string>
+    <string name="location_method_wifi">Wi-Fi 定位</string>
+    <string name="location_method_cell">基站定位</string>
+    <string name="location_method_network">网络定位</string>
+    <string name="location_method_cache">缓存定位</string>
+    <string name="location_method_amap_network">高德网络定位</string>
+    <string name="location_method_unknown">未知定位</string>
+    <string name="location_signal_strong">信号强</string>
+    <string name="location_signal_medium">信号中</string>
+    <string name="location_signal_weak">信号弱</string>
+    <string name="location_signal_unknown">信号未知</string>
     <string name="back">返回</string>
 </resources>

@@ -1,10 +1,10 @@
-package com.iboism.gpxrecorder.records.details
+package com.iboism.gpxrecorder.util
 
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-internal object AmapCoordinateConverter {
+object AmapCoordinateConverter {
     private const val A = 6378245.0
     private const val EE = 0.00669342162296594323
 

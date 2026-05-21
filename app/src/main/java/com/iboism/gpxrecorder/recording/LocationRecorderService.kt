@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
@@ -14,10 +13,6 @@ import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.iboism.gpxrecorder.Events
 import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.MainActivity
@@ -26,6 +21,14 @@ import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.RecordingConfiguration
 import com.iboism.gpxrecorder.model.TrackPoint
+import com.iboism.gpxrecorder.recording.location.AmapRecordingLocationProvider
+import com.iboism.gpxrecorder.recording.location.GoogleRecordingLocationProvider
+import com.iboism.gpxrecorder.recording.location.LocationProviderName
+import com.iboism.gpxrecorder.recording.location.RecordingLocation
+import com.iboism.gpxrecorder.recording.location.RecordingLocationProvider
+import com.iboism.gpxrecorder.recording.location.RecordingLocationStatus
+import com.iboism.gpxrecorder.settings.MapProvider
+import com.iboism.gpxrecorder.settings.MapProviderPreference
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
@@ -52,21 +55,13 @@ class LocationRecorderService : Service() {
     private var config = RecordingConfiguration()
     private var notificationHelper: RecordingNotification? = null
     private var lastTrackPointElapsedRealtimeMillis: Long = SystemClock.elapsedRealtime()
+    private var locationProvider: RecordingLocationProvider? = null
+
+    var locationStatus: RecordingLocationStatus = RecordingLocationStatus.waiting(LocationProviderName.Amap)
+        private set
 
     private val notificationManager: NotificationManager
         get() = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-    private val fusedLocation by lazy {
-        LocationServices.getFusedLocationProviderClient(this@LocationRecorderService)
-    }
-
-    private val locationCallback by lazy {
-        object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                onLocationChanged(locationResult.lastLocation)
-            }
-        }
-    }
 
     override fun onTimeout(startId: Int, serviceType: Int) {
         val intentFlags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -88,7 +83,8 @@ class LocationRecorderService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        fusedLocation.removeLocationUpdates(locationCallback)
+        locationProvider?.destroy()
+        locationProvider = null
         Realm.getDefaultConfiguration()?.let{ Realm.compactRealm(it) }
         stopForeground(STOP_FOREGROUND_REMOVE)
     }
@@ -121,7 +117,7 @@ class LocationRecorderService : Service() {
         isPaused = true
         EventBus.getDefault().post(Events.RecordingPausedEvent(gpxId))
         notificationManager.notify(NOTIFICATION_ID, notificationHelper.setPaused(true).notification())
-        fusedLocation.removeLocationUpdates(locationCallback)
+        locationProvider?.stop()
     }
 
     @SuppressLint("MissingPermission")
@@ -130,18 +126,18 @@ class LocationRecorderService : Service() {
         val gpxId = gpxId ?: return
         isPaused = false
         EventBus.getDefault().post(Events.RecordingResumedEvent(gpxId))
-        notificationManager.notify(NOTIFICATION_ID, notificationHelper.setPaused(false).notification())
-        fusedLocation.requestLocationUpdates(config.locationRequest(),
-            locationCallback,
-            mainLooper)
+        val notification = notificationHelper.setPaused(false).notification()
+        notificationManager.notify(NOTIFICATION_ID, notification)
+        startLocationUpdates(notification)
     }
 
     @SuppressLint("MissingPermission")
     fun appendCurrentTrackPoint() {
         if (isPaused) return
-        fusedLocation
-            .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-            .addOnSuccessListener { onLocationChanged(it) }
+        locationProvider?.requestCurrentLocation(
+            onLocation = ::onLocationChanged,
+            onStatusChanged = ::onLocationStatusChanged
+        )
     }
 
     @SuppressLint("MissingPermission")
@@ -156,12 +152,7 @@ class LocationRecorderService : Service() {
 
         if (isPaused) return
         appendCurrentTrackPoint()
-        fusedLocation.removeLocationUpdates(locationCallback)
-        fusedLocation.requestLocationUpdates(
-            config.locationRequest(),
-            locationCallback,
-            mainLooper
-        )
+        notificationHelper?.notification()?.let(::startLocationUpdates)
     }
 
     @SuppressLint("MissingPermission")
@@ -182,27 +173,47 @@ class LocationRecorderService : Service() {
         } ?: RecordingConfiguration()
         resetNextTrackPointCountdown()
 
-        fusedLocation.requestLocationUpdates(
-            config.locationRequest(),
-            locationCallback,
-            mainLooper
+        selectLocationProvider()
+        startLocationUpdates(notification)
+    }
+
+    private fun selectLocationProvider() {
+        locationProvider?.destroy()
+        locationProvider = when (MapProviderPreference.getProvider(applicationContext)) {
+            MapProvider.Google -> GoogleRecordingLocationProvider(applicationContext)
+            MapProvider.Amap -> AmapRecordingLocationProvider(applicationContext)
+        }
+        locationStatus = locationProvider?.status ?: RecordingLocationStatus.waiting(LocationProviderName.Amap)
+    }
+
+    private fun startLocationUpdates(notification: android.app.Notification) {
+        if (locationProvider == null) selectLocationProvider()
+        locationProvider?.start(
+            config = config,
+            notificationId = NOTIFICATION_ID,
+            notification = notification,
+            onLocation = ::onLocationChanged,
+            onStatusChanged = ::onLocationStatusChanged
         )
     }
 
-    private fun onLocationChanged(location: Location?) {
+    private fun onLocationStatusChanged(status: RecordingLocationStatus) {
+        locationStatus = status
+        EventBus.getDefault().post(Events.RecordingLocationStatusUpdatedEvent(gpxId))
+    }
+
+    private fun onLocationChanged(location: RecordingLocation?) {
         location?.let { loc ->
-            if (loc.accuracy > 40) return
-            LastLocation.put(lat = loc.latitude, lon = loc.longitude)
+            val accuracy = loc.status.accuracyMeters
+            if (accuracy != null && accuracy > 40) return
+            LastLocation.put(lat = loc.lat, lon = loc.lon)
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction { r ->
-                val locAgeNanos = SystemClock.elapsedRealtimeNanos() - loc.elapsedRealtimeNanos
-                val locInstant = Date().toInstant().minusNanos(locAgeNanos)
-
                 val point = TrackPoint(
-                    lat = loc.latitude,
-                    lon = loc.longitude,
-                    ele = loc.altitude,
-                    time = DateTimeFormatHelper.formatDate(Date.from(locInstant))
+                    lat = loc.lat,
+                    lon = loc.lon,
+                    ele = loc.ele,
+                    time = DateTimeFormatHelper.formatDate(loc.time)
                 )
                 r.copyToRealm(point)
                 GpxContent.withId(gpxId, r)?.let { gpx ->
