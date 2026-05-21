@@ -38,6 +38,21 @@ class RecordingConfiguratorModal : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.config_dialog, container, false)?.apply {
+            val titleView = findViewById<View>(R.id.title)
+            val titleInitialPaddingTop = titleView.paddingTop
+            ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                val extraTopPadding = resources.getDimensionPixelSize(R.dimen.status_bar_content_extra_padding)
+                titleView.setPadding(
+                    titleView.paddingLeft,
+                    titleInitialPaddingTop + systemBars.top + extraTopPadding,
+                    titleView.paddingRight,
+                    titleView.paddingBottom
+                )
+                view.setPadding(view.paddingLeft, 0, view.paddingRight, systemBars.bottom)
+                insets
+            }
+
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val initialInterval = prefs.getLong(RecordingConfiguration.intervalKey, RecordingConfiguration.REQUEST_INTERVAL)
             val readOnlyTitle = arguments?.getString(READ_ONLY_TITLE_KEY)

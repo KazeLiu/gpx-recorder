@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
@@ -14,6 +16,28 @@ class SettingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        val titleInitialPaddingTop = binding.settingsTitle.paddingTop
+        val backInitialPaddingTop = binding.backButton.paddingTop
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.settingsRoot) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val topClearance = systemBars.top + resources.getDimensionPixelSize(R.dimen.status_bar_content_extra_padding)
+            binding.settingsTitle.setPadding(
+                binding.settingsTitle.paddingLeft,
+                titleInitialPaddingTop + topClearance,
+                binding.settingsTitle.paddingRight,
+                binding.settingsTitle.paddingBottom
+            )
+            binding.backButton.setPadding(
+                binding.backButton.paddingLeft,
+                backInitialPaddingTop + topClearance,
+                binding.backButton.paddingRight,
+                binding.backButton.paddingBottom
+            )
+            view.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
+
         return binding.root
     }
 

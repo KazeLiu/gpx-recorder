@@ -2,11 +2,14 @@ package com.iboism.gpxrecorder
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.extensions.getRealmInitFailure
 import com.iboism.gpxrecorder.model.GpxContent
@@ -30,16 +33,16 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemePreference.applyStored(this)
         LocalePreference.applyStored(this)
-        enableEdgeToEdge()
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        applySystemBarAppearance()
         
-        // Handle window insets for edge-to-edge
+        // Let fragment backgrounds draw behind the transparent status bar.
         val mainLayout = findViewById<android.view.View>(R.id.content_container)
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Only apply top, left, and right padding - let specific UI components handle bottom insets as needed
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            view.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
 
@@ -86,6 +89,16 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
             intent.extras?.remove(Keys.GpxId)
             handleOpenRecordingIntent(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applySystemBarAppearance()
+    }
+
+    private fun applySystemBarAppearance() {
+        window.statusBarColor = Color.TRANSPARENT
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
     }
 
     private fun handleOpenRecordingIntent(gpxId: Long) {

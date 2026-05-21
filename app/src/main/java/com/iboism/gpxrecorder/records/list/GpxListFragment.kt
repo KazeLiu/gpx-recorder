@@ -147,10 +147,46 @@ class GpxListFragment : Fragment(), RecorderServiceConnection.OnServiceConnected
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentRouteListBinding.inflate(inflater, container, false)
+        val titleInitialPaddingTop = binding.gpxNavTitle.paddingTop
+        val exportInitialPaddingTop = binding.exportButton.paddingTop
+        val cancelInitialPaddingTop = binding.cancelButton.paddingTop
+        val selectAllInitialPaddingTop = binding.selectAllButton.paddingTop
+        val overflowInitialPaddingTop = binding.listNavOverflowButton.paddingTop
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val topClearance = systemBars.top + resources.getDimensionPixelSize(R.dimen.status_bar_content_extra_padding)
             view.setPadding(0, 0, 0, systemBars.bottom)
+            binding.gpxNavTitle.setPadding(
+                binding.gpxNavTitle.paddingLeft,
+                titleInitialPaddingTop + topClearance,
+                binding.gpxNavTitle.paddingRight,
+                binding.gpxNavTitle.paddingBottom
+            )
+            binding.exportButton.setPadding(
+                binding.exportButton.paddingLeft,
+                exportInitialPaddingTop + topClearance,
+                binding.exportButton.paddingRight,
+                binding.exportButton.paddingBottom
+            )
+            binding.cancelButton.setPadding(
+                binding.cancelButton.paddingLeft,
+                cancelInitialPaddingTop + topClearance,
+                binding.cancelButton.paddingRight,
+                binding.cancelButton.paddingBottom
+            )
+            binding.selectAllButton.setPadding(
+                binding.selectAllButton.paddingLeft,
+                selectAllInitialPaddingTop + topClearance,
+                binding.selectAllButton.paddingRight,
+                binding.selectAllButton.paddingBottom
+            )
+            binding.listNavOverflowButton.setPadding(
+                binding.listNavOverflowButton.paddingLeft,
+                overflowInitialPaddingTop + topClearance,
+                binding.listNavOverflowButton.paddingRight,
+                binding.listNavOverflowButton.paddingBottom
+            )
             insets
         }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -71,10 +72,29 @@ class GpxDetailsFragment : Fragment(), TrackPointEditingDelegate {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentRouteDetailsBinding.inflate(layoutInflater, container, false)
+        val titleInitialTopMargin = (binding.titleEt.layoutParams as MarginLayoutParams).topMargin
+        val resumeInitialPaddingTop = binding.resumeBtn.paddingTop
+        val moreInitialPaddingTop = binding.moreBtn.paddingTop
 
         // Handle bottom insets for this fragment's content
         ViewCompat.setOnApplyWindowInsetsListener(binding.detailRoot) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val topClearance = systemBars.top + resources.getDimensionPixelSize(R.dimen.status_bar_content_extra_padding)
+            val titleLayoutParams = binding.titleEt.layoutParams as MarginLayoutParams
+            titleLayoutParams.topMargin = titleInitialTopMargin + topClearance
+            binding.titleEt.layoutParams = titleLayoutParams
+            binding.resumeBtn.setPadding(
+                binding.resumeBtn.paddingLeft,
+                resumeInitialPaddingTop + topClearance,
+                binding.resumeBtn.paddingRight,
+                binding.resumeBtn.paddingBottom
+            )
+            binding.moreBtn.setPadding(
+                binding.moreBtn.paddingLeft,
+                moreInitialPaddingTop + topClearance,
+                binding.moreBtn.paddingRight,
+                binding.moreBtn.paddingBottom
+            )
             // Apply bottom padding to ensure FABs and RecyclerView content aren't hidden
             view.setPadding(0, 0, 0, systemBars.bottom)
             insets

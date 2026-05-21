@@ -9,14 +9,15 @@
     <color name="track_point_drag_color">@color/md_primary</color>
     <color name="track_point_insert_color">@color/md_secondary</color>
     <color name="track_point_icon_on_color">@color/md_onSecondary</color>
-    <color name="nav_bar_surface">@color/md_primary</color>
+    <color name="location_status_chip_surface">#E0151216</color>
+    <color name="nav_bar_surface">@color/md_primaryContainer</color>
     <color name="on_nav_bar_surface">@color/md_onPrimary</color>
     <color name="on_nav_bar_surface_secondary">@color/md_primaryContainer</color>
     <color name="large_button_surface">@color/md_primary</color>
     <color name="on_large_button_surface">@color/md_onPrimary</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="seed">#FB7299</color>
-    <color name="md_primary">#FB7299</color>
+    <color name="seed">#B83A61</color>
+    <color name="md_primary">#B83A61</color>
     <color name="md_onPrimary">#FFFFFF</color>
     <color name="md_primaryContainer">#5E1431</color>
     <color name="md_onPrimaryContainer">#FFD9E4</color>
@@ -45,7 +46,7 @@
     <color name="md_shadow">#000000</color>
     <color name="md_inverseSurface">#F2DEE6</color>
     <color name="md_inverseOnSurface">#332A2F</color>
-    <color name="md_inversePrimary">#FB7299</color>
-    <color name="md_surfaceTint">#FB7299</color>
-    <color name="md_surfaceTintColor">#FB7299</color>
+    <color name="md_inversePrimary">#B83A61</color>
+    <color name="md_surfaceTint">#B83A61</color>
+    <color name="md_surfaceTintColor">#B83A61</color>
 </resources>

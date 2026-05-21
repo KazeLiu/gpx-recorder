@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -47,6 +49,28 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentActiveRouteDetailsBinding.inflate(layoutInflater, container, false)
+        val headerInitialPaddingTop = binding.currentRecHeader.paddingTop
+        val moreInitialPaddingTop = binding.moreBtn.paddingTop
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val topClearance = systemBars.top + resources.getDimensionPixelSize(R.dimen.status_bar_content_extra_padding)
+            binding.currentRecHeader.setPadding(
+                binding.currentRecHeader.paddingLeft,
+                headerInitialPaddingTop + topClearance,
+                binding.currentRecHeader.paddingRight,
+                binding.currentRecHeader.paddingBottom
+            )
+            binding.moreBtn.setPadding(
+                binding.moreBtn.paddingLeft,
+                moreInitialPaddingTop + topClearance,
+                binding.moreBtn.paddingRight,
+                binding.moreBtn.paddingBottom
+            )
+            view.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
+
         return binding.root
     }
 

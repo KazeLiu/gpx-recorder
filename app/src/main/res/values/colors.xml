@@ -9,6 +9,7 @@
     <color name="track_point_drag_color">@color/md_primary</color>
     <color name="track_point_insert_color">@color/md_secondary</color>
     <color name="track_point_icon_on_color">@color/md_onSecondary</color>
+    <color name="location_status_chip_surface">#EAFDFDFD</color>
     <color name="nav_bar_surface">@color/md_primary</color>
     <color name="on_nav_bar_surface">@color/md_onPrimary</color>
     <color name="on_nav_bar_surface_secondary">@color/md_primaryContainer</color>

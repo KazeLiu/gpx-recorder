@@ -13,4 +13,5 @@
     <dimen name="md3_card_vertical_margin">8dp</dimen>
     <dimen name="md3_large_button_height">64dp</dimen>
     <dimen name="md3_touch_target">48dp</dimen>
+    <dimen name="status_bar_content_extra_padding">8dp</dimen>
 </resources>
