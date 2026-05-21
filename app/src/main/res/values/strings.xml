@@ -4,7 +4,7 @@
         <item quantity="other">%1$d points</item>
     </plurals>
 
-    <string name="app_name" translatable="false">GPX Recorder</string>
+    <string name="app_name" translatable="false">迹录</string>
     <string name="google_maps_key" translatable="false"></string>
 
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
@@ -49,7 +49,7 @@
     <string name="error">Error</string>
     <string name="expand">Expand</string>
     <string name="github" translatable="false">Github</string>
-    <string name="gpx_recorder" translatable="false">GPX Recorder</string>
+    <string name="gpx_recorder" translatable="false">迹录</string>
     <string name="how_often_to_record_track_points">How often to record track points. (Approximately)</string>
     <string name="init_error_message">Please check application file permissions and try again.   Note: This app doesn\'t support rooted devices and must be installed from the Google Play Store.  If this problem persists, contact the developer.</string>
     <string name="init_error_title">Failed to Initialize Local Database</string>
@@ -58,7 +58,7 @@
     <string name="new_recording">New Recording</string>
     <string name="notification_recording_in_progress">Location recording in progress</string>
     <string name="notification_recording_paused">Location recording paused</string>
-    <string name="notification_title" translatable="false">GPX Recorder</string>
+    <string name="notification_title" translatable="false">迹录</string>
     <string name="okay">Okay</string>
     <string name="open_source_license_info">Open Source License Info</string>
     <string name="pause_recording">Pause</string>

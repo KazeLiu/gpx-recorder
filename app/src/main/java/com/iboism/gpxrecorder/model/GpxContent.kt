@@ -22,7 +22,7 @@ open class GpxContent(
 
     override fun getXmlString(): String {
         val titleXml = "<name>$title</name>"
-        val descXml = "<desc>Recorded with GPX Recorder for Android</desc>"
+        val descXml = "<desc>Recorded with 迹录 for Android</desc>"
         val metaDataXml = "<metadata>$titleXml$descXml</metadata>"
         val contentXml = listOf(trackList)
             .flatten()
