@@ -10,7 +10,6 @@ import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.MainActivity
 import com.iboism.gpxrecorder.R
-import com.iboism.gpxrecorder.recording.waypoint.CreateWaypointDialogActivity
 
 /**
  * Created by bradpatras on 12/13/17.
@@ -25,9 +24,6 @@ class RecordingNotification(val context: Context, val id: Long) {
 
     private val openAppIntent = Intent(context, MainActivity::class.java).putExtra(Keys.GpxId, id)
     private val openAppPendingIntent = PendingIntent.getActivity(context, id.toInt(), openAppIntent, intentFlags)
-
-    private val setWaypointIntent = Intent(context, CreateWaypointDialogActivity::class.java).putExtra(Keys.GpxId, id)
-    private val setWaypointPendingIntent = PendingIntent.getActivity(context, id.toInt(), setWaypointIntent, intentFlags)
 
     private val pauseRecordingIntent = LocationRecorderService.createPauseRecordingIntent(context)
     private val pauseRecordingPendingIntent = PendingIntent.getService(context, 2, pauseRecordingIntent, intentFlags)
@@ -48,7 +44,6 @@ class RecordingNotification(val context: Context, val id: Long) {
             .setForegroundServiceBehavior(FOREGROUND_SERVICE_IMMEDIATE)
             .setSmallIcon(R.drawable.ic_gpx_notification)
             .setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_recording_in_progress)))
-            .addAction(R.drawable.ic_add_location, context.getString(R.string.add_waypoint), setWaypointPendingIntent)
             .addAction(R.drawable.ic_cancel, context.getString(R.string.stop_recording), stopRecordingPendingIntent)
 
         if (isPaused) {

@@ -3,15 +3,15 @@ package com.iboism.gpxrecorder.recording
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.Events
 import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.R
@@ -60,21 +60,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.stopBtn.setOnClickListener(this::stopButtonClicked)
         binding.trackPointCountTv.setOnClickListener(this::trackPointCountClicked)
 
-        val moreMenu = PopupMenu(binding.root.context, binding.moreBtn)
-        val mapToggleMenuItem: MenuItem = moreMenu.menu.add(R.string.toggle_map_type)
-        val updateIntervalMenuItem: MenuItem = moreMenu.menu.add(R.string.update_recording_interval)
-
-        moreMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem) {
-                mapToggleMenuItem -> mapController?.toggleMapType()
-                updateIntervalMenuItem -> showUpdateIntervalDialog()
-                else -> return@setOnMenuItemClickListener false
-            }
-
-            return@setOnMenuItemClickListener true
-        }
-
-        binding.moreBtn.setOnClickListener { moreMenu.show() }
+        binding.moreBtn.setOnClickListener { showMoreMenu() }
 
         updateUI(gpxId)
 
@@ -105,12 +91,29 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
 
     private fun stopButtonClicked(view: View) {
         val context = context ?: return
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
             .setTitle(R.string.stop_recording_confirm_title)
             .setMessage(R.string.stop_recording_confirm_message)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.stop_recording) { _, _ ->
                 LocationRecorderService.requestStopRecording(context)
+            }
+            .show()
+    }
+
+    private fun showMoreMenu() {
+        val context = context ?: return
+        val items = arrayOf(
+            getString(R.string.toggle_map_type),
+            getString(R.string.update_recording_interval)
+        )
+
+        MaterialAlertDialogBuilder(context)
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> mapController?.toggleMapType()
+                    1 -> showUpdateIntervalDialog()
+                }
             }
             .show()
     }
@@ -132,7 +135,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             formatDurationShort(Date().time - it.time)
         } ?: getString(R.string.unknown_recording_duration)
 
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
             .setTitle(R.string.recording_info_title)
             .setMessage(getString(R.string.recording_info_message, durationText, startTimeText))
             .setPositiveButton(android.R.string.ok, null)
@@ -143,6 +146,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         val context = context ?: return
         val dialogView = LayoutInflater.from(context).inflate(R.layout.config_dialog, null)
         dialogView.findViewById<View>(R.id.config_title_editText).visibility = View.GONE
+        dialogView.findViewById<View>(R.id.config_title_input_layout).visibility = View.GONE
 
         val configuratorView = RecordingConfiguratorView(
             dialogView,
@@ -153,7 +157,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         )
         configuratorView.doneButton.visibility = View.GONE
 
-        val dialog = AlertDialog.Builder(context)
+        val dialog = MaterialAlertDialogBuilder(context)
             .setView(dialogView)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.update_recording_interval, null)
@@ -253,9 +257,27 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.routeTitleTv.text = routeTitle
         val pauseResumeString = if (isPaused) R.string.resume_recording else R.string.pause_recording
         binding.playpauseBtn.setText(pauseResumeString)
+        binding.playpauseBtn.setIconResource(if (isPaused) R.drawable.ic_play else R.drawable.ic_pause)
+        updateRecordingHeaderStyle(isPaused)
         if (shouldRedrawMap) {
             mapController?.redraw()
         }
+    }
+
+    private fun updateRecordingHeaderStyle(isPaused: Boolean) {
+        val headerBackgroundColor = ContextCompat.getColor(
+            requireContext(),
+            if (isPaused) R.color.md_errorContainer else R.color.nav_bar_surface
+        )
+        val headerContentColor = ContextCompat.getColor(
+            requireContext(),
+            if (isPaused) R.color.md_onErrorContainer else R.color.on_nav_bar_surface
+        )
+
+        binding.recordingHeaderBackground.setBackgroundColor(headerBackgroundColor)
+        binding.currentRecHeader.setTextColor(headerContentColor)
+        binding.routeTitleTv.setTextColor(headerContentColor)
+        binding.moreBtn.setColorFilter(headerContentColor)
     }
 
     private fun formatDurationShort(durationMillis: Long): String {

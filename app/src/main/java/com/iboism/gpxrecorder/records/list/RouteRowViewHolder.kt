@@ -9,6 +9,6 @@ class RouteRowViewHolder(binding: ListRowRouteBinding): RecyclerView.ViewHolder(
     val titleView = binding.gpxContentTitle
     val dateView = binding.gpxContentDate
     val distanceView = binding.gpxContentDistance
-    val waypointCountView = binding.gpxContentWaypointCount
+    val trackPointCountView = binding.gpxContentTrackPointCount
     val checkbox = binding.checkBox
 }

@@ -45,8 +45,6 @@
             android:foregroundServiceType="location"
             />
 
-        <receiver android:name=".recording.waypoint.CreateWaypointService"/>
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -74,22 +72,13 @@
         </provider>
 
         <activity
-            android:name=".recording.waypoint.CreateWaypointDialogActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="${applicationId}.addWaypoint"
-            android:theme="@style/Theme.MaterialComponents.NoActionBarDialog"
-            android:exported="true">
-        </activity>
-
-        <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:theme="@style/Theme.GpxRecorder.ExternalActionBar"
             />
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:theme="@style/Theme.GpxRecorder.ExternalActionBar"
             />
     </application>
 </manifest>

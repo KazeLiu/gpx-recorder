@@ -3,7 +3,6 @@ package com.iboism.gpxrecorder.recording.configurator
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.NumberPicker
 import android.widget.TextView
 import com.iboism.gpxrecorder.R
 
@@ -20,9 +19,7 @@ class RecordingConfiguratorView(
     val titleEditText: EditText = root.findViewById(R.id.config_title_editText),
     val doneButton: TextView = root.findViewById(R.id.start_button),
     private val screenTitle: TextView = root.findViewById(R.id.title),
-    private val hoursPicker: NumberPicker = root.findViewById(R.id.interval_hours_picker),
-    private val minutesPicker: NumberPicker = root.findViewById(R.id.interval_minutes_picker),
-    private val secondsPicker: NumberPicker = root.findViewById(R.id.interval_seconds_picker),
+    private val intervalPicker: Md3DurationWheelPicker = root.findViewById(R.id.interval_picker),
     val routeTitle: String? = null,
     val isTitleEditable: Boolean = true,
     val isResumingRoute: Boolean = false,
@@ -31,16 +28,6 @@ class RecordingConfiguratorView(
 ) {
 
     init {
-        hoursPicker.minValue = 0
-        hoursPicker.maxValue = 12
-        hoursPicker.wrapSelectorWheel = true
-        minutesPicker.minValue = 0
-        minutesPicker.maxValue = 59
-        minutesPicker.wrapSelectorWheel = true
-        secondsPicker.minValue = 0
-        secondsPicker.maxValue = 59
-        secondsPicker.wrapSelectorWheel = true
-
         routeTitle?.let {
             titleEditText.setText(it)
         }
@@ -79,16 +66,13 @@ class RecordingConfiguratorView(
     }
 
     fun getIntervalMillis(): Long {
-        return (hoursPicker.value * 3600000L) + (minutesPicker.value * 60000L) + (secondsPicker.value * 1000L)
+        return intervalPicker.getIntervalMillis()
     }
 
     private fun setInterval(intervalMillis: Long) {
-        val hours = intervalMillis / 3600000L
-        val minutes = (intervalMillis - (hours * 3600000L)) / 60000L
-        val seconds = (intervalMillis - (hours * 3600000L) - (minutes * 60000L)) / 1000L
-
-        hoursPicker.value = hours.toInt()
-        minutesPicker.value = minutes.toInt()
-        secondsPicker.value = seconds.toInt()
+        intervalPicker.setIntervalMillis(0L)
+        intervalPicker.post {
+            intervalPicker.setIntervalMillis(intervalMillis)
+        }
     }
 }

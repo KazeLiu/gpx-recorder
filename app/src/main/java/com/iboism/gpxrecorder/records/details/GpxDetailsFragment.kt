@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentRouteDetailsBinding
@@ -104,7 +104,7 @@ class GpxDetailsFragment : Fragment(), TrackPointEditingDelegate {
             distanceText = resources.getString(R.string.distance_km, distance),
             dateText24Hour = DateTimeFormatHelper.toReadableString24Hour(gpxContent.date),
             dateTextAmPm = DateTimeFormatHelper.toReadableStringAmPm(gpxContent.date),
-            waypointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
+            trackPointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         )
 
         realm.close()
@@ -192,7 +192,7 @@ class GpxDetailsFragment : Fragment(), TrackPointEditingDelegate {
             val distance = gpxContent.totalDistanceKm()
             val pointCount = gpxContent.trackPointCount()
             detailsView.setRouteStats(
-                waypointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount),
+                trackPointsText = resources.getQuantityString(R.plurals.point_count, pointCount, pointCount),
                 distanceText = resources.getString(R.string.distance_km, distance)
             )
         }
@@ -205,7 +205,7 @@ class GpxDetailsFragment : Fragment(), TrackPointEditingDelegate {
 
     override fun onTrackPointEditingUnsupported() {
         context?.let {
-            AlertDialog.Builder(it)
+            MaterialAlertDialogBuilder(it)
                 .setTitle(R.string.track_point_editing_unavailable_title)
                 .setMessage(R.string.track_point_editing_unavailable_message)
                 .setPositiveButton(R.string.okay, null)

@@ -24,7 +24,7 @@ open class GpxContent(
         val titleXml = "<name>$title</name>"
         val descXml = "<desc>Recorded with GPX Recorder for Android</desc>"
         val metaDataXml = "<metadata>$titleXml$descXml</metadata>"
-        val contentXml = listOf(waypointList, trackList)
+        val contentXml = listOf(trackList)
             .flatten()
             .asSequence()
             .filterIsInstance(XmlSerializable::class.java)
@@ -38,26 +38,6 @@ open class GpxContent(
         val map: HashMap<Any?, Any?> = HashMap()
         map["title"] = title
         map["type"] = "FeatureCollection"
-
-        val waypointsMapList = waypointList
-            .asIterable()
-            .map { waypoint ->
-                val waypointMap = HashMap<String, Any>()
-
-                val propertiesMap = HashMap<String, Any>()
-                propertiesMap["title"] = waypoint.title
-                propertiesMap["description"] = waypoint.desc
-
-                val geometryMap = HashMap<String, Any>()
-                geometryMap["type"] = "Point"
-                geometryMap["coordinates"] = arrayOf(waypoint.lon, waypoint.lat)
-
-                waypointMap["type"] = "Feature"
-                waypointMap["properties"] = propertiesMap
-                waypointMap["geometry"] = geometryMap
-
-                waypointMap
-            }
 
         val coordinates = trackList
             .flatMap { it.segments }
@@ -98,7 +78,7 @@ open class GpxContent(
                 pointMap
             }
 
-        map["features"] = listOf(linesMap) + trackPointNoteFeatures + waypointsMapList
+        map["features"] = listOf(linesMap) + trackPointNoteFeatures
         return JSONObject(map).toString()
     }
 

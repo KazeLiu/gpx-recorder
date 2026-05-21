@@ -3,7 +3,11 @@ package com.iboism.gpxrecorder.records.details
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,7 +19,6 @@ import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
-import androidx.appcompat.app.AlertDialog
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.amap.api.maps.AMap
@@ -33,12 +36,12 @@ import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.maps.model.PolylineOptions
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
 import com.iboism.gpxrecorder.model.TrackPoint
-import com.iboism.gpxrecorder.model.Waypoint
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import com.iboism.gpxrecorder.util.DP
 import kotlin.math.abs
@@ -71,6 +74,7 @@ internal class AmapRouteMapController(
     private val touchSlop = ViewConfiguration.get(container.context).scaledTouchSlop
     private var pendingManualDrag: PendingManualDrag? = null
     private var activeManualDrag: ActiveManualDrag? = null
+    private val editableTrackPointIconCache = mutableMapOf<Int, BitmapDescriptor>()
     private val trackPointMarkerIconSize: Pair<Int, Int> by lazy {
         val bitmap = bitmapFromVector(mapView.context, R.drawable.ic_draggable_track_point)
         (bitmap.width to bitmap.height).also { bitmap.recycle() }
@@ -171,7 +175,6 @@ internal class AmapRouteMapController(
 
     private fun AMap.drawContent(gpx: GpxContent, shouldCenter: Boolean) {
         val trackBounds = this.drawTracks(gpx.trackList.toList())
-        this.drawWaypoints(gpx.waypointList.toList())
 
         if (trackBounds != null && shouldCenter) {
             this.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 50))
@@ -238,19 +241,8 @@ internal class AmapRouteMapController(
         return if (allPoints.isNotEmpty()) boundsBuilder.build() else null
     }
 
-    private fun AMap.drawWaypoints(waypoints: List<Waypoint>) {
-        if (isTrackPointEditingEnabled) return
-        waypoints.forEach {
-            this.addMarker(MarkerOptions().position(toAmapLatLng(it.lat, it.lon))
-                .setFlat(true)
-                .title(it.title)
-                .snippet(it.desc)
-                .icon(getBitmapDescriptor(R.drawable.ic_waypoint_pt))
-                .anchor(.5f, .5f))
-        }
-    }
-
     private fun AMap.drawEditableTrackPointMarkers(tracks: List<Track>) {
+        var pointOrder = 1
         tracks.forEach { track ->
             track.segments.forEach { segment ->
                 segment.points.forEach { point ->
@@ -260,11 +252,12 @@ internal class AmapRouteMapController(
                             .setFlat(false)
                             .title(mapView.context.getString(R.string.track_point))
                             .snippet(point.note.ifBlank { DateTimeFormatHelper.toReadableString(point.time) })
-                            .icon(getBitmapDescriptor(R.drawable.ic_draggable_track_point))
+                            .icon(getNumberedTrackPointDescriptor(pointOrder))
                             .draggable(false)
                             .anchor(TRACK_POINT_IDLE_ANCHOR_U, TRACK_POINT_IDLE_ANCHOR_V)
                     )
                     marker.setObject(EditableMarker.TrackPoint(point.identifier))
+                    pointOrder += 1
                 }
             }
         }
@@ -412,7 +405,7 @@ internal class AmapRouteMapController(
             minLines = 3
         }
 
-        AlertDialog.Builder(mapView.context)
+        MaterialAlertDialogBuilder(mapView.context)
             .setTitle(R.string.edit_track_point)
             .setView(noteEditText)
             .setPositiveButton(R.string.save_note) { _, _ ->
@@ -512,7 +505,8 @@ internal class AmapRouteMapController(
 
         currentLocationButton = ImageButton(container.context).apply {
             setImageResource(R.drawable.ic_near_me)
-            setBackgroundColor(ContextCompat.getColor(container.context, R.color.nav_bar_surface))
+            setBackgroundResource(R.drawable.md3_map_button_background)
+            imageTintList = ContextCompat.getColorStateList(container.context, R.color.md_primary)
             contentDescription = container.context.getString(R.string.return_to_current_location)
             alpha = .92f
             setOnClickListener { moveCameraToCurrentLocation() }
@@ -535,6 +529,46 @@ internal class AmapRouteMapController(
         val descriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
         bitmap.recycle()
         return descriptor
+    }
+
+    private fun getNumberedTrackPointDescriptor(pointOrder: Int): BitmapDescriptor {
+        return editableTrackPointIconCache.getOrPut(pointOrder) {
+            val (width, height) = trackPointMarkerIconSize
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val radius = minOf(width, height) * 0.38f
+            val centerX = width / 2f
+            val centerY = height / 2f
+
+            val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(mapView.context, R.color.track_point_drag_color)
+                style = Paint.Style.FILL
+            }
+            val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(mapView.context, R.color.md_onPrimary)
+                strokeWidth = DP(2f, mapView.context).pxValue.toFloat()
+                style = Paint.Style.STROKE
+            }
+            val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(mapView.context, R.color.track_point_icon_on_color)
+                textAlign = Paint.Align.CENTER
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                textSize = when {
+                    pointOrder >= 100 -> DP(10f, mapView.context).pxValue.toFloat()
+                    pointOrder >= 10 -> DP(12f, mapView.context).pxValue.toFloat()
+                    else -> DP(14f, mapView.context).pxValue.toFloat()
+                }
+            }
+
+            canvas.drawCircle(centerX, centerY, radius, fillPaint)
+            canvas.drawCircle(centerX, centerY, radius, strokePaint)
+            val textBaseline = centerY - (textPaint.descent() + textPaint.ascent()) / 2f
+            canvas.drawText(pointOrder.toString(), centerX, textBaseline, textPaint)
+
+            val descriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+            bitmap.recycle()
+            descriptor
+        }
     }
 
     private sealed class EditableMarker {

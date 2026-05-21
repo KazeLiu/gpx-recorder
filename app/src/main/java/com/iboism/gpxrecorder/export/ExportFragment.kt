@@ -76,16 +76,26 @@ class ExportFragment: DialogFragment() {
         this.actions = bundleActions
     }
 
+    override fun onStart() {
+        super.onStart()
+        val width = (resources.displayMetrics.widthPixels * 0.92f).toInt()
+        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.exportShareBtn.setOnClickListener { onShareClicked() }
         binding.exportSaveBtn.setOnClickListener { onSaveClicked() }
         binding.exportDownloadBtn.setOnClickListener { onDownloadClicked() }
-        binding.formatSelectorSpinner.adapter = ArrayAdapter(
-            this.requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(R.array.export_formats_array)
+        val exportFormats = resources.getStringArray(R.array.export_formats_array)
+        binding.formatSelectorSpinner.setAdapter(
+            ArrayAdapter(
+                this.requireContext(),
+                android.R.layout.simple_list_item_1,
+                exportFormats
+            )
         )
+        binding.formatSelectorSpinner.setText(exportFormats.first(), false)
 
         binding.exportProgressBar.isIndeterminate = true
     }
@@ -165,8 +175,9 @@ class ExportFragment: DialogFragment() {
     }
 
     private fun getSelectedExportFormat(): FileHelper.Format {
-        return when(binding.formatSelectorSpinner.selectedItemPosition) {
-            0 -> FileHelper.Format.Gpx
+        val exportFormats = resources.getStringArray(R.array.export_formats_array)
+        return when(binding.formatSelectorSpinner.text.toString()) {
+            exportFormats.firstOrNull() -> FileHelper.Format.Gpx
             else -> FileHelper.Format.GeoJson
         }
     }

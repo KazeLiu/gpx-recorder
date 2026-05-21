@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.extensions.getRealmInitFailure
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.RecordingConfiguration
@@ -67,12 +67,6 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
 //                val trk = Track(segments = RealmList(seg))
 //                val gpx = GpxContent(title = lst[j], trackList = RealmList(trk))
 //
-//                val wlst = RealmList<Waypoint>()
-//                for (i in 0..r.nextInt(4)) {
-//                    wlst.add(Waypoint())
-//                }
-//                gpx.waypointList = wlst
-//
 //                Realm.getDefaultInstance().executeTransaction {
 //                    it.copyToRealm(gpx)
 //                }
@@ -115,7 +109,7 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
     }
 
     private fun showSchemaFailure() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(R.string.init_error_title)
             .setMessage(R.string.init_error_message)
             .setOnDismissListener {

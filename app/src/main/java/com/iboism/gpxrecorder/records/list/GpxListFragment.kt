@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -14,22 +12,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.iboism.gpxrecorder.Events
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentRouteListBinding
 import com.iboism.gpxrecorder.export.ExportFragment
 import com.iboism.gpxrecorder.model.GpxContent
-import com.iboism.gpxrecorder.navigation.NavigationHelper
+import com.iboism.gpxrecorder.navigation.BottomNavigationDrawer
 import com.iboism.gpxrecorder.recording.RecorderFragment
 import com.iboism.gpxrecorder.recording.RecorderServiceConnection
 import com.iboism.gpxrecorder.recording.configurator.RecordingConfiguratorModal
 import com.iboism.gpxrecorder.records.details.GpxDetailsFragment
-import com.iboism.gpxrecorder.util.DP
 import com.iboism.gpxrecorder.util.PermissionHelper
 import io.realm.Realm
 import io.realm.RealmResults
@@ -233,22 +228,13 @@ class GpxListFragment : Fragment(), RecorderServiceConnection.OnServiceConnected
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = (requireActivity() as AppCompatActivity)
-
         binding.cancelButton.setOnClickListener(this::onCancelButtonClicked)
         binding.exportFab.setOnClickListener(this::onExportFabClicked)
         binding.exportButton.setOnClickListener(this::onExportButtonClicked)
         binding.selectAllButton.setOnClickListener(this::onSelectAllButtonClicked)
 
-        val popup = PopupMenu(requireContext(), binding.listNavOverflowButton)
-        popup.menuInflater.inflate(R.menu.activity_main_drawer, popup.menu)
-        popup.setOnMenuItemClickListener {
-            val navHelper = NavigationHelper(activity)
-            navHelper.onNavigationItemSelected(it)
-        }
-
         binding.listNavOverflowButton.setOnClickListener {
-            popup.show()
+            BottomNavigationDrawer().show(parentFragmentManager, "navigation")
         }
 
         binding.fab.setOnClickListener(this::onFabClicked)
@@ -268,10 +254,6 @@ class GpxListFragment : Fragment(), RecorderServiceConnection.OnServiceConnected
         binding.gpxListView.adapter = adapter
         binding.gpxListView.setHasFixedSize(true)
         (binding.gpxListView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-        val divider = MaterialDividerItemDecoration(view.context, DividerItemDecoration.VERTICAL)
-        divider.isLastItemDecorated = false
-        divider.dividerInsetStart = DP(20f, view.context).pxValue
-        binding.gpxListView.addItemDecoration(divider)
 
         setPlaceholdersHidden(gpxContentList.isNotEmpty())
         gpxContentList.addChangeListener(gpxChangeListener)

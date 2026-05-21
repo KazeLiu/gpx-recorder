@@ -7,12 +7,6 @@
     <item quantity="other">%1$d point</item>
   </plurals>
 
-  <plurals name="waypoint_count">
-    <item quantity="one">%d étape</item>
-    <item quantity="many">%d étapes</item>
-    <item quantity="other">%d étapes</item>
-  </plurals>
-
   <!-- Alert stuff -->
 
   <string name="action_settings">Paramètres</string>
@@ -37,7 +31,6 @@
 
   <string name="add_title_hint">Ajouter un titre…</string>
 
-  <string name="add_waypoint">Ajouter un waypoint</string>
 
   <string name="background_location_justification_desc">Cette application collecte des données de localisation pour activer la fonction d\'enregistrement d\'itinéraire même lorsque l\'application est fermée ou non utilisée. L\'application tentera d\'afficher une notification lors de la collecte de données, mais elle peut ne pas apparaître en fonction des préférences de notification sur votre appareil.\n\n Votre position sera UNIQUEMENT collectée pendant que vous enregistrez un itinéraire.</string>
 
@@ -49,7 +42,6 @@
 
   <string name="calculating_placeholder">calculateur..</string>
 
-  <string name="cannot_create_waypoint">Impossible de créer un waypoint pour le moment</string>
 
   <string name="channel_description">Contrôler la session d\'enregistrement en cours</string>
 
@@ -85,7 +77,6 @@
 
   <string name="expand">Développer</string>
 
-  <string name="failed_to_place_waypoint">Impossible de placer le waypoint</string>
 
   <string name="how_often_to_record_track_points">À quelle fréquence enregistrer les points de trace. (Environ)</string>
 

@@ -1,176 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_background"
-    android:paddingTop="24dp"
-    android:paddingBottom="12dp"
+    android:orientation="vertical"
     android:paddingHorizontal="24dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingTop="24dp"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/export_title_tv"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:text="@string/export"
-        android:textColor="@color/md_onSurface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/format_tv"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/file_format"
-        android:textColor="@color/md_onSurface"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/format_selector_spinner"
-        app:layout_constraintBottom_toBottomOf="@id/format_selector_spinner"
-        app:layout_constraintRight_toLeftOf="@id/center_x"
-        android:layout_marginStart="16dp"
-        />
-
-    <TextView
-        android:id="@+id/filename_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/use_iso_date_for_filename"
-        android:textColor="@color/md_onSurface"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/filename_checkbox"
-        app:layout_constraintBottom_toBottomOf="@id/filename_checkbox"
-        app:layout_constraintRight_toLeftOf="@id/filename_checkbox"
-        android:layout_marginStart="16dp"
-        />
-
-    <CheckBox
-        android:id="@+id/filename_checkbox"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintTop_toBottomOf="@id/format_selector_spinner"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="16dp"
-        />
-
-    <Spinner
-        android:id="@+id/format_selector_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:layout_marginTop="12dp"
-        android:foregroundGravity="right"
-        android:gravity="end"
-        android:textAlignment="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/center_x"
-        app:layout_constraintTop_toBottomOf="@id/export_title_tv" />
-
-
-
-    <LinearLayout android:id="@+id/button_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filename_checkbox"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
-        <Button
+        android:text="@string/export"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+        android:textColor="@color/md_onSurface" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/format_selector_layout"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="@string/file_format">
+
+        <AutoCompleteTextView
+            android:id="@+id/format_selector_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/md_onSurface"
+            android:textColorHint="@color/md_onSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/filename_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/filename_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/use_iso_date_for_filename"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textColor="@color/md_onSurface" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/filename_checkbox"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/export_save_btn"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
-            android:layout_marginHorizontal="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/center_x"
-            app:layout_constraintTop_toBottomOf="@id/filename_checkbox"
-            android:textColor="@color/button_text_on_surface"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/save"
-            />
+            android:textColor="@color/button_text_on_surface" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/export_download_btn"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:lines="1"
-            android:layout_marginHorizontal="8dp"
-            app:layout_constraintLeft_toRightOf="@id/export_save_btn"
-            app:layout_constraintRight_toLeftOf="@id/export_share_btn"
-            app:layout_constraintTop_toBottomOf="@id/filename_checkbox"
-            android:textColor="@color/button_text_on_surface"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/download"
-            />
+            android:textColor="@color/button_text_on_surface" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/export_share_btn"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/filename_checkbox"
-            app:layout_constraintLeft_toRightOf="@id/center_x"
+            android:layout_marginStart="4dp"
             android:lines="1"
-            android:layout_marginHorizontal="8dp"
-            android:textColor="@color/button_text_on_surface"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/share"
-            />
+            android:textColor="@color/button_text_on_surface" />
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/export_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/format_selector_spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:indeterminateTint="@color/md_primary"
-        android:visibility="gone"
-        />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/center_x"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".5"
-        />
-
-    <ImageView android:id="@+id/info_icon"
-        android:layout_width="24dp"
-        android:layout_height="0dp"
-        android:src="@drawable/outline_info_24"
-        app:tint="@color/md_onSurface"
-        app:layout_constraintStart_toStartOf="@id/format_tv"
-        app:layout_constraintTop_toBottomOf="@id/button_container"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/info_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@color/md_onSurface"
-        android:text="@string/download_location_info"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@+id/info_icon"
-        app:layout_constraintEnd_toEndOf="@id/filename_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/button_container"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        />
+        android:indeterminate="true"
+        android:indeterminateTint="@color/md_primary"
+        android:visibility="gone" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/info_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/info_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/outline_info_24"
+            app:tint="@color/md_onSurfaceVariant" />
+
+        <TextView
+            android:id="@+id/info_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="@string/download_location_info"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="@color/md_onSurfaceVariant" />
+    </LinearLayout>
+</LinearLayout>

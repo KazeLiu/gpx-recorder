@@ -3,9 +3,9 @@ package com.iboism.gpxrecorder.navigation
 import android.content.Intent
 import android.net.Uri
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
@@ -30,7 +30,7 @@ class NavigationHelper(private val activity: AppCompatActivity) : NavigationView
                 activity.launchExternalIntent(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/KazeLiu/gpx-recorder/")))
 
             R.id.nav_delete_recordings -> {
-                AlertDialog.Builder(activity)
+                MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.clear_all_alert_title)
                     .setMessage(R.string.clear_all_alert_message)
                     .setCancelable(true)

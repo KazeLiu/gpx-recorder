@@ -2,8 +2,7 @@ package com.iboism.gpxrecorder.records.details
 
 import android.os.Bundle
 import android.view.View
-import android.widget.PopupMenu
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentRouteDetailsBinding
 import io.reactivex.subjects.PublishSubject
@@ -15,7 +14,7 @@ class GpxDetailsView(
     val binding: FragmentRouteDetailsBinding,
     val titleText: String,
     val distanceText: String,
-    val waypointsText: String,
+    val trackPointsText: String,
     val dateText24Hour: String,
     val dateTextAmPm: String
 ) {
@@ -24,7 +23,6 @@ class GpxDetailsView(
     private var isEditingTitle = false
     private var isShowingAmPmDate = false
     private var isEditingTrackPoints = false
-    private val moreMenu: PopupMenu = PopupMenu(binding.root.context, binding.moreBtn, R.menu.details_overlfow_menu)
 
     var saveTouchObservable: PublishSubject<Unit> = PublishSubject.create()
     var shareTouchObservable: PublishSubject<Unit> = PublishSubject.create()
@@ -38,7 +36,7 @@ class GpxDetailsView(
         setTitleReadOnly()
         binding.titleEt.append(titleText)
         binding.distanceTv.visibility = View.GONE
-        binding.waypointTv.text = "$waypointsText · $distanceText"
+        binding.trackPointCountTv.text = "$trackPointsText · $distanceText"
         binding.dateTv.text = dateText24Hour
 
         binding.resumeBtn.setOnClickListener { resumePressed() }
@@ -46,20 +44,6 @@ class GpxDetailsView(
         binding.addWptBtn.text = binding.root.context.getString(R.string.edit_track_points)
         binding.addWptBtn.setOnClickListener { trackPointEditToggleObservable.onNext(!isEditingTrackPoints) }
         binding.dateTv.setOnClickListener { toggleDateFormat() }
-        moreMenu.menuInflater.inflate(R.menu.details_overlfow_menu, moreMenu.menu)
-
-        moreMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.save -> savePressed()
-                R.id.share -> sharePressed()
-                R.id.toggle_map_type -> mapTypeToggleObservable.onNext(Unit)
-                R.id.delete_route -> deletePressed()
-                R.id.rename_route -> editPressed()
-                else -> return@setOnMenuItemClickListener false
-            }
-
-            return@setOnMenuItemClickListener true
-        }
     }
 
     fun restoreInstanceState(outState: Bundle?) {
@@ -72,8 +56,7 @@ class GpxDetailsView(
         val titleDraft = outState?.getString(DRAFT_TITLE_KEY) ?: return
 
         editPressed()
-        binding.titleEt.text.clear()
-        binding.titleEt.text.append(titleDraft)
+        binding.titleEt.setText(titleDraft)
         outState.remove(DRAFT_TITLE_KEY)
     }
 
@@ -84,8 +67,8 @@ class GpxDetailsView(
         }
     }
 
-    fun setRouteStats(waypointsText: String, distanceText: String) {
-        binding.waypointTv.text = "$waypointsText · $distanceText"
+    fun setRouteStats(trackPointsText: String, distanceText: String) {
+        binding.trackPointCountTv.text = "$trackPointsText · $distanceText"
     }
 
     fun setTrackPointEditingEnabled(isEnabled: Boolean) {
@@ -132,7 +115,7 @@ class GpxDetailsView(
     }
 
     private fun deletePressed() {
-        AlertDialog.Builder(binding.root.context)
+        MaterialAlertDialogBuilder(binding.root.context)
             .setTitle(R.string.delete_recording_alert_title)
             .setMessage(R.string.delete_recording_alert_message)
             .setCancelable(true)
@@ -150,7 +133,26 @@ class GpxDetailsView(
     }
 
     private fun morePressed() {
-        moreMenu.show()
+        val context = binding.root.context
+        val items = arrayOf(
+            context.getString(R.string.save),
+            context.getString(R.string.share),
+            context.getString(R.string.toggle_map_type),
+            context.getString(R.string.delete_route),
+            context.getString(R.string.rename_route)
+        )
+
+        MaterialAlertDialogBuilder(context)
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> savePressed()
+                    1 -> sharePressed()
+                    2 -> mapTypeToggleObservable.onNext(Unit)
+                    3 -> deletePressed()
+                    4 -> editPressed()
+                }
+            }
+            .show()
     }
 
     private fun applyPressed() {
@@ -175,7 +177,7 @@ class GpxDetailsView(
     }
 
     private fun resumePressed() {
-        AlertDialog.Builder(binding.root.context)
+        MaterialAlertDialogBuilder(binding.root.context)
             .setTitle(R.string.resume_recording_alert_title)
             .setMessage(R.string.resume_recording_alert_message)
             .setCancelable(true)

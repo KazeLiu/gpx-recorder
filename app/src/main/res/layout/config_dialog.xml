@@ -8,116 +8,40 @@
     android:clickable="true"
     android:focusable="true">
 
-    <EditText
-        android:id="@+id/config_title_editText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/config_title_input_layout"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dialog_horizontal_margin"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/dialog_horizontal_margin"
-        android:hint="@string/enter_title"
-        android:lines="1"
-        android:singleLine="true"
-        android:textColor="@color/md_onSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:inputType="text"/>
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
-    <TextView
-        android:id="@+id/hours_lbl"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/config_title_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_title"
+            android:inputType="text"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/md_onSurface"
+            android:textColorHint="@color/md_onSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.iboism.gpxrecorder.recording.configurator.Md3DurationWheelPicker
+        android:id="@+id/interval_picker"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:text="@string/hour_initial"
-        android:textSize="16sp"
-        android:textColor="@color/md_onSurface"
-        app:layout_constraintStart_toEndOf="@+id/interval_hours_picker"
-        app:layout_constraintEnd_toStartOf="@id/interval_minutes_picker"
-        app:layout_constraintTop_toTopOf="@+id/interval_minutes_picker"
-        app:layout_constraintBottom_toBottomOf="@id/interval_minutes_picker"/>
-
-    <TextView
-        android:id="@+id/minutes_lbl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:text="@string/minute_initial"
-        android:textSize="16sp"
-        android:textColor="@color/md_onSurface"
-        app:layout_constraintStart_toEndOf="@+id/interval_minutes_picker"
-        app:layout_constraintEnd_toStartOf="@id/interval_seconds_picker"
-        app:layout_constraintTop_toTopOf="@+id/interval_minutes_picker"
-        app:layout_constraintBottom_toBottomOf="@id/interval_minutes_picker"/>
-
-    <TextView
-        android:id="@+id/seconds_lbl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:text="@string/second_initial"
-        android:textSize="16sp"
-        android:textColor="@color/md_onSurface"
-        app:layout_constraintStart_toEndOf="@+id/interval_seconds_picker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/interval_minutes_picker"
-        app:layout_constraintBottom_toBottomOf="@id/interval_minutes_picker"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hguide_one_fourth"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hguide_half"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hguide_three_fourths"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
-
-    <NumberPicker
-        android:id="@+id/interval_hours_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="@id/hguide_one_fourth"
-        app:layout_constraintLeft_toLeftOf="@id/hguide_one_fourth"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <NumberPicker
-        android:id="@+id/interval_minutes_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="@id/hguide_half"
-        app:layout_constraintLeft_toLeftOf="@id/hguide_half"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <NumberPicker
-        android:id="@+id/interval_seconds_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="172dp"
         android:layout_marginStart="@dimen/dialog_horizontal_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="@id/hguide_three_fourths"
-        app:layout_constraintLeft_toLeftOf="@id/hguide_three_fourths"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
@@ -127,10 +51,10 @@
         android:layout_marginStart="@dimen/dialog_horizontal_margin"
         android:layout_marginTop="18dp"
         android:text="@string/interval_minutes"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:textColor="@color/md_onSurface"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/config_title_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/config_title_input_layout" />
 
     <TextView
         android:id="@+id/textView3"
@@ -141,13 +65,12 @@
         android:layout_marginEnd="8dp"
         android:text="@string/how_often_to_record_track_points"
         android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textColor="@color/md_onSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@id/interval_hours_picker" />
+        app:layout_constraintTop_toBottomOf="@id/interval_picker" />
 
     <TextView
         android:id="@+id/textView4"
@@ -159,30 +82,33 @@
         android:alpha="0.7"
         android:text="@string/battery_drain_warning"
         android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@id/textView3"
         android:textColor="@color/md_error"/>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/start_button"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/md3_large_button_height"
+        android:layout_marginStart="@dimen/dialog_horizontal_margin"
         android:layout_marginTop="24dp"
-        android:background="@color/large_button_surface"
+        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
         android:text="@string/start"
         android:textColor="@color/on_large_button_surface"
-        android:textSize="36sp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:textStyle="bold"
+        app:backgroundTint="@color/large_button_surface"
+        app:cornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/title"
@@ -191,7 +117,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/new_recording"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
         android:textColor="@color/md_onSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

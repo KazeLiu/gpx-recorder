@@ -4,10 +4,6 @@
         <item quantity="other">%1$d 个轨迹点</item>
     </plurals>
 
-    <plurals name="waypoint_count">
-        <item quantity="other">%d 个航点</item>
-    </plurals>
-
     <!-- Alert stuff -->
     <string name="action_settings">设置</string>
     <string name="title_activity_recording_configuration">新建记录</string>
@@ -21,14 +17,12 @@
     <string name="done">完成</string>
     <string name="add_note_hint">添加备注…</string>
     <string name="add_title_hint">添加标题…</string>
-    <string name="add_waypoint">添加航点</string>
     <string name="append_track_point">追加坐标点</string>
     <string name="background_location_justification_desc">此应用会收集位置数据，以便在应用关闭或未使用时也能记录路线。应用会在收集数据时尝试显示通知，但是否显示取决于您设备上的通知偏好设置。\n\n您的位置只会在您正在记录路线时被收集。</string>
     <string name="background_location_justification_title">后台位置访问权限</string>
     <string name="background_permission_title">始终允许</string>
     <string name="battery_drain_warning">小于 1 分钟的间隔可能增加耗电</string>
     <string name="calculating_placeholder">正在计算..</string>
-    <string name="cannot_create_waypoint">当前无法创建航点</string>
     <string name="channel_description">控制当前记录会话</string>
     <string name="channel_name">记录</string>
     <string name="clear_all_alert_button">全部清除</string>
@@ -46,8 +40,7 @@
     <string name="enter_title">输入标题</string>
     <string name="error">错误</string>
     <string name="expand">展开</string>
-    <string name="failed_to_place_waypoint">航点放置失败</string>
-    <string name="how_often_to_record_track_points">每隔多久记录一次轨迹点。（约）</string>
+    <string name="how_often_to_record_track_points">每隔多久记录一次轨迹点</string>
     <string name="init_error_message">请检查应用文件权限后重试。注意：此应用不支持已 root 的设备，且必须从 Google Play 商店安装。如果问题仍然存在，请联系开发者。</string>
     <string name="init_error_title">本地数据库初始化失败</string>
     <string name="interval_minutes">间隔</string>
@@ -62,7 +55,7 @@
     <string name="privacy_policy">隐私政策</string>
     <string name="recording_in_progress">正在记录</string>
     <string name="resume_recording">继续</string>
-    <string name="save">保存…</string>
+    <string name="save">保存</string>
     <string name="share">分享</string>
     <string name="shortcut_label">开始记录</string>
     <string name="start">开始</string>
@@ -90,12 +83,13 @@
     <string name="toggle_map_type">切换地图类型</string>
     <string name="toggle_time_format">切换时间格式</string>
     <string name="update_recording_interval">修改记录间隔</string>
-    <string name="recording_interval_short">每%s</string>
+    <string name="recording_interval_short">每%s记录一次</string>
     <string name="next_track_point_short">下次约%s</string>
     <string name="next_track_point_paused_short">下次暂停中</string>
     <string name="duration_hours_short">时</string>
     <string name="duration_minutes_short">分</string>
     <string name="duration_seconds_short">秒</string>
+    <string name="interval_wheel_value">%1$d %2$s</string>
     <string name="delete_route">删除路线</string>
     <string name="delete_track_point">删除坐标点</string>
     <string name="edit_track_point">编辑坐标点</string>
@@ -124,7 +118,6 @@
     <string name="map_marker_start">起点</string>
     <string name="map_marker_end">终点</string>
     <string name="default_recording_title">未命名</string>
-    <string name="default_waypoint_title">航点</string>
     <string name="settings">设置</string>
     <string name="language">语言</string>
     <string name="language_english">English</string>

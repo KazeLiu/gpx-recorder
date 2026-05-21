@@ -6,12 +6,6 @@
     <item quantity="other">%1$d puntos</item>
   </plurals>
 
-  <plurals name="waypoint_count">
-    <item quantity="one">%d punto de referencia</item>
-    <item quantity="many">%d puntos intermedios</item>
-    <item quantity="other">%d puntos intermedios</item>
-  </plurals>
-
   <!-- Alert stuff -->
 
   <string name="action_settings">Ajustes</string>
@@ -36,7 +30,6 @@
 
   <string name="add_title_hint">Añadir título…</string>
 
-  <string name="add_waypoint">Añadir punto de ruta</string>
 
   <string name="background_location_justification_desc">Esta aplicación recopila datos de ubicación para habilitar la función de registro de ruta incluso cuando la aplicación está cerrada o no está en uso. La aplicación intentará mostrar una notificación cada vez que recopile datos, pero es posible que no aparezca según las preferencias de notificación de su dispositivo.\n\n Su ubicación SOLO se recopilará mientras esté grabando una ruta.</string>
 
@@ -48,7 +41,6 @@
 
   <string name="calculating_placeholder">calculador..</string>
 
-  <string name="cannot_create_waypoint">No se puede crear un waypoint en este momento</string>
 
   <string name="channel_description">Controlar la sesión de grabación actual</string>
 
@@ -84,7 +76,6 @@
 
   <string name="expand">Expandir</string>
 
-  <string name="failed_to_place_waypoint">Error al colocar el waypoint</string>
 
   <string name="how_often_to_record_track_points">Con qué frecuencia registrar puntos de seguimiento. (Aproximadamente)</string>
 

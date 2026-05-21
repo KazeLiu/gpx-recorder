@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/current_recording_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/md_surfaceVariant"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="@dimen/md3_card_vertical_margin"
+    android:layout_marginBottom="@dimen/md3_card_vertical_margin"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    app:cardBackgroundColor="@color/md_primaryContainer"
+    app:cardCornerRadius="@dimen/md3_card_corner_radius"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
     <TextView android:id="@+id/current_rec_header"
         android:layout_width="wrap_content"
@@ -17,68 +27,80 @@
         android:layout_marginTop="8dp"
         android:textAlignment="viewStart"
         android:layout_marginBottom="2dp"
-        android:layout_marginStart="16dp"
-        android:textSize="14sp"
-        android:textColor="@color/md_onSurfaceVariant"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textColor="@color/md_onPrimaryContainer"
         android:text="@string/recording_in_progress"/>
 
     <TextView
         android:id="@+id/route_title_tv"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text=""
-        android:textSize="18sp"
         android:minLines="1"
         android:maxLines="2"
         android:singleLine="false"
         android:textAlignment="viewStart"
-        android:textColor="@color/md_onSurfaceVariant"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@id/add_wpt_btn"
+        android:textColor="@color/md_onPrimaryContainer"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@id/recording_actions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/current_rec_header"
         android:ellipsize="end"/>
 
-    <Button
-        android:id="@+id/add_wpt_btn"
-        style="@style/Widget.Material3.Button.TextButton"
+    <LinearLayout
+        android:id="@+id/recording_actions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_waypoint"
-        android:textAllCaps="false"
-        android:textColor="@color/button_text_on_surface"
-        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/playpause_btn"
-        app:layout_constraintTop_toBottomOf="@+id/route_title_tv" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/route_title_tv">
 
-    <Button
-        android:id="@+id/playpause_btn"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pause_recording"
-        android:textAllCaps="false"
-        android:textColor="@color/button_text_on_surface"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/stop_btn"
-        app:layout_constraintTop_toBottomOf="@+id/route_title_tv" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/playpause_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minHeight="0dp"
+            android:minWidth="76dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/pause_recording"
+            android:textAllCaps="false"
+            android:textColor="@color/md_onErrorContainer"
+            app:backgroundTint="@color/md_errorContainer"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/ic_pause"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconSize="18dp"
+            app:iconTint="@color/md_onErrorContainer" />
 
-    <Button
-        android:id="@+id/stop_btn"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_recording"
-        android:textAllCaps="false"
-        android:textColor="@color/button_text_on_surface"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_title_tv"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stop_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minHeight="0dp"
+            android:minWidth="76dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/stop_recording"
+            android:textAllCaps="false"
+            android:textColor="@color/md_onPrimary"
+            app:backgroundTint="@color/md_primary"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/ic_stop_recording"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconSize="18dp"
+            app:iconTint="@color/md_onPrimary" />
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

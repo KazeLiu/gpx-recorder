@@ -6,11 +6,6 @@
     <item quantity="other">%1$d Punkte</item>
   </plurals>
 
-  <plurals name="waypoint_count">
-    <item quantity="one">%d Wegpunkt</item>
-    <item quantity="other">%d Wegpunkte</item>
-  </plurals>
-
   <!-- Alert stuff -->
 
   <string name="action_settings">Einstellungen</string>
@@ -35,7 +30,6 @@
 
   <string name="add_title_hint">Titel hinzufügen…</string>
 
-  <string name="add_waypoint">Wegpunkt hinzufügen</string>
 
   <string name="background_location_justification_desc">Diese App sammelt Standortdaten, um die Routenaufzeichnungsfunktion auch dann zu aktivieren, wenn die App geschlossen ist oder nicht verwendet wird. Die App versucht, bei jeder Datenerfassung eine Benachrichtigung anzuzeigen. Abhängig von den Benachrichtigungseinstellungen auf Ihrem Gerät wird diese jedoch möglicherweise nicht angezeigt.\n\n Ihr Standort wird NUR erfasst, während Sie eine Route aufzeichnen.</string>
 
@@ -47,7 +41,6 @@
 
   <string name="calculating_placeholder">berechnen..</string>
 
-  <string name="cannot_create_waypoint">Der Wegpunkt kann derzeit nicht erstellt werden</string>
 
   <string name="channel_description">Steuern Sie die aktuelle Aufnahmesitzung</string>
 
@@ -83,7 +76,6 @@
 
   <string name="expand">Expandieren</string>
 
-  <string name="failed_to_place_waypoint">Wegpunkt konnte nicht platziert werden</string>
 
   <string name="how_often_to_record_track_points">Wie oft werden Trackpunkte aufgezeichnet? (Etwa)</string>
 

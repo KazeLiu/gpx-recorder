@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentSettingsBinding
 
@@ -32,7 +32,7 @@ class SettingsFragment : Fragment() {
                 it.languageTag == LocalePreference.getLanguageTag(requireContext())
             }
 
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.language)
                 .setSingleChoiceItems(languageOptions.map { getString(it.labelRes) }.toTypedArray(), currentIndex) { dialog, which ->
                     LocalePreference.setLanguageTag(requireContext(), languageOptions[which].languageTag)
@@ -55,7 +55,7 @@ class SettingsFragment : Fragment() {
             val currentProvider = MapProviderPreference.getProvider(requireContext())
             val currentIndex = mapProviderOptions.indexOfFirst { it.provider == currentProvider }
 
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.map_provider)
                 .setSingleChoiceItems(mapProviderOptions.map { getString(it.labelRes) }.toTypedArray(), currentIndex) { dialog, which ->
                     MapProviderPreference.setProvider(requireContext(), mapProviderOptions[which].provider)

@@ -5,7 +5,7 @@
     android:id="@+id/settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_background"
+    android:background="@color/md_surface"
     android:clickable="true"
     android:focusable="true"
     tools:context="com.iboism.gpxrecorder.settings.SettingsFragment">
@@ -24,7 +24,7 @@
         android:id="@+id/back_button"
         android:layout_width="48dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/back"
         android:padding="12dp"
         android:src="@drawable/ic_left_arrow"
@@ -41,7 +41,7 @@
         android:paddingHorizontal="8dp"
         android:paddingVertical="16dp"
         android:text="@string/settings"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textColor="@color/on_nav_bar_surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/back_button"
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/language"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:textColor="@color/md_onSurface" />
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_onSurfaceVariant"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     tools:text="English" />
             </LinearLayout>
 
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/map_provider"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:textColor="@color/md_onSurface" />
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_onSurfaceVariant"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     tools:text="Google Maps" />
             </LinearLayout>
 

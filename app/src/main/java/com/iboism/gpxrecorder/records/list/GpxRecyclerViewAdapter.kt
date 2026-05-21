@@ -1,13 +1,12 @@
 package com.iboism.gpxrecorder.records.list
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.Events
-import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.ListRowActiveRouteBinding
 import com.iboism.gpxrecorder.databinding.ListRowDeletedRouteBinding
@@ -16,7 +15,6 @@ import com.iboism.gpxrecorder.external.RealmRecyclerViewAdapter
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.recording.LocationRecorderService
 import com.iboism.gpxrecorder.recording.RecorderServiceConnection
-import com.iboism.gpxrecorder.recording.waypoint.CreateWaypointDialogActivity
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -133,7 +131,6 @@ class GpxRecyclerViewAdapter(
         holder.rootView.setOnClickListener {
             currentRecordingOpener?.invoke()
         }
-        holder.addWaypointButton.setOnClickListener(this::addWaypointButtonClicked)
         holder.playPauseButton.setOnClickListener(this::playPauseButtonClicked)
         holder.stopButton.setOnClickListener(this::stopButtonClicked)
 
@@ -144,12 +141,6 @@ class GpxRecyclerViewAdapter(
         val itemIndex = data?.indexOfFirst { it.identifier == id } ?: return
 
         notifyItemChanged(itemIndex)
-    }
-
-    private fun addWaypointButtonClicked(view: View) {
-        currentlyRecordingRouteId?.let {
-            context.startActivity(Intent(context, CreateWaypointDialogActivity::class.java).putExtra(Keys.GpxId, it))
-        }
     }
 
     private fun playPauseButtonClicked(view: View) {
@@ -164,7 +155,14 @@ class GpxRecyclerViewAdapter(
     }
 
     private fun stopButtonClicked(view: View) {
-        LocationRecorderService.requestStopRecording(context)
+        MaterialAlertDialogBuilder(view.context)
+            .setTitle(R.string.stop_recording_confirm_title)
+            .setMessage(R.string.stop_recording_confirm_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.stop_recording) { _, _ ->
+                LocationRecorderService.requestStopRecording(context)
+            }
+            .show()
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
@@ -178,8 +176,7 @@ class GpxRecyclerViewAdapter(
     private fun bindCurrentViewHolder(viewHolder: ActiveRouteRowViewHolder, position: Int) {
         val gpx = getItem(position) ?: return
         viewHolder.routeTitle.text = gpx.title
-        val playPauseText = if(serviceConnection.service?.isPaused == true) R.string.resume_recording else R.string.pause_recording
-        viewHolder.playPauseButton.text = context.getString(playPauseText)
+        viewHolder.setPaused(serviceConnection.service?.isPaused == true)
     }
 
     private fun bindContentViewHolder(viewHolder: RouteRowViewHolder, position: Int) {
@@ -190,7 +187,7 @@ class GpxRecyclerViewAdapter(
         viewHolder.dateView.text = DateTimeFormatHelper.toReadableString(gpx.date)
         viewHolder.titleView.text = gpx.title
         val pointCount = gpx.trackPointCount()
-        viewHolder.waypointCountView.text = context.resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
+        viewHolder.trackPointCountView.text = context.resources.getQuantityString(R.plurals.point_count, pointCount, pointCount)
         viewHolder.checkbox.isChecked = selectedIds.contains(gpx.identifier)
         viewHolder.checkbox.visibility = if (isSelecting) View.VISIBLE else View.GONE
         viewHolder.distanceView.text = context.resources.getString(R.string.distance_km, gpx.totalDistanceKm())

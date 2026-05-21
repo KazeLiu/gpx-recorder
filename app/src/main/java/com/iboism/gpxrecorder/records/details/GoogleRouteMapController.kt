@@ -25,7 +25,6 @@ import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
-import com.iboism.gpxrecorder.model.Waypoint
 import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 
 internal class GoogleRouteMapController(
@@ -128,7 +127,6 @@ internal class GoogleRouteMapController(
 
     private fun GoogleMap.drawContent(gpx: GpxContent, shouldCenter: Boolean) {
         val trackBounds = this.drawTracks(gpx.trackList.toList())
-        this.drawWaypoints(gpx.waypointList.toList())
 
         if (trackBounds != null && shouldCenter) {
             this.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 50))
@@ -188,17 +186,6 @@ internal class GoogleRouteMapController(
 
         allPoints.forEach { boundsBuilder.include(it) }
         return if (allPoints.isNotEmpty()) boundsBuilder.build() else null
-    }
-
-    private fun GoogleMap.drawWaypoints(waypoints: List<Waypoint>) {
-        waypoints.forEach {
-            this.addMarker(MarkerOptions().position(LatLng(it.lat,it.lon))
-                .flat(true)
-                .title(it.title)
-                .snippet(it.desc)
-                .icon(getBitmapDescriptor(R.drawable.ic_waypoint_pt))
-                .anchor(.5f, .5f))
-        }
     }
 
     private fun moveCameraToLastLocation() {
