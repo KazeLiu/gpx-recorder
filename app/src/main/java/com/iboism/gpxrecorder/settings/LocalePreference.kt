@@ -6,10 +6,15 @@ import androidx.core.os.LocaleListCompat
 import com.iboism.gpxrecorder.util.Prefs
 
 object LocalePreference {
+    const val defaultLanguageTag = "zh-CN"
+
     private const val languageTagKey = "kLanguageTag"
 
     fun getLanguageTag(context: Context): String {
-        return Prefs.getDefault(context).getString(languageTagKey, "") ?: ""
+        return Prefs.getDefault(context)
+            .getString(languageTagKey, defaultLanguageTag)
+            ?.ifEmpty { defaultLanguageTag }
+            ?: defaultLanguageTag
     }
 
     fun setLanguageTag(context: Context, languageTag: String) {

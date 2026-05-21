@@ -29,7 +29,7 @@ class SettingsFragment : Fragment() {
         updateLanguageValue()
         binding.languageRow.setOnClickListener {
             val currentIndex = languageOptions.indexOfFirst {
-                it.languageTag == LocalePreference.getLanguageTag(requireContext()).ifEmpty { "en" }
+                it.languageTag == LocalePreference.getLanguageTag(requireContext())
             }
 
             AlertDialog.Builder(requireContext())
@@ -44,7 +44,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun updateLanguageValue() {
-        val selectedTag = LocalePreference.getLanguageTag(requireContext()).ifEmpty { "en" }
+        val selectedTag = LocalePreference.getLanguageTag(requireContext())
         val selectedOption = languageOptions.firstOrNull { it.languageTag == selectedTag } ?: languageOptions.first()
         binding.languageValue.text = getString(selectedOption.labelRes)
     }

@@ -8,8 +8,10 @@ enum class MapProvider(val value: String) {
     Amap("amap");
 
     companion object {
+        val defaultProvider = Amap
+
         fun fromValue(value: String?): MapProvider {
-            return entries.firstOrNull { it.value == value } ?: Google
+            return entries.firstOrNull { it.value == value } ?: defaultProvider
         }
     }
 }
@@ -18,7 +20,7 @@ object MapProviderPreference {
     private const val mapProviderKey = "kMapProvider"
 
     fun getProvider(context: Context): MapProvider {
-        return MapProvider.fromValue(Prefs.getDefault(context).getString(mapProviderKey, MapProvider.Google.value))
+        return MapProvider.fromValue(Prefs.getDefault(context).getString(mapProviderKey, MapProvider.defaultProvider.value))
     }
 
     fun setProvider(context: Context, provider: MapProvider) {
