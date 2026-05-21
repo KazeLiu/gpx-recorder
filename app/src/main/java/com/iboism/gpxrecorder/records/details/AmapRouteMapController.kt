@@ -11,7 +11,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.InputType
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.ViewGroup
@@ -398,16 +398,14 @@ internal class AmapRouteMapController(
 
     private fun showTrackPointDialog(pointId: Long) {
         val snapshot = TrackPointEditor.snapshot(pointId) ?: return
-        val noteEditText = EditText(mapView.context).apply {
+        val dialogView = LayoutInflater.from(mapView.context).inflate(R.layout.dialog_edit_track_point, null)
+        val noteEditText = dialogView.findViewById<EditText>(R.id.track_point_note_edit_text).apply {
             setText(snapshot.note)
-            hint = mapView.context.getString(R.string.track_point_note_hint)
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            minLines = 3
         }
 
         MaterialAlertDialogBuilder(mapView.context)
             .setTitle(R.string.edit_track_point)
-            .setView(noteEditText)
+            .setView(dialogView)
             .setPositiveButton(R.string.save_note) { _, _ ->
                 TrackPointEditor.updateNote(pointId, noteEditText.text.toString())
                 redraw()
