@@ -41,10 +41,17 @@ class LocationRecorderService : Service() {
     var isPaused: Boolean = false
     val recordingIntervalMillis: Long
         get() = config.interval
+    val millisUntilNextTrackPoint: Long?
+        get() {
+            if (isPaused) return null
+            val elapsed = SystemClock.elapsedRealtime() - lastTrackPointElapsedRealtimeMillis
+            return (config.interval - elapsed).coerceAtLeast(0L)
+        }
 
     private val serviceBinder = ServiceBinder()
     private var config = RecordingConfiguration()
     private var notificationHelper: RecordingNotification? = null
+    private var lastTrackPointElapsedRealtimeMillis: Long = SystemClock.elapsedRealtime()
 
     private val notificationManager: NotificationManager
         get() = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -144,6 +151,7 @@ class LocationRecorderService : Service() {
             title = config.title,
             interval = intervalMillis
         )
+        resetNextTrackPointCountdown()
         EventBus.getDefault().post(Events.RecordingIntervalUpdatedEvent(gpxId))
 
         if (isPaused) return
@@ -172,6 +180,7 @@ class LocationRecorderService : Service() {
         config = intent.extras?.getBundle(RecordingConfiguration.configKey)?.let {
             return@let RecordingConfiguration.fromBundle(it)
         } ?: RecordingConfiguration()
+        resetNextTrackPointCountdown()
 
         fusedLocation.requestLocationUpdates(
             config.locationRequest(),
@@ -201,8 +210,13 @@ class LocationRecorderService : Service() {
                 }
             }
             realm.close()
+            resetNextTrackPointCountdown()
             EventBus.getDefault().post(Events.RecordingTrackPointAddedEvent(gpxId))
         }
+    }
+
+    private fun resetNextTrackPointCountdown() {
+        lastTrackPointElapsedRealtimeMillis = SystemClock.elapsedRealtime()
     }
 
     inner class ServiceBinder : Binder() {

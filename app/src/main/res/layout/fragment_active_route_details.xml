@@ -23,6 +23,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/recording_in_progress"
         android:textAlignment="viewStart"
         android:textColor="@color/on_nav_bar_surface"
@@ -32,6 +34,26 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingTop="6dp"
         />
+
+    <TextView
+        android:id="@+id/track_point_count_tv"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/button_text_on_surface"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/add_wpt_btn"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline3" />
 
     <TextView
         android:id="@+id/route_title_tv"
@@ -62,44 +84,69 @@
         app:tint="@color/on_nav_bar_surface"
         android:contentDescription="More menu button" />
 
-    <Button
+    <TextView
         android:id="@+id/add_wpt_btn"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="4dp"
         android:text="@string/append_track_point"
         android:textAllCaps="false"
         android:textColor="@color/button_text_on_surface"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/playpause_btn"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/track_point_count_tv"
         app:layout_constraintTop_toBottomOf="@id/guideline3" />
 
-    <Button
+    <TextView
         android:id="@+id/playpause_btn"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="4dp"
         android:text="@string/pause_recording"
         android:textAllCaps="false"
         android:textColor="@color/button_text_on_surface"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/stop_btn" />
+        app:layout_constraintEnd_toStartOf="@+id/stop_btn"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/add_wpt_btn"
+        app:layout_constraintTop_toBottomOf="@id/guideline3" />
 
-    <Button
+    <TextView
         android:id="@+id/stop_btn"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="4dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/stop_recording"
         android:textAllCaps="false"
         android:textColor="@color/button_text_on_surface"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/playpause_btn"
+        app:layout_constraintTop_toBottomOf="@id/guideline3" />
 
     <FrameLayout
         android:id="@+id/map_view"

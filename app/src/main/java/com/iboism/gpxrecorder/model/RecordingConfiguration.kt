@@ -16,7 +16,6 @@ class RecordingConfiguration(
 ) {
     fun locationRequest(): LocationRequest {
         return LocationRequest.Builder(interval)
-            .setMinUpdateDistanceMeters(2f)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .setMinUpdateIntervalMillis(fastestInterval)
             .setMaxUpdateDelayMillis(maxWait)

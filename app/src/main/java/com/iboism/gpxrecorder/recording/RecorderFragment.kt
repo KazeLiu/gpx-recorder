@@ -19,6 +19,7 @@ import com.iboism.gpxrecorder.databinding.FragmentActiveRouteDetailsBinding
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.recording.configurator.RecordingConfiguratorView
 import com.iboism.gpxrecorder.records.details.MapController
+import com.iboism.gpxrecorder.util.DateTimeFormatHelper
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -26,13 +27,15 @@ import io.realm.Realm
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnectedDelegate {
     private var gpxId: Long? = null
     private var mapController: MapController? = null
     private var serviceConnection: RecorderServiceConnection = RecorderServiceConnection(this)
-    private var observableInterval: Observable<Long> = Observable.interval(5, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
+    private var observableInterval: Observable<Long> = Observable.interval(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
     private var intervalObserver: Disposable? = null
     private lateinit var binding: FragmentActiveRouteDetailsBinding
 
@@ -55,6 +58,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.addWptBtn.setOnClickListener(this::appendTrackPointButtonClicked)
         binding.playpauseBtn.setOnClickListener(this::playPauseButtonClicked)
         binding.stopBtn.setOnClickListener(this::stopButtonClicked)
+        binding.trackPointCountTv.setOnClickListener(this::trackPointCountClicked)
 
         val moreMenu = PopupMenu(binding.root.context, binding.moreBtn)
         val mapToggleMenuItem: MenuItem = moreMenu.menu.add(R.string.toggle_map_type)
@@ -100,9 +104,39 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     }
 
     private fun stopButtonClicked(view: View) {
-        context?.let {
-            LocationRecorderService.requestStopRecording(it)
+        val context = context ?: return
+        AlertDialog.Builder(context)
+            .setTitle(R.string.stop_recording_confirm_title)
+            .setMessage(R.string.stop_recording_confirm_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.stop_recording) { _, _ ->
+                LocationRecorderService.requestStopRecording(context)
+            }
+            .show()
+    }
+
+    private fun trackPointCountClicked(view: View) {
+        val context = context ?: return
+        val gpxId = gpxId ?: return
+        val realm = Realm.getDefaultInstance()
+        val gpxContent = GpxContent.withId(gpxId, realm)
+        if (gpxContent == null) {
+            realm.close()
+            return
         }
+        val startTimeText = DateTimeFormatHelper.toReadableString24Hour(gpxContent.date)
+        val startDate = DateTimeFormatHelper.parseDate(gpxContent.date)
+        realm.close()
+
+        val durationText = startDate?.let {
+            formatDurationShort(Date().time - it.time)
+        } ?: getString(R.string.unknown_recording_duration)
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.recording_info_title)
+            .setMessage(getString(R.string.recording_info_message, durationText, startTimeText))
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun showUpdateIntervalDialog() {
@@ -117,14 +151,19 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             screenTitleTextRes = R.string.update_recording_interval,
             doneButtonTextRes = R.string.update_recording_interval
         )
+        configuratorView.doneButton.visibility = View.GONE
 
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.update_recording_interval, null)
             .create()
 
-        configuratorView.doneButton.setOnClickListener {
-            serviceConnection.service?.updateRecordingInterval(configuratorView.getIntervalMillis())
-            dialog.dismiss()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                serviceConnection.service?.updateRecordingInterval(configuratorView.getIntervalMillis())
+                dialog.dismiss()
+            }
         }
         dialog.show()
     }
@@ -144,7 +183,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         mapController?.onResume()
 
         intervalObserver = observableInterval.subscribe {
-            mapController?.redraw()
+            updateUI(gpxId, shouldRedrawMap = false)
         }
     }
 
@@ -174,7 +213,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         super.onSaveInstanceState(outState)
     }
 
-    private fun updateUI(gpxIdOrNull: Long?) {
+    private fun updateUI(gpxIdOrNull: Long?, shouldRedrawMap: Boolean = true) {
         //val distance = content.trackList.first()?.segments?.first()?.distance ?: 0f todo: add distance to ui
         val gpxId = gpxIdOrNull ?: return
         val realm = Realm.getDefaultInstance()
@@ -192,9 +231,21 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             isPaused = it.isPaused
         }
 
-        binding.currentRecHeader.text = getString(
-            R.string.recording_in_progress
-        ) + " · " + resources.getQuantityString(
+        val recordingStatusParts = mutableListOf(
+            getString(R.string.recording_in_progress)
+        )
+        serviceConnection.service?.let { service ->
+            recordingStatusParts.add(
+                getString(R.string.recording_interval_short, formatDurationShort(service.recordingIntervalMillis))
+            )
+            recordingStatusParts.add(
+                service.millisUntilNextTrackPoint?.let { remainingMillis ->
+                    getString(R.string.next_track_point_short, formatDurationShort(remainingMillis))
+                } ?: getString(R.string.next_track_point_paused_short)
+            )
+        }
+        binding.currentRecHeader.text = recordingStatusParts.joinToString(" · ")
+        binding.trackPointCountTv.text = resources.getQuantityString(
             R.plurals.point_count,
             trackPointCount,
             trackPointCount
@@ -202,7 +253,26 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.routeTitleTv.text = routeTitle
         val pauseResumeString = if (isPaused) R.string.resume_recording else R.string.pause_recording
         binding.playpauseBtn.setText(pauseResumeString)
-        mapController?.redraw()
+        if (shouldRedrawMap) {
+            mapController?.redraw()
+        }
+    }
+
+    private fun formatDurationShort(durationMillis: Long): String {
+        val totalSeconds = (durationMillis / 1000L).coerceAtLeast(0L)
+        val hours = totalSeconds / 3600L
+        val minutes = (totalSeconds % 3600L) / 60L
+        val seconds = totalSeconds % 60L
+
+        return buildString {
+            if (hours > 0) append(String.format(Locale.ROOT, "%d%s", hours, getString(R.string.duration_hours_short)))
+            if (minutes > 0 || hours > 0) {
+                append(String.format(Locale.ROOT, "%d%s", minutes, getString(R.string.duration_minutes_short)))
+            }
+            if (seconds > 0 || isEmpty()) {
+                append(String.format(Locale.ROOT, "%d%s", seconds, getString(R.string.duration_seconds_short)))
+            }
+        }
     }
 
     override fun onServiceConnected(serviceConnection: RecorderServiceConnection) {

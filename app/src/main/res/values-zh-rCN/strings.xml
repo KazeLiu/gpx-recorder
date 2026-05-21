@@ -90,6 +90,12 @@
     <string name="toggle_map_type">切换地图类型</string>
     <string name="toggle_time_format">切换时间格式</string>
     <string name="update_recording_interval">修改记录间隔</string>
+    <string name="recording_interval_short">每%s</string>
+    <string name="next_track_point_short">下次约%s</string>
+    <string name="next_track_point_paused_short">下次暂停中</string>
+    <string name="duration_hours_short">时</string>
+    <string name="duration_minutes_short">分</string>
+    <string name="duration_seconds_short">秒</string>
     <string name="delete_route">删除路线</string>
     <string name="delete_track_point">删除坐标点</string>
     <string name="edit_track_point">编辑坐标点</string>
@@ -109,6 +115,11 @@
     <string name="resume_recording_alert_title">继续记录</string>
     <string name="resume_recording_alert_message">如果当前正在记录路线，该记录会被停止。要继续记录这条路线吗？</string>
     <string name="continue_recording">继续</string>
+    <string name="recording_info_title">记录信息</string>
+    <string name="recording_info_message">已记录时长：%1$s\n开始记录：%2$s</string>
+    <string name="stop_recording_confirm_title">停止记录？</string>
+    <string name="stop_recording_confirm_message">停止后，本次轨迹会保存到列表。</string>
+    <string name="unknown_recording_duration">未知</string>
     <string name="share_chooser_title">选择应用</string>
     <string name="map_marker_start">起点</string>
     <string name="map_marker_end">终点</string>

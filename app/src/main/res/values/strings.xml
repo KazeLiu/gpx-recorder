@@ -101,6 +101,12 @@
     <string name="toggle_map_type">Toggle map type</string>
     <string name="toggle_time_format">Toggle time format</string>
     <string name="update_recording_interval">Update interval</string>
+    <string name="recording_interval_short">Every %s</string>
+    <string name="next_track_point_short">Next ~%s</string>
+    <string name="next_track_point_paused_short">Next paused</string>
+    <string name="duration_hours_short">h</string>
+    <string name="duration_minutes_short">m</string>
+    <string name="duration_seconds_short">s</string>
     <string name="delete_route">Delete route</string>
     <string name="delete_track_point">Delete point</string>
     <string name="edit_track_point">Edit track point</string>
@@ -120,6 +126,11 @@
     <string name="resume_recording_alert_title">Resume recording</string>
     <string name="resume_recording_alert_message">If a route recording is in progress, it will be stopped. Would you like to continue recording this route?</string>
     <string name="continue_recording">Continue</string>
+    <string name="recording_info_title">Recording info</string>
+    <string name="recording_info_message">Recorded for: %1$s\nStarted at: %2$s</string>
+    <string name="stop_recording_confirm_title">Stop recording?</string>
+    <string name="stop_recording_confirm_message">This route will be saved to the list after stopping.</string>
+    <string name="unknown_recording_duration">Unknown</string>
     <string name="share_chooser_title">Choose an app</string>
     <string name="map_marker_start">Start</string>
     <string name="map_marker_end">End</string>
