@@ -3,6 +3,7 @@ package com.iboism.gpxrecorder.recording.location
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
+import android.util.Log
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -131,10 +132,16 @@ class AmapRecordingLocationProvider(
 
     private fun AMapLocation.toStatus(): RecordingLocationStatus {
         if (errorCode != AMapLocation.LOCATION_SUCCESS) {
+            val formattedError = AmapLocationErrorFormatter.format(
+                errorCode = errorCode,
+                errorInfo = errorInfo,
+                locationDetail = locationDetail
+            )
+            Log.w(TAG, formattedError)
             return RecordingLocationStatus(
                 provider = LocationProviderName.Amap,
                 method = LocationMethod.Unknown,
-                errorMessage = errorInfo.takeIf { it.isNotBlank() } ?: locationDetail
+                errorMessage = formattedError
             )
         }
 
@@ -156,5 +163,9 @@ class AmapRecordingLocationProvider(
             satellites = satellites.takeIf { it > 0 },
             signalStrength = signalStrengthFromAccuracy(accuracy)
         )
+    }
+
+    companion object {
+        private const val TAG = "AmapLocationProvider"
     }
 }

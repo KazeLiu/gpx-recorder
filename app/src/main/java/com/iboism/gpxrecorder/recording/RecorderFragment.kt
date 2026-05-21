@@ -83,6 +83,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         binding.playpauseBtn.setOnClickListener(this::playPauseButtonClicked)
         binding.stopBtn.setOnClickListener(this::stopButtonClicked)
         binding.trackPointCountTv.setOnClickListener(this::trackPointCountClicked)
+        binding.locationStatusChip.setOnClickListener { locationStatusClicked() }
 
         binding.moreBtn.setOnClickListener { showMoreMenu() }
 
@@ -277,6 +278,7 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
             ?.locationStatus
             ?.displayText(requireContext())
             ?: getString(R.string.location_status_waiting)
+        binding.locationStatusChip.contentDescription = binding.locationStatusChip.text
         binding.trackPointCountTv.text = resources.getQuantityString(
             R.plurals.point_count,
             trackPointCount,
@@ -290,6 +292,24 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
         if (shouldRedrawMap) {
             mapController?.redraw()
         }
+    }
+
+    private fun locationStatusClicked() {
+        val context = context ?: return
+        val status = serviceConnection.service?.locationStatus ?: return
+        val errorMessage = status.errorMessage ?: return
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.error)
+            .setMessage(
+                getString(
+                    R.string.location_status_error,
+                    status.provider.label(context),
+                    errorMessage
+                )
+            )
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun updateRecordingHeaderStyle(isPaused: Boolean) {

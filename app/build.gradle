@@ -18,11 +18,14 @@ android {
     compileSdkVersion 36
     defaultConfig {
         applicationId = "com.kaze.gpxrecorder"
-        minSdkVersion 29
+        minSdkVersion 28
         targetSdkVersion 36
         versionCode 52
         versionName "1.0"
         resValue "string", "amap_api_key", localProperties.getProperty("AMAP_API_KEY", "")
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
     }
 
     buildFeatures {
@@ -48,12 +51,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     
     kotlinOptions {
-        jvmTarget = '18'
+        jvmTarget = '17'
     }
     
     namespace = 'com.iboism.gpxrecorder'
@@ -77,4 +80,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.3.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
+    testImplementation 'junit:junit:4.13.2'
 }
