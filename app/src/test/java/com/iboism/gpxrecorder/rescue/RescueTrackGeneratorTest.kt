@@ -20,6 +20,17 @@ class RescueTrackGeneratorTest {
     }
 
     @Test
+    fun validateAnchorsForPlanningAllowsMissingEndTime() {
+        val anchors = listOf(
+            RescueAnchorSnapshot(1L, 30.0, 120.0, "2026-05-22T01:00:00Z", RescueAnchorSource.MANUAL, 0),
+            RescueAnchorSnapshot(2L, 30.1, 120.1, null, RescueAnchorSource.MANUAL, 1)
+        )
+
+        assertNull(RescueTrackGenerator.validateAnchorsForPlanning(anchors))
+        assertEquals("终点必须设置时间。", RescueTrackGenerator.validateAnchors(anchors))
+    }
+
+    @Test
     fun generateKeepsTimedAnchorsAndInterpolatesUntimedAnchor() {
         val anchors = listOf(
             RescueAnchorSnapshot(1L, 30.0, 120.0, "2026-05-22T01:00:00Z", RescueAnchorSource.MANUAL, 0),

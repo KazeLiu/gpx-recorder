@@ -450,21 +450,12 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
             showMessage("至少需要两个锚点。")
             return
         }
-        val last = draft.anchors.filterNotNull().maxByOrNull { it.order } ?: return
-        if (last.time == null) {
-            pickDateTime(Date(), R.string.rescue_pick_end_time) { time ->
-                if (time == null) return@pickDateTime
-                RescueDraftRepository.updateAnchorTime(draftId, last.identifier, time)
-                preparePlanningIfValid()
-            }
-            return
-        }
         preparePlanningIfValid()
     }
 
     private fun preparePlanningIfValid() {
         val draft = RescueDraftRepository.copyDraft(draftId) ?: return
-        val error = RescueTrackGenerator.validateAnchors(RescueDraftRepository.anchorsForGeneration(draft))
+        val error = RescueTrackGenerator.validateAnchorsForPlanning(RescueDraftRepository.anchorsForGeneration(draft))
         if (error != null) {
             showMessage(error)
             return
@@ -705,6 +696,15 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
 
     private fun generatePreview() {
         val draft = RescueDraftRepository.copyDraft(draftId) ?: return
+        val last = draft.anchors.filterNotNull().maxByOrNull { it.order } ?: return
+        if (last.time == null) {
+            pickDateTime(Date(), R.string.rescue_pick_end_time) { time ->
+                if (time == null) return@pickDateTime
+                RescueDraftRepository.updateAnchorTime(draftId, last.identifier, time)
+                generatePreview()
+            }
+            return
+        }
         val anchors = RescueDraftRepository.anchorsForGeneration(draft)
         val error = RescueTrackGenerator.validateAnchors(anchors)
         if (error != null) {

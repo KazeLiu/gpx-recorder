@@ -124,6 +124,17 @@ object RescueTrackGenerator {
         if (ordered.size < 2) return "至少需要两个锚点。"
         if (ordered.first().time == null) return "起点必须设置时间。"
         if (ordered.last().time == null) return "终点必须设置时间。"
+        return validateTimedAnchorOrder(ordered)
+    }
+
+    fun validateAnchorsForPlanning(anchors: List<RescueAnchorSnapshot>): String? {
+        val ordered = anchors.sortedBy { it.order }
+        if (ordered.size < 2) return "至少需要两个锚点。"
+        if (ordered.first().time == null) return "起点必须设置时间。"
+        return validateTimedAnchorOrder(ordered)
+    }
+
+    private fun validateTimedAnchorOrder(ordered: List<RescueAnchorSnapshot>): String? {
         val timedAnchors = ordered.mapNotNull { anchor ->
             val time = anchor.time?.let { DateTimeFormatHelper.parseDate(it) } ?: return@mapNotNull null
             anchor to time
