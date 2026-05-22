@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_background"
     android:orientation="vertical"
-    android:paddingHorizontal="24dp"
-    android:paddingTop="24dp"
-    android:paddingBottom="16dp">
+    android:paddingHorizontal="@dimen/dialog_horizontal_padding"
+    android:paddingTop="16dp"
+    android:paddingBottom="12dp">
 
     <TextView
         android:id="@+id/export_title_tv"
@@ -15,19 +15,20 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/export"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textColor="@color/md_onSurface" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/format_selector_layout"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        style="@style/Widget.Gpx.TextInputLayout.Compact.Dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:hint="@string/file_format">
 
         <AutoCompleteTextView
             android:id="@+id/format_selector_spinner"
+            style="@style/GpxCompactTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
@@ -39,7 +40,7 @@
         android:id="@+id/filename_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/md3_compact_item_spacing"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:orientation="horizontal">
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/use_iso_date_for_filename"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="@color/md_onSurface" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -63,46 +64,49 @@
         android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/md3_compact_item_spacing"
         android:gravity="end"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/export_save_btn"
-            style="@style/Widget.Material3.Button.TextButton"
+            style="@style/Widget.Gpx.Button.Compact.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
+            android:maxLines="1"
             android:text="@string/save"
             android:textColor="@color/button_text_on_surface" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/export_download_btn"
-            style="@style/Widget.Material3.Button.TextButton"
+            style="@style/Widget.Gpx.Button.Compact.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:lines="1"
+            android:maxLines="1"
             android:text="@string/download"
             android:textColor="@color/button_text_on_surface" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/export_share_btn"
-            style="@style/Widget.Material3.Button.TextButton"
+            style="@style/Widget.Gpx.Button.Compact.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:lines="1"
+            android:maxLines="1"
             android:text="@string/share"
             android:textColor="@color/button_text_on_surface" />
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/export_progress_bar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/md3_compact_item_spacing"
         android:indeterminate="true"
         android:indeterminateTint="@color/md_primary"
         android:visibility="gone" />
@@ -111,7 +115,7 @@
         android:id="@+id/info_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/md3_compact_item_spacing"
         android:gravity="top"
         android:orientation="horizontal">
 

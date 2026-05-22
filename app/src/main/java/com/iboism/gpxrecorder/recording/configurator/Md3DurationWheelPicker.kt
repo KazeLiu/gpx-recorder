@@ -30,7 +30,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
     init {
         orientation = HORIZONTAL
         gravity = Gravity.CENTER
-        setPadding(dp(12), dp(8), dp(12), dp(8))
+        setPadding(dp(8), dp(6), dp(8), dp(6))
         addWheel(hoursWheel)
         addWheel(minutesWheel)
         addWheel(secondsWheel)
@@ -55,9 +55,9 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
     private fun addWheel(wheel: WheelColumn) {
         addView(
             wheel,
-            LayoutParams(0, dp(156), 1f).apply {
-                marginStart = dp(4)
-                marginEnd = dp(4)
+            LayoutParams(0, dp(128), 1f).apply {
+                marginStart = dp(3)
+                marginEnd = dp(3)
             }
         )
     }
@@ -69,7 +69,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
         values: IntRange,
         private val unitLabel: String,
     ) : MaterialCardView(context) {
-        private val itemHeight = dp(44)
+        private val itemHeight = dp(40)
         private val recyclerView = RecyclerView(context)
         private val adapter = WheelAdapter(values.toList(), unitLabel)
         private val layoutManager = LinearLayoutManager(context)
@@ -79,7 +79,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
             private set
 
         init {
-            radius = dp(22).toFloat()
+            radius = dp(18).toFloat()
             cardElevation = 0f
             strokeWidth = 0
             setCardBackgroundColor(ContextCompat.getColor(context, R.color.md_surfaceContainer))
@@ -89,7 +89,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
 
             val highlight = View(context).apply {
                 background = GradientDrawable().apply {
-                    cornerRadius = dp(16).toFloat()
+                    cornerRadius = dp(14).toFloat()
                     setColor(ContextCompat.getColor(context, R.color.md_primaryContainer))
                 }
             }
@@ -100,8 +100,8 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
                     itemHeight,
                     Gravity.CENTER
                 ).apply {
-                    leftMargin = dp(8)
-                    rightMargin = dp(8)
+                    leftMargin = dp(6)
+                    rightMargin = dp(6)
                 }
             )
 
@@ -179,7 +179,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
             val isSelected = position == selectedPosition
             holder.textView.apply {
                 text = context.getString(R.string.interval_wheel_value, values[position], unitLabel)
-                textSize = if (isSelected) 21f else 16f
+                textSize = if (isSelected) 18f else 14f
                 typeface = Typeface.DEFAULT_BOLD.takeIf { isSelected } ?: Typeface.DEFAULT
                 alpha = if (isSelected) 1f else 0.48f
                 setTextColor(
@@ -201,7 +201,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
             init {
                 textView.layoutParams = RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,
-                    (44 * textView.resources.displayMetrics.density).roundToInt()
+                    (40 * textView.resources.displayMetrics.density).roundToInt()
                 )
             }
         }

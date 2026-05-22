@@ -5,13 +5,22 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">80dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="dialog_horizontal_padding">24dp</dimen>
+    <dimen name="dialog_horizontal_padding">16dp</dimen>
     <dimen name="dialog_horizontal_margin">16dp</dimen>
     <dimen name="settings_row_min_height">48dp</dimen>
     <dimen name="md3_screen_horizontal_padding">16dp</dimen>
     <dimen name="md3_card_corner_radius">20dp</dimen>
     <dimen name="md3_card_vertical_margin">8dp</dimen>
-    <dimen name="md3_large_button_height">64dp</dimen>
+    <dimen name="md3_large_button_height">52dp</dimen>
     <dimen name="md3_touch_target">48dp</dimen>
+    <dimen name="md3_compact_button_height">44dp</dimen>
+    <dimen name="md3_compact_button_min_width">64dp</dimen>
+    <dimen name="md3_compact_button_horizontal_padding">12dp</dimen>
+    <dimen name="md3_compact_text_button_horizontal_padding">8dp</dimen>
+    <dimen name="md3_compact_input_min_height">48dp</dimen>
+    <dimen name="md3_compact_input_padding_top">18dp</dimen>
+    <dimen name="md3_compact_input_padding_bottom">6dp</dimen>
+    <dimen name="md3_compact_section_spacing">12dp</dimen>
+    <dimen name="md3_compact_item_spacing">8dp</dimen>
     <dimen name="status_bar_content_extra_padding">8dp</dimen>
 </resources>

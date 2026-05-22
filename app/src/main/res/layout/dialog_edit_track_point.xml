@@ -5,13 +5,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingStart="@dimen/dialog_horizontal_padding"
-    android:paddingTop="8dp"
+    android:paddingTop="6dp"
     android:paddingEnd="@dimen/dialog_horizontal_padding"
     android:paddingBottom="4dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/track_point_note_input_layout"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox"
+        style="@style/Widget.Gpx.TextInputLayout.Compact.Filled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/track_point_note_hint"
@@ -19,6 +19,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/track_point_note_edit_text"
+            style="@style/GpxCompactTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top|start"

@@ -48,6 +48,82 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="TextAppearance.Gpx.CompactButton" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Gpx.CompactLargeButton" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Gpx.CompactFieldText" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Gpx.CompactFieldHint" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.Gpx.Button.Compact" parent="Widget.Material3.Button">
+        <item name="android:minWidth">@dimen/md3_compact_button_min_width</item>
+        <item name="android:minHeight">@dimen/md3_compact_button_height</item>
+        <item name="android:paddingStart">@dimen/md3_compact_button_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/md3_compact_button_horizontal_padding</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Gpx.CompactButton</item>
+    </style>
+
+    <style name="Widget.Gpx.Button.Compact.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minWidth">@dimen/md3_compact_button_min_width</item>
+        <item name="android:minHeight">@dimen/md3_compact_button_height</item>
+        <item name="android:paddingStart">@dimen/md3_compact_button_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/md3_compact_button_horizontal_padding</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Gpx.CompactButton</item>
+    </style>
+
+    <style name="Widget.Gpx.Button.Compact.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:minWidth">@dimen/md3_compact_button_min_width</item>
+        <item name="android:minHeight">@dimen/md3_compact_button_height</item>
+        <item name="android:paddingStart">@dimen/md3_compact_text_button_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/md3_compact_text_button_horizontal_padding</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Gpx.CompactButton</item>
+    </style>
+
+    <style name="Widget.Gpx.Button.Compact.Large" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/md3_large_button_height</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Gpx.CompactLargeButton</item>
+    </style>
+
+    <style name="Widget.Gpx.TextInputLayout.Compact.Filled" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+        <item name="helperTextTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+    </style>
+
+    <style name="Widget.Gpx.TextInputLayout.Compact.Dropdown" parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="hintTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+        <item name="helperTextTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Gpx.CompactFieldHint</item>
+    </style>
+
+    <style name="GpxCompactTextInputEditText">
+        <item name="android:minHeight">@dimen/md3_compact_input_min_height</item>
+        <item name="android:paddingTop">@dimen/md3_compact_input_padding_top</item>
+        <item name="android:paddingBottom">@dimen/md3_compact_input_padding_bottom</item>
+        <item name="android:textAppearance">@style/TextAppearance.Gpx.CompactFieldText</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

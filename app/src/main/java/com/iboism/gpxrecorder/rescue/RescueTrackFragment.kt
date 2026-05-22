@@ -221,9 +221,11 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
 
         binding.rescueModeSpinner.adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item_compact,
             listOf("直线", "驾车", "步行", "骑行")
-        )
+        ).apply {
+            setDropDownViewResource(R.layout.spinner_dropdown_item_compact)
+        }
         binding.rescueModeSpinner.setOnItemSelectedListener(SimpleSelectionListener { position ->
             if (isRendering) return@SimpleSelectionListener
             val segment = currentSegment() ?: return@SimpleSelectionListener
@@ -232,9 +234,11 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
         })
         binding.rescueIntervalSpinner.adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_item_compact,
             listOf("1 秒", "10 秒", "30 秒", "60 秒", "90 秒", "120 秒")
-        )
+        ).apply {
+            setDropDownViewResource(R.layout.spinner_dropdown_item_compact)
+        }
         binding.rescueIntervalSpinner.setSelection(1, false)
     }
 
@@ -360,6 +364,9 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
                 text = "${candidate.title} · ${candidate.distanceMeters} 米 · ${candidate.durationSeconds / 60} 分钟"
                 id = View.generateViewId()
                 isChecked = index == segment.selectedRouteIndex
+                minHeight = (40 * resources.displayMetrics.density).toInt()
+                textSize = 14f
+                setPadding(0, 0, 0, 0)
                 setOnClickListener {
                     RescueDraftRepository.saveRouteCandidates(
                         draftId,
@@ -1254,7 +1261,7 @@ class RescueTrackFragment : Fragment(), AmapRescueTrackMapController.Listener {
         private const val ARG_DRAFT_ID = Keys.GpxId
         private const val WAYPOINT_ROUTE_REFRESH_DEBOUNCE_MS = 900L
         private const val MAX_INLINE_LIST_VISIBLE_ITEMS = 3
-        private const val INLINE_LIST_MAX_ITEMS_HEIGHT = 168f
+        private const val INLINE_LIST_MAX_ITEMS_HEIGHT = 144f
 
         fun newInstance(draftId: Long? = null): RescueTrackFragment {
             return RescueTrackFragment().apply {

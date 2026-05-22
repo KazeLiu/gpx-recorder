@@ -21,12 +21,12 @@
         android:layout_height="wrap_content"
         android:background="@color/nav_bar_surface"
         android:gravity="center_vertical"
-        android:minHeight="64dp"
+        android:minHeight="56dp"
         android:orientation="horizontal"
         android:paddingStart="8dp"
-        android:paddingTop="12dp"
+        android:paddingTop="6dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -66,14 +66,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rescue_previous_step_button"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.Gpx.Button.Compact.Outlined"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:minWidth="88dp"
-            android:minHeight="40dp"
+            android:minHeight="44dp"
+            android:maxLines="1"
             android:text="@string/rescue_previous_step"
             android:textColor="@color/on_nav_bar_surface"
-            android:textSize="12sp"
             app:strokeColor="@color/on_nav_bar_surface" />
     </LinearLayout>
 
@@ -93,19 +93,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="@dimen/dialog_horizontal_margin"
-            android:paddingTop="14dp"
+            android:paddingTop="10dp"
             android:paddingEnd="@dimen/dialog_horizontal_margin"
-            android:paddingBottom="18dp">
+            android:paddingBottom="12dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/rescue_title_input_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/Widget.Gpx.TextInputLayout.Compact.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/rescue_title_input"
+                    style="@style/GpxCompactTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/title"
@@ -117,18 +118,19 @@
                 android:id="@+id/rescue_search_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                    style="@style/Widget.Gpx.TextInputLayout.Compact.Filled"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/rescue_search_input"
+                        style="@style/GpxCompactTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/rescue_search_hint"
@@ -138,9 +140,11 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_search_button"
-                    android:layout_width="88dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="8dp"
+                    style="@style/Widget.Gpx.Button.Compact"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="6dp"
+                    android:maxLines="1"
                     android:text="@string/rescue_search" />
             </LinearLayout>
 
@@ -148,7 +152,7 @@
                 android:id="@+id/rescue_status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/md_onSurfaceVariant" />
 
@@ -170,11 +174,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_anchor_sort_button"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="72dp"
+                    style="@style/Widget.Gpx.Button.Compact.Text"
+                    android:layout_width="64dp"
                     android:layout_height="40dp"
-                    android:minWidth="72dp"
+                    android:minWidth="64dp"
                     android:minHeight="40dp"
+                    android:maxLines="1"
                     android:text="@string/rescue_sort" />
             </LinearLayout>
 
@@ -187,25 +192,25 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rescue_import_media_button"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Gpx.Button.Compact.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/md3_large_button_height"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:text="@string/rescue_import_media" />
 
             <TextView
                 android:id="@+id/rescue_segment_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="@color/md_onSurface" />
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/md_onSurfaceVariant" />
 
             <LinearLayout
                 android:id="@+id/rescue_planning_route_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -215,28 +220,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="2"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:textColor="@color/md_onSurface" />
 
                 <Spinner
                     android:id="@+id/rescue_mode_spinner"
-                    android:layout_width="132dp"
+                    android:layout_width="120dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="6dp" />
             </LinearLayout>
 
             <RadioGroup
                 android:id="@+id/rescue_candidate_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/rescue_waypoint_summary_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -250,11 +255,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_waypoint_sort_button"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="72dp"
+                    style="@style/Widget.Gpx.Button.Compact.Text"
+                    android:layout_width="64dp"
                     android:layout_height="40dp"
-                    android:minWidth="72dp"
+                    android:minWidth="64dp"
                     android:minHeight="40dp"
+                    android:maxLines="1"
                     android:text="@string/rescue_sort" />
             </LinearLayout>
 
@@ -269,7 +275,7 @@
                 android:id="@+id/rescue_generation_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -281,45 +287,50 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_generate_button"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="144dp"
+                    style="@style/Widget.Gpx.Button.Compact.Outlined"
+                    android:layout_width="112dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="6dp"
                     android:minHeight="48dp"
-                    android:text="@string/rescue_generate_preview_short"
-                    android:textSize="12sp" />
+                    android:maxLines="1"
+                    android:text="@string/rescue_generate_preview_short" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/rescue_segment_navigation_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_previous_segment_button"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.Gpx.Button.Compact.Outlined"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/md3_large_button_height"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:text="@string/rescue_previous_segment" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_next_button"
+                    style="@style/Widget.Gpx.Button.Compact"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/md3_large_button_height"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:text="@string/rescue_next_step" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rescue_save_button"
+                style="@style/Widget.Gpx.Button.Compact"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/md3_large_button_height"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/md3_compact_item_spacing"
+                android:maxLines="1"
                 android:text="@string/rescue_save_route" />
         </LinearLayout>
     </ScrollView>
