@@ -8,6 +8,19 @@ object AmapCoordinateConverter {
     private const val A = 6378245.0
     private const val EE = 0.00669342162296594323
 
+    fun wgsToGcj(lat: Double, lon: Double): Pair<Double, Double> {
+        if (isOutsideChina(lat, lon)) return lat to lon
+        var dLat = transformLat(lon - 105.0, lat - 35.0)
+        var dLon = transformLon(lon - 105.0, lat - 35.0)
+        val radLat = lat / 180.0 * Math.PI
+        var magic = sin(radLat)
+        magic = 1 - EE * magic * magic
+        val sqrtMagic = sqrt(magic)
+        dLat = (dLat * 180.0) / ((A * (1 - EE)) / (magic * sqrtMagic) * Math.PI)
+        dLon = (dLon * 180.0) / (A / sqrtMagic * cos(radLat) * Math.PI)
+        return (lat + dLat) to (lon + dLon)
+    }
+
     fun gcjToWgs(lat: Double, lon: Double): Pair<Double, Double> {
         if (isOutsideChina(lat, lon)) return lat to lon
         var dLat = transformLat(lon - 105.0, lat - 35.0)

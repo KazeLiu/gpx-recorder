@@ -11,12 +11,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.gms.location.LocationServices
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.extensions.hideSoftKeyBoard
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.RecordingConfiguration
 import com.iboism.gpxrecorder.recording.location.AmapRecordingLocationProvider
+import com.iboism.gpxrecorder.rescue.RescueDraftRepository
+import com.iboism.gpxrecorder.rescue.RescueTrackFragment
 import com.iboism.gpxrecorder.settings.MapProvider
 import com.iboism.gpxrecorder.settings.MapProviderPreference
 import com.iboism.gpxrecorder.util.PermissionHelper
@@ -67,6 +70,14 @@ class RecordingConfiguratorModal : Fragment() {
             )
 
             configuratorView.restoreInstanceState(savedInstanceState)
+            findViewById<View>(R.id.rescue_track_entry_card)?.apply {
+                visibility = if (gpxId == null) View.VISIBLE else View.GONE
+                setOnClickListener { clickedView ->
+                    context.hideSoftKeyBoard(clickedView)
+                    showRescueTrackFlow()
+                }
+            }
+            findViewById<View>(R.id.normal_recording_section_label)?.visibility = if (gpxId == null) View.VISIBLE else View.GONE
             configuratorView.doneButton.setOnClickListener { clickedView ->
                 PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putLong(RecordingConfiguration.intervalKey, configuratorView.getIntervalMillis())
@@ -127,6 +138,32 @@ class RecordingConfiguratorModal : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showRescueTrackFlow() {
+        val activeDraftId = RescueDraftRepository.latestActiveDraftId()
+        if (activeDraftId != null) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.rescue_continue_draft_title)
+                .setMessage(R.string.rescue_continue_draft_message)
+                .setPositiveButton(R.string.rescue_continue_draft) { _, _ ->
+                    openRescueTrack(activeDraftId)
+                }
+                .setNegativeButton(R.string.rescue_new_draft) { _, _ ->
+                    openRescueTrack(RescueDraftRepository.createDraftReplacingActive())
+                }
+                .show()
+            return
+        }
+        openRescueTrack(RescueDraftRepository.createDraft())
+    }
+
+    private fun openRescueTrack(draftId: Long) {
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.none, R.anim.none, R.anim.slide_out_right)
+            .replace(R.id.content_container, RescueTrackFragment.newInstance(draftId))
+            .addToBackStack("rescue_track")
+            .commit()
     }
 
     interface Listener {
