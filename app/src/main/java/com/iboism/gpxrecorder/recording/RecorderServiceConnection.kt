@@ -36,10 +36,12 @@ class RecorderServiceConnection(private val delegate: OnServiceConnectedDelegate
         }
     }
 
-    fun disconnect(context: Context) {
+    fun disconnect(context: Context, notifyDelegate: Boolean = true) {
         try {
             context.unbindService(serviceConnection)
-            delegate.onServiceDisconnected()
+            if (notifyDelegate) {
+                delegate.onServiceDisconnected()
+            }
             service = null
         } catch (e: IllegalArgumentException) {
             // no op

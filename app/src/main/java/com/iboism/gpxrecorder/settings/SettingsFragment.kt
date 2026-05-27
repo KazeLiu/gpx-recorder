@@ -75,13 +75,32 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupThemeOptions() {
-        binding.darkModeSwitch.isChecked = ThemePreference.isDarkModeEnabled(requireContext())
+        binding.followSystemSwitch.isChecked = ThemePreference.isFollowSystemEnabled(requireContext())
+        binding.darkModeSwitch.isChecked = ThemePreference.isManualDarkModeEnabled(requireContext())
+        updateThemeOptionVisibility()
+
+        binding.followSystemSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                val currentDarkMode = ThemePreference.isDarkModeEnabled(requireContext())
+                binding.darkModeSwitch.isChecked = currentDarkMode
+                ThemePreference.setManualDarkModeEnabled(requireContext(), currentDarkMode)
+            }
+            ThemePreference.setFollowSystemEnabled(requireContext(), isChecked)
+            updateThemeOptionVisibility()
+        }
+        binding.followSystemRow.setOnClickListener {
+            binding.followSystemSwitch.isChecked = !binding.followSystemSwitch.isChecked
+        }
         binding.darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            ThemePreference.setDarkModeEnabled(requireContext(), isChecked)
+            ThemePreference.setManualDarkModeEnabled(requireContext(), isChecked)
         }
         binding.darkModeRow.setOnClickListener {
             binding.darkModeSwitch.isChecked = !binding.darkModeSwitch.isChecked
         }
+    }
+
+    private fun updateThemeOptionVisibility() {
+        binding.darkModeRow.visibility = if (binding.followSystemSwitch.isChecked) View.GONE else View.VISIBLE
     }
 
     private fun setupMapProviderOptions() {

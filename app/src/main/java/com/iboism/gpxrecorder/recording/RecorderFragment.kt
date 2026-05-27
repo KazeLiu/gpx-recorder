@@ -235,6 +235,12 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     override fun onStart() {
         super.onStart()
         mapController?.onStart()
+        requestServiceConnectionIfNeeded()
+    }
+
+    override fun onStop() {
+        context?.let { serviceConnection.disconnect(it, notifyDelegate = false) }
+        super.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
