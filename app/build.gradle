@@ -20,8 +20,8 @@ android {
         applicationId = "com.kaze.gpxrecorder"
         minSdkVersion 28
         targetSdkVersion 36
-        versionCode 52
-        versionName "1.0"
+        versionCode 54
+        versionName "1.4"
         resValue "string", "amap_api_key", localProperties.getProperty("AMAP_API_KEY", "")
         resValue "string", "amap_web_api_key", localProperties.getProperty("AMAP_WEB_API_KEY", localProperties.getProperty("AMAP_API_KEY", ""))
         ndk {

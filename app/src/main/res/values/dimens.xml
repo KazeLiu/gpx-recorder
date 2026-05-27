@@ -17,9 +17,9 @@
     <dimen name="md3_compact_button_min_width">64dp</dimen>
     <dimen name="md3_compact_button_horizontal_padding">12dp</dimen>
     <dimen name="md3_compact_text_button_horizontal_padding">8dp</dimen>
-    <dimen name="md3_compact_input_min_height">48dp</dimen>
-    <dimen name="md3_compact_input_padding_top">18dp</dimen>
-    <dimen name="md3_compact_input_padding_bottom">6dp</dimen>
+    <dimen name="md3_compact_input_min_height">52dp</dimen>
+    <dimen name="md3_compact_input_padding_top">24dp</dimen>
+    <dimen name="md3_compact_input_padding_bottom">8dp</dimen>
     <dimen name="md3_compact_section_spacing">12dp</dimen>
     <dimen name="md3_compact_item_spacing">8dp</dimen>
     <dimen name="status_bar_content_extra_padding">8dp</dimen>
