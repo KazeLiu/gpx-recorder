@@ -142,30 +142,31 @@ internal class GoogleRouteMapController(
         val boundsBuilder = LatLngBounds.Builder()
         clear()
 
-        tracks.forEach { track ->
-            val points = track.segments.flatMap { segment ->
-                segment.points.map { LatLng(it.lat, it.lon) }
+        for (track in tracks) {
+            for (segment in track.segments) {
+                val points = segment.points.map { LatLng(it.lat, it.lon) }
+                if (points.isEmpty()) continue
+                allPoints.addAll(points)
+
+                if (points.size < 2) continue
+                this.addPolyline(
+                    PolylineOptions()
+                        .color(ContextCompat.getColor(mapView.context, R.color.white))
+                        .jointType(ROUND)
+                        .width(16.5f)
+                        .addAll(points)
+                        .geodesic(true)
+                )
+
+                this.addPolyline(
+                    PolylineOptions()
+                        .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
+                        .jointType(ROUND)
+                        .width(12f)
+                        .addAll(points)
+                        .geodesic(true)
+                )
             }
-            if (points.isEmpty()) return@forEach
-            allPoints.addAll(points)
-
-            this.addPolyline(
-                PolylineOptions()
-                    .color(ContextCompat.getColor(mapView.context, R.color.white))
-                    .jointType(ROUND)
-                    .width(16.5f)
-                    .addAll(points)
-                    .geodesic(true)
-            )
-
-            this.addPolyline(
-                PolylineOptions()
-                    .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
-                    .jointType(ROUND)
-                    .width(12f)
-                    .addAll(points)
-                    .geodesic(true)
-            )
         }
 
         tracks.firstOrNull()?.segments?.firstOrNull()?.points?.firstOrNull()?.let {

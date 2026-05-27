@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Bundle
@@ -59,6 +61,7 @@ internal class AmapRouteMapController(
     private var isLayoutReady = false
     private var isMapSetup = false
     private var map: AMap? = null
+    private var currentLocationMarker: Marker? = null
 
     override var shouldDrawEnd = true
     override var shouldCenterOnLoad = true
@@ -76,6 +79,7 @@ internal class AmapRouteMapController(
     private var pendingManualDrag: PendingManualDrag? = null
     private var activeManualDrag: ActiveManualDrag? = null
     private val editableTrackPointIconCache = mutableMapOf<Int, BitmapDescriptor>()
+    private val currentLocationDescriptor: BitmapDescriptor by lazy { createCurrentLocationDescriptor() }
     private val trackPointMarkerIconSize: Pair<Int, Int> by lazy {
         val bitmap = bitmapFromVector(mapView.context, R.drawable.ic_draggable_track_point)
         (bitmap.width to bitmap.height).also { bitmap.recycle() }
@@ -176,6 +180,9 @@ internal class AmapRouteMapController(
 
     private fun AMap.drawContent(gpx: GpxContent, shouldCenter: Boolean) {
         val trackBounds = this.drawTracks(gpx.trackList.toList())
+        if (showCurrentLocationButton) {
+            this.drawCurrentLocationMarker()
+        }
 
         if (trackBounds != null && shouldCenter) {
             this.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 50))
@@ -186,29 +193,31 @@ internal class AmapRouteMapController(
         val allPoints: MutableList<LatLng> = mutableListOf()
         val boundsBuilder = LatLngBounds.Builder()
         clear()
+        currentLocationMarker = null
 
-        tracks.forEach { track ->
-            val points = track.segments.flatMap { segment ->
-                segment.points.map { toAmapLatLng(it) }
+        for (track in tracks) {
+            for (segment in track.segments) {
+                val points = segment.points.map { toAmapLatLng(it) }
+                if (points.isEmpty()) continue
+                allPoints.addAll(points)
+
+                if (points.size < 2) continue
+                this.addPolyline(
+                    PolylineOptions()
+                        .color(ContextCompat.getColor(mapView.context, R.color.white))
+                        .width(16.5f)
+                        .addAll(points)
+                        .geodesic(true)
+                )
+
+                this.addPolyline(
+                    PolylineOptions()
+                        .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
+                        .width(12f)
+                        .addAll(points)
+                        .geodesic(true)
+                )
             }
-            if (points.isEmpty()) return@forEach
-            allPoints.addAll(points)
-
-            this.addPolyline(
-                PolylineOptions()
-                    .color(ContextCompat.getColor(mapView.context, R.color.white))
-                    .width(16.5f)
-                    .addAll(points)
-                    .geodesic(true)
-            )
-
-            this.addPolyline(
-                PolylineOptions()
-                    .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
-                    .width(12f)
-                    .addAll(points)
-                    .geodesic(true)
-            )
         }
 
         tracks.firstOrNull()?.segments?.firstOrNull()?.points?.firstOrNull()?.let {
@@ -461,6 +470,7 @@ internal class AmapRouteMapController(
                 }
 
                 LastLocation.put(lat = location.lat, lon = location.lon)
+                map?.drawCurrentLocationMarker(location.lat, location.lon)
                 map?.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         toAmapLatLng(location.lat, location.lon),
@@ -493,6 +503,24 @@ internal class AmapRouteMapController(
     private fun AMap.disableAutoCenteringLocation() {
         this.myLocationStyle = MyLocationStyle()
             .myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW)
+    }
+
+    private fun AMap.drawCurrentLocationMarker(lat: Double? = null, lon: Double? = null) {
+        val location = if (lat != null && lon != null) {
+            lat to lon
+        } else {
+            LastLocation.get().let { it.lat to it.lon }
+        }
+        if (location.first == 0.0 && location.second == 0.0) return
+
+        currentLocationMarker?.remove()
+        currentLocationMarker = this.addMarker(
+            MarkerOptions()
+                .position(toAmapLatLng(location.first, location.second))
+                .setFlat(true)
+                .icon(currentLocationDescriptor)
+                .anchor(.5f, .5f)
+        )
     }
 
     private fun updateCurrentLocationButton() {
@@ -570,6 +598,48 @@ internal class AmapRouteMapController(
             bitmap.recycle()
             descriptor
         }
+    }
+
+    private fun createCurrentLocationDescriptor(): BitmapDescriptor {
+        val size = DP(32f, mapView.context).pxValue
+        val center = size / 2f
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val haloPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(mapView.context, R.color.google_light_blue)
+            alpha = 55
+            style = Paint.Style.FILL
+        }
+        val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(mapView.context, R.color.google_light_blue)
+            style = Paint.Style.FILL
+        }
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            strokeWidth = DP(2f, mapView.context).pxValue.toFloat()
+            style = Paint.Style.STROKE
+        }
+        val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            style = Paint.Style.FILL
+        }
+        val arrowHalfWidth = DP(4f, mapView.context).pxValue.toFloat()
+        val arrowTop = DP(7f, mapView.context).pxValue.toFloat()
+        val arrowPath = Path().apply {
+            moveTo(center, arrowTop)
+            lineTo(center - arrowHalfWidth, center)
+            lineTo(center + arrowHalfWidth, center)
+            close()
+        }
+
+        canvas.drawCircle(center, center, DP(14f, mapView.context).pxValue.toFloat(), haloPaint)
+        canvas.drawCircle(center, center, DP(8f, mapView.context).pxValue.toFloat(), dotPaint)
+        canvas.drawCircle(center, center, DP(8f, mapView.context).pxValue.toFloat(), strokePaint)
+        canvas.drawPath(arrowPath, arrowPaint)
+
+        val descriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+        bitmap.recycle()
+        return descriptor
     }
 
     private sealed class EditableMarker {

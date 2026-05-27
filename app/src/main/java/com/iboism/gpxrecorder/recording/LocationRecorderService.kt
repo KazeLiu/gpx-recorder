@@ -20,6 +20,7 @@ import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.RecordingConfiguration
+import com.iboism.gpxrecorder.model.Segment
 import com.iboism.gpxrecorder.model.TrackPoint
 import com.iboism.gpxrecorder.recording.location.AmapRecordingLocationProvider
 import com.iboism.gpxrecorder.recording.location.GoogleRecordingLocationProvider
@@ -204,20 +205,33 @@ class LocationRecorderService : Service() {
 
     private fun onLocationChanged(location: RecordingLocation?) {
         location?.let { loc ->
-            val accuracy = loc.status.accuracyMeters
-            if (accuracy != null && accuracy > 40) return
+            if (!RecordingTrackPointPolicy.shouldRecord(loc)) return
             LastLocation.put(lat = loc.lat, lon = loc.lon)
+            val elapsedSinceLastPoint = SystemClock.elapsedRealtime() - lastTrackPointElapsedRealtimeMillis
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction { r ->
                 val point = TrackPoint(
                     lat = loc.lat,
                     lon = loc.lon,
                     ele = loc.ele,
-                    time = DateTimeFormatHelper.formatDate(loc.time)
+                    time = DateTimeFormatHelper.formatDate(loc.time),
+                    note = RecordingTrackPointNoteFormatter.accuracyNote(loc)
                 )
                 r.copyToRealm(point)
                 GpxContent.withId(gpxId, r)?.let { gpx ->
-                    gpx.trackList.last()?.segments?.last()?.addPoint(point)
+                    val track = gpx.trackList.last() ?: return@let
+                    val currentSegment = track.segments.lastOrNull()
+                    val targetSegment = when {
+                        currentSegment == null -> {
+                            r.copyToRealm(Segment()).also { track.segments.add(it) }
+                        }
+                        currentSegment.points.isNotEmpty() &&
+                            RecordingTrackPointPolicy.shouldStartNewSegment(elapsedSinceLastPoint, config.interval) -> {
+                            r.copyToRealm(Segment()).also { track.segments.add(it) }
+                        }
+                        else -> currentSegment
+                    }
+                    targetSegment.addPoint(point)
                 }
             }
             realm.close()
