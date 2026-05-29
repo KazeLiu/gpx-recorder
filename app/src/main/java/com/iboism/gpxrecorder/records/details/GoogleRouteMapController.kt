@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.iboism.gpxrecorder.R
+import com.iboism.gpxrecorder.extensions.getThemeColor
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
@@ -160,7 +161,7 @@ internal class GoogleRouteMapController(
 
                 this.addPolyline(
                     PolylineOptions()
-                        .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
+                        .color(mapView.context.getThemeColor(R.attr.gpxRouteLineColor))
                         .jointType(ROUND)
                         .width(12f)
                         .addAll(points)

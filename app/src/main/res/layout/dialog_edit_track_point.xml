@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/track_point_note_hint"
-        app:boxBackgroundColor="@color/md_surfaceContainer">
+        app:boxBackgroundColor="?attr/gpxSurfaceContainer">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/track_point_note_edit_text"
@@ -25,7 +25,7 @@
             android:gravity="top|start"
             android:inputType="textMultiLine|textCapSentences"
             android:minLines="4"
-            android:textColor="@color/md_onSurface"
-            android:textColorHint="@color/md_onSurfaceVariant" />
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant" />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

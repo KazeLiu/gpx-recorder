@@ -46,6 +46,7 @@ class SettingsFragment : Fragment() {
         binding.backButton.setOnClickListener { parentFragmentManager.popBackStack() }
         setupLanguageOptions()
         setupThemeOptions()
+        setupColorThemeOptions()
         setupMapProviderOptions()
         setupFutureSettings()
     }
@@ -103,6 +104,28 @@ class SettingsFragment : Fragment() {
         binding.darkModeRow.visibility = if (binding.followSystemSwitch.isChecked) View.GONE else View.VISIBLE
     }
 
+    private fun setupColorThemeOptions() {
+        updateColorThemeValue()
+        binding.colorThemeRow.setOnClickListener {
+            val currentTheme = ThemePreference.getColorTheme(requireContext())
+            val currentIndex = colorThemeOptions.indexOf(currentTheme)
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.color_theme)
+                .setSingleChoiceItems(colorThemeOptions.map { getString(it.labelRes) }.toTypedArray(), currentIndex) { dialog, which ->
+                    ThemePreference.setColorTheme(requireContext(), colorThemeOptions[which])
+                    updateColorThemeValue()
+                    dialog.dismiss()
+                    requireActivity().recreate()
+                }
+                .show()
+        }
+    }
+
+    private fun updateColorThemeValue() {
+        binding.colorThemeValue.text = getString(ThemePreference.getColorTheme(requireContext()).labelRes)
+    }
+
     private fun setupMapProviderOptions() {
         updateMapProviderValue()
         binding.mapProviderRow.setOnClickListener {
@@ -139,6 +162,7 @@ class SettingsFragment : Fragment() {
             LanguageOption("en", R.string.language_english),
             LanguageOption("zh-CN", R.string.language_simplified_chinese)
         )
+        private val colorThemeOptions = ThemePreference.ColorTheme.entries.toList()
         private val mapProviderOptions = listOf(
             MapProviderOption(MapProvider.Google, R.string.map_provider_google),
             MapProviderOption(MapProvider.Amap, R.string.map_provider_amap)

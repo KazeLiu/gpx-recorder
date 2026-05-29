@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="gpxButtonTextOnSurface" format="color|reference" />
+    <attr name="gpxButtonTextOnAccent" format="color|reference" />
+    <attr name="gpxRouteLineColor" format="color|reference" />
+    <attr name="gpxPreviewPlaceholderColor" format="color|reference" />
+    <attr name="gpxTrackPointDragColor" format="color|reference" />
+    <attr name="gpxTrackPointInsertColor" format="color|reference" />
+    <attr name="gpxTrackPointIconOnColor" format="color|reference" />
+    <attr name="gpxLocationStatusChipSurface" format="color|reference" />
+    <attr name="gpxSurfaceContainer" format="color|reference" />
+    <attr name="gpxNavBarSurface" format="color|reference" />
+    <attr name="gpxOnNavBarSurface" format="color|reference" />
+    <attr name="gpxOnNavBarSurfaceSecondary" format="color|reference" />
+    <attr name="gpxLargeButtonSurface" format="color|reference" />
+    <attr name="gpxOnLargeButtonSurface" format="color|reference" />
+</resources>

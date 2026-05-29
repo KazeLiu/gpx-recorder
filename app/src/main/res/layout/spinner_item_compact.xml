@@ -9,4 +9,4 @@
     android:paddingStart="12dp"
     android:paddingEnd="8dp"
     android:textAppearance="@style/TextAppearance.Gpx.CompactFieldText"
-    android:textColor="@color/md_onSurface" />
+    android:textColor="?attr/colorOnSurface" />

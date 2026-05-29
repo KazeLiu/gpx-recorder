@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_surface"
+    android:background="?attr/colorSurface"
     android:clickable="true"
     android:focusable="true">
 
@@ -11,7 +11,7 @@
         android:id="@+id/config_header_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/nav_bar_surface"
+        android:background="?attr/gpxNavBarSurface"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +39,8 @@
             android:inputType="text"
             android:lines="1"
             android:singleLine="true"
-            android:textColor="@color/md_onSurface"
-            android:textColorHint="@color/md_onSurfaceVariant" />
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -52,12 +52,12 @@
         android:layout_marginEnd="@dimen/dialog_horizontal_margin"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@color/nav_bar_surface"
+        app:cardBackgroundColor="?attr/gpxNavBarSurface"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        app:strokeColor="@color/md_primary"
+        app:strokeColor="?attr/colorPrimary"
         app:strokeWidth="1dp">
 
         <LinearLayout
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rescue_track_entry_title"
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                android:textColor="@color/on_nav_bar_surface"
+                android:textColor="?attr/gpxOnNavBarSurface"
                 android:textStyle="bold" />
 
             <TextView
@@ -80,7 +80,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/rescue_track_entry_subtitle"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="@color/on_nav_bar_surface" />
+                android:textColor="?attr/gpxOnNavBarSurface" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -92,7 +92,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/normal_recording_section"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-        android:textColor="@color/md_onSurfaceVariant"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rescue_track_entry_card" />
 
@@ -115,7 +115,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/interval_minutes"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-        android:textColor="@color/md_onSurface"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/config_title_input_layout" />
 
@@ -129,7 +129,7 @@
         android:text="@string/how_often_to_record_track_points"
         android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        android:textColor="@color/md_onSurfaceVariant"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -150,7 +150,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@id/textView3"
-        android:textColor="@color/md_error"/>
+        android:textColor="?attr/colorError" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/start_button"
@@ -163,9 +163,9 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/start"
-        android:textColor="@color/on_large_button_surface"
+        android:textColor="?attr/gpxOnLargeButtonSurface"
         android:textStyle="bold"
-        app:backgroundTint="@color/large_button_surface"
+        app:backgroundTint="?attr/gpxLargeButtonSurface"
         app:cornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,7 +183,7 @@
         android:paddingBottom="12dp"
         android:text="@string/new_recording"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textColor="@color/on_nav_bar_surface"
+        android:textColor="?attr/gpxOnNavBarSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

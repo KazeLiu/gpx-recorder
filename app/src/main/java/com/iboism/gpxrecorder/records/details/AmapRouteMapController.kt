@@ -38,6 +38,8 @@ import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.maps.model.PolylineOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
+import com.iboism.gpxrecorder.extensions.getThemeColor
+import com.iboism.gpxrecorder.extensions.getThemeColorStateList
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.Track
@@ -212,7 +214,7 @@ internal class AmapRouteMapController(
 
                 this.addPolyline(
                     PolylineOptions()
-                        .color(ContextCompat.getColor(mapView.context, R.color.google_light_blue))
+                        .color(mapView.context.getThemeColor(R.attr.gpxRouteLineColor))
                         .width(12f)
                         .addAll(points)
                         .geodesic(true)
@@ -535,7 +537,7 @@ internal class AmapRouteMapController(
         currentLocationButton = ImageButton(container.context).apply {
             setImageResource(R.drawable.ic_near_me)
             setBackgroundResource(R.drawable.md3_map_button_background)
-            imageTintList = ContextCompat.getColorStateList(container.context, R.color.md_primary)
+            imageTintList = container.context.getThemeColorStateList(R.attr.colorPrimary)
             contentDescription = container.context.getString(R.string.return_to_current_location)
             alpha = .92f
             setOnClickListener { moveCameraToCurrentLocation() }
@@ -570,16 +572,16 @@ internal class AmapRouteMapController(
             val centerY = height / 2f
 
             val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = ContextCompat.getColor(mapView.context, R.color.track_point_drag_color)
+                color = mapView.context.getThemeColor(R.attr.gpxTrackPointDragColor)
                 style = Paint.Style.FILL
             }
             val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = ContextCompat.getColor(mapView.context, R.color.md_onPrimary)
+                color = mapView.context.getThemeColor(R.attr.colorOnPrimary)
                 strokeWidth = DP(2f, mapView.context).pxValue.toFloat()
                 style = Paint.Style.STROKE
             }
             val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = ContextCompat.getColor(mapView.context, R.color.track_point_icon_on_color)
+                color = mapView.context.getThemeColor(R.attr.gpxTrackPointIconOnColor)
                 textAlign = Paint.Align.CENTER
                 typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                 textSize = when {
@@ -606,12 +608,12 @@ internal class AmapRouteMapController(
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val haloPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(mapView.context, R.color.google_light_blue)
+            color = mapView.context.getThemeColor(R.attr.gpxRouteLineColor)
             alpha = 55
             style = Paint.Style.FILL
         }
         val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(mapView.context, R.color.google_light_blue)
+            color = mapView.context.getThemeColor(R.attr.gpxRouteLineColor)
             style = Paint.Style.FILL
         }
         val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

@@ -16,7 +16,7 @@
         android:gravity="center"
         android:text="@string/export"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textColor="@color/md_onSurface" />
+        android:textColor="?attr/colorOnSurface" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/format_selector_layout"
@@ -32,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            android:textColor="@color/md_onSurface"
-            android:textColorHint="@color/md_onSurfaceVariant" />
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:text="@string/use_iso_date_for_filename"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="@color/md_onSurface" />
+            android:textColor="?attr/colorOnSurface" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/filename_checkbox"
@@ -76,7 +76,7 @@
             android:lines="1"
             android:maxLines="1"
             android:text="@string/save"
-            android:textColor="@color/button_text_on_surface" />
+            android:textColor="?attr/gpxButtonTextOnSurface" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/export_download_btn"
@@ -87,7 +87,7 @@
             android:lines="1"
             android:maxLines="1"
             android:text="@string/download"
-            android:textColor="@color/button_text_on_surface" />
+            android:textColor="?attr/gpxButtonTextOnSurface" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/export_share_btn"
@@ -98,7 +98,7 @@
             android:lines="1"
             android:maxLines="1"
             android:text="@string/share"
-            android:textColor="@color/button_text_on_surface" />
+            android:textColor="?attr/gpxButtonTextOnSurface" />
     </LinearLayout>
 
     <ProgressBar
@@ -108,7 +108,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/md3_compact_item_spacing"
         android:indeterminate="true"
-        android:indeterminateTint="@color/md_primary"
+        android:indeterminateTint="?attr/colorPrimary"
         android:visibility="gone" />
 
     <LinearLayout
@@ -124,7 +124,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/outline_info_24"
-            app:tint="@color/md_onSurfaceVariant" />
+            app:tint="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:id="@+id/info_label"
@@ -134,6 +134,6 @@
             android:layout_weight="1"
             android:text="@string/download_location_info"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            android:textColor="@color/md_onSurfaceVariant" />
+            android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 </LinearLayout>

@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), RecordingConfiguratorModal.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemePreference.applyStored(this)
+        setTheme(ThemePreference.getActivityThemeRes(this))
         LocalePreference.applyStored(this)
         enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
         super.onCreate(savedInstanceState)

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:textColor="@color/md_onSurfaceVariant"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="13sp" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:gravity="center"
         android:text="@string/rescue_datetime_picker_label"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        android:textColor="@color/md_onSurfaceVariant" />
+        android:textColor="?attr/colorOnSurfaceVariant" />
 
     <LinearLayout
         android:id="@+id/rescue_datetime_picker_row"
@@ -181,6 +181,6 @@
             android:layout_weight="1"
             android:maxLines="1"
             android:text="@string/rescue_delete_anchor"
-            android:textColor="@color/md_error" />
+            android:textColor="?attr/colorError" />
     </LinearLayout>
 </LinearLayout>

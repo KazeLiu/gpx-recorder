@@ -4,13 +4,13 @@
     android:id="@+id/current_recording_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_surface">
+    android:background="?attr/colorSurface">
 
     <View
         android:id="@+id/recording_header_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/nav_bar_surface"
+        android:background="?attr/gpxNavBarSurface"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,7 +29,7 @@
         android:text="@string/recording_in_progress"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        android:textColor="@color/on_nav_bar_surface"
+        android:textColor="?attr/gpxOnNavBarSurface"
         app:layout_constraintEnd_toStartOf="@id/more_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +44,7 @@
         android:text=""
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-        android:textColor="@color/on_nav_bar_surface"
+        android:textColor="?attr/gpxOnNavBarSurface"
         app:layout_constraintEnd_toEndOf="@id/current_rec_header"
         app:layout_constraintStart_toStartOf="@id/current_rec_header"
         app:layout_constraintTop_toBottomOf="@id/current_rec_header" />
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toTopOf="@+id/map_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/on_nav_bar_surface"
+        app:tint="?attr/gpxOnNavBarSurface"
         android:contentDescription="More menu button" />
 
     <FrameLayout
@@ -90,7 +90,7 @@
         android:paddingVertical="3dp"
         android:text="@string/location_status_waiting"
         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-        android:textColor="@color/md_onSurface"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="@id/map_view"
         app:layout_constraintTop_toTopOf="@id/map_view" />
 
@@ -98,7 +98,7 @@
         android:id="@+id/recording_bottom_bar_divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/md_surfaceVariant"
+        android:background="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toTopOf="@+id/recording_bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -107,7 +107,7 @@
         android:id="@+id/recording_bottom_bar"
         android:layout_width="0dp"
         android:layout_height="72dp"
-        android:background="@color/md_surface"
+        android:background="?attr/colorSurface"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingHorizontal="4dp"
@@ -130,14 +130,14 @@
             android:minHeight="0dp"
             android:paddingHorizontal="0dp"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-            android:textColor="@color/md_onSurfaceVariant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
             app:backgroundTint="@color/transparent"
             app:icon="@drawable/ic_route"
             app:iconGravity="textTop"
             app:iconPadding="3dp"
             app:iconSize="22dp"
-            app:iconTint="@color/md_onSurfaceVariant" />
+            app:iconTint="?attr/colorOnSurfaceVariant" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_wpt_btn"
@@ -154,14 +154,14 @@
             android:text="@string/append_track_point"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-            android:textColor="@color/md_onSurfaceVariant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
             app:backgroundTint="@color/transparent"
             app:icon="@drawable/ic_add_location"
             app:iconGravity="textTop"
             app:iconPadding="3dp"
             app:iconSize="22dp"
-            app:iconTint="@color/md_onSurfaceVariant" />
+            app:iconTint="?attr/colorOnSurfaceVariant" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/playpause_btn"
@@ -178,14 +178,14 @@
             android:text="@string/pause_recording"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-            android:textColor="@color/md_onSurfaceVariant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
             app:backgroundTint="@color/transparent"
             app:icon="@drawable/ic_pause"
             app:iconGravity="textTop"
             app:iconPadding="3dp"
             app:iconSize="22dp"
-            app:iconTint="@color/md_onSurfaceVariant" />
+            app:iconTint="?attr/colorOnSurfaceVariant" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_btn"
@@ -202,14 +202,14 @@
             android:text="@string/stop_recording"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-            android:textColor="@color/md_primary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="11sp"
             app:backgroundTint="@color/transparent"
             app:icon="@drawable/ic_stop_recording"
             app:iconGravity="textTop"
             app:iconPadding="3dp"
             app:iconSize="22dp"
-            app:iconTint="@color/md_primary" />
+            app:iconTint="?attr/colorPrimary" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

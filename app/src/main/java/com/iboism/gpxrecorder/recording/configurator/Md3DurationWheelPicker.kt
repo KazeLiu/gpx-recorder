@@ -10,12 +10,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.iboism.gpxrecorder.R
+import com.iboism.gpxrecorder.extensions.getThemeColor
 import kotlin.math.roundToInt
 
 class Md3DurationWheelPicker @JvmOverloads constructor(
@@ -82,7 +82,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
             radius = dp(18).toFloat()
             cardElevation = 0f
             strokeWidth = 0
-            setCardBackgroundColor(ContextCompat.getColor(context, R.color.md_surfaceContainer))
+            setCardBackgroundColor(context.getThemeColor(R.attr.gpxSurfaceContainer))
 
             val frame = FrameLayout(context)
             addView(frame, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
@@ -90,7 +90,7 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
             val highlight = View(context).apply {
                 background = GradientDrawable().apply {
                     cornerRadius = dp(14).toFloat()
-                    setColor(ContextCompat.getColor(context, R.color.md_primaryContainer))
+                    setColor(context.getThemeColor(R.attr.colorPrimaryContainer))
                 }
             }
             frame.addView(
@@ -183,9 +183,8 @@ class Md3DurationWheelPicker @JvmOverloads constructor(
                 typeface = Typeface.DEFAULT_BOLD.takeIf { isSelected } ?: Typeface.DEFAULT
                 alpha = if (isSelected) 1f else 0.48f
                 setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        if (isSelected) R.color.md_onPrimaryContainer else R.color.md_onSurfaceVariant
+                    context.getThemeColor(
+                        if (isSelected) R.attr.colorOnPrimaryContainer else R.attr.colorOnSurfaceVariant
                     )
                 )
             }

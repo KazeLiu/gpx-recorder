@@ -5,6 +5,7 @@ import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentRouteDetailsBinding
+import com.iboism.gpxrecorder.extensions.getThemeColor
 import io.reactivex.subjects.PublishSubject
 
 private const val DRAFT_TITLE_KEY: String = "GpxDetailsView_titleDraft"
@@ -85,7 +86,7 @@ class GpxDetailsView(
         binding.titleEt.isFocusableInTouchMode = false
         binding.titleEt.isCursorVisible = false
         binding.titleEt.clearFocus()
-        binding.titleEt.setBackgroundResource(R.color.nav_bar_surface)
+        binding.titleEt.setBackgroundColor(binding.root.context.getThemeColor(R.attr.gpxNavBarSurface))
         binding.titleEt.setHorizontallyScrolling(false)
     }
 

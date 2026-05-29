@@ -5,7 +5,7 @@
     android:id="@+id/settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_surface"
+    android:background="?attr/colorSurface"
     android:clickable="true"
     android:focusable="true"
     tools:context="com.iboism.gpxrecorder.settings.SettingsFragment">
@@ -14,7 +14,7 @@
         android:id="@+id/nav_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/nav_bar_surface"
+        android:background="?attr/gpxNavBarSurface"
         app:layout_constraintBottom_toBottomOf="@id/settings_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,18 +31,18 @@
         app:layout_constraintBottom_toBottomOf="@id/settings_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/on_nav_bar_surface" />
+        app:tint="?attr/gpxOnNavBarSurface" />
 
     <TextView
         android:id="@+id/settings_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/nav_bar_surface"
+        android:background="?attr/gpxNavBarSurface"
         android:paddingHorizontal="8dp"
         android:paddingVertical="16dp"
         android:text="@string/settings"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textColor="@color/on_nav_bar_surface"
+        android:textColor="?attr/gpxOnNavBarSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
@@ -84,13 +84,13 @@
                     android:layout_weight="1"
                     android:text="@string/language"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="@color/md_onSurface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:id="@+id/language_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/md_onSurfaceVariant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     tools:text="English" />
             </LinearLayout>
@@ -114,7 +114,7 @@
                     android:layout_weight="1"
                     android:text="@string/dark_mode_follow_system"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="@color/md_onSurface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/follow_system_switch"
@@ -142,13 +142,43 @@
                     android:layout_weight="1"
                     android:text="@string/dark_mode"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="@color/md_onSurface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/dark_mode_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/dark_mode" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/color_theme_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/settings_row_min_height"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/color_theme_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/color_theme"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:textColor="?attr/colorOnSurface" />
+
+                <TextView
+                    android:id="@+id/color_theme_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    tools:text="Blue" />
             </LinearLayout>
 
             <LinearLayout
@@ -170,13 +200,13 @@
                     android:layout_weight="1"
                     android:text="@string/map_provider"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="@color/md_onSurface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:id="@+id/map_provider_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/md_onSurfaceVariant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     tools:text="Google Maps" />
             </LinearLayout>

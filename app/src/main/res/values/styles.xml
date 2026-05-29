@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.Material3.DayNight">
+    <style name="AppTheme.Base" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/md_primary</item>
         <item name="colorOnPrimary">@color/md_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_primaryContainer</item>
@@ -14,6 +14,8 @@
         <item name="colorOnTertiary">@color/md_onTertiary</item>
         <item name="colorError">@color/md_error</item>
         <item name="colorOnError">@color/md_onError</item>
+        <item name="colorErrorContainer">@color/md_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_onErrorContainer</item>
         <item name="colorSurface">@color/md_surface</item>
         <item name="colorOnSurface">@color/md_onSurface</item>
         <item name="colorSurfaceVariant">@color/md_surfaceVariant</item>
@@ -30,6 +32,66 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="gpxButtonTextOnSurface">@color/md_primary</item>
+        <item name="gpxButtonTextOnAccent">@color/md_onPrimary</item>
+        <item name="gpxRouteLineColor">@color/google_light_blue</item>
+        <item name="gpxPreviewPlaceholderColor">@color/google_light_green</item>
+        <item name="gpxTrackPointDragColor">@color/md_primary</item>
+        <item name="gpxTrackPointInsertColor">@color/md_secondary</item>
+        <item name="gpxTrackPointIconOnColor">@color/md_onSecondary</item>
+        <item name="gpxLocationStatusChipSurface">@color/location_status_chip_surface</item>
+        <item name="gpxSurfaceContainer">@color/md_surfaceContainer</item>
+        <item name="gpxNavBarSurface">@color/nav_bar_surface</item>
+        <item name="gpxOnNavBarSurface">@color/on_nav_bar_surface</item>
+        <item name="gpxOnNavBarSurfaceSecondary">@color/on_nav_bar_surface_secondary</item>
+        <item name="gpxLargeButtonSurface">@color/large_button_surface</item>
+        <item name="gpxOnLargeButtonSurface">@color/on_large_button_surface</item>
+    </style>
+
+    <style name="AppTheme.Blue" parent="AppTheme.Base">
+        <item name="colorPrimary">@color/blue_md_primary</item>
+        <item name="colorOnPrimary">@color/blue_md_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/blue_md_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/blue_md_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/blue_md_secondary</item>
+        <item name="colorOnSecondary">@color/blue_md_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/blue_md_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/blue_md_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/blue_md_tertiary</item>
+        <item name="colorOnTertiary">@color/blue_md_onTertiary</item>
+        <item name="colorError">@color/blue_md_error</item>
+        <item name="colorOnError">@color/blue_md_onError</item>
+        <item name="colorErrorContainer">@color/blue_md_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/blue_md_onErrorContainer</item>
+        <item name="colorSurface">@color/blue_md_surface</item>
+        <item name="colorOnSurface">@color/blue_md_onSurface</item>
+        <item name="colorSurfaceVariant">@color/blue_md_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/blue_md_onSurfaceVariant</item>
+        <item name="android:colorBackground">@color/blue_md_background</item>
+        <item name="colorOutline">@color/blue_md_outline</item>
+        <item name="colorControlActivated">@color/blue_md_primary</item>
+        <item name="colorControlHighlight">@color/blue_md_primaryContainer</item>
+        <item name="android:colorAccent">@color/blue_md_secondary</item>
+        <item name="colorAccent">@color/blue_md_secondary</item>
+        <item name="android:windowBackground">@color/blue_md_background</item>
+        <item name="android:navigationBarColor">@color/blue_md_surface</item>
+        <item name="gpxButtonTextOnSurface">@color/blue_md_primary</item>
+        <item name="gpxButtonTextOnAccent">@color/blue_md_onPrimary</item>
+        <item name="gpxRouteLineColor">@color/blue_route_line</item>
+        <item name="gpxPreviewPlaceholderColor">@color/blue_preview_placeholder</item>
+        <item name="gpxTrackPointDragColor">@color/blue_md_primary</item>
+        <item name="gpxTrackPointInsertColor">@color/blue_md_secondary</item>
+        <item name="gpxTrackPointIconOnColor">@color/blue_md_onSecondary</item>
+        <item name="gpxLocationStatusChipSurface">@color/blue_location_status_chip_surface</item>
+        <item name="gpxSurfaceContainer">@color/blue_md_surfaceContainer</item>
+        <item name="gpxNavBarSurface">@color/blue_nav_bar_surface</item>
+        <item name="gpxOnNavBarSurface">@color/blue_on_nav_bar_surface</item>
+        <item name="gpxOnNavBarSurfaceSecondary">@color/blue_on_nav_bar_surface_secondary</item>
+        <item name="gpxLargeButtonSurface">@color/blue_large_button_surface</item>
+        <item name="gpxOnLargeButtonSurface">@color/blue_on_large_button_surface</item>
     </style>
 
     <style name="Theme.GpxRecorder.NoActionBarDialog" parent="@style/Theme.Material3.DayNight.Dialog.Alert">
@@ -125,6 +187,11 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Blue.NoActionBar" parent="AppTheme.Blue">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

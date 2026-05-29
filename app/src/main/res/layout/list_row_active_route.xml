@@ -9,7 +9,7 @@
     android:layout_marginBottom="@dimen/md3_card_vertical_margin"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/md_primaryContainer"
+    app:cardBackgroundColor="?attr/colorPrimaryContainer"
     app:cardCornerRadius="@dimen/md3_card_corner_radius"
     app:cardElevation="0dp">
 
@@ -28,7 +28,7 @@
         android:textAlignment="viewStart"
         android:layout_marginBottom="2dp"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        android:textColor="@color/md_onPrimaryContainer"
+        android:textColor="?attr/colorOnPrimaryContainer"
         android:text="@string/recording_in_progress"/>
 
     <TextView
@@ -41,7 +41,7 @@
         android:maxLines="2"
         android:singleLine="false"
         android:textAlignment="viewStart"
-        android:textColor="@color/md_onPrimaryContainer"
+        android:textColor="?attr/colorOnPrimaryContainer"
         android:layout_marginTop="4dp"
         app:layout_constraintBottom_toTopOf="@id/recording_stats_tv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
         android:maxLines="1"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-        android:textColor="@color/md_onPrimaryContainer"
+        android:textColor="?attr/colorOnPrimaryContainer"
         app:layout_constraintBottom_toTopOf="@id/recording_actions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,14 +88,14 @@
             android:paddingHorizontal="16dp"
             android:text="@string/pause_recording"
             android:textAllCaps="false"
-            android:textColor="@color/md_onErrorContainer"
-            app:backgroundTint="@color/md_errorContainer"
+            android:textColor="?attr/colorOnErrorContainer"
+            app:backgroundTint="?attr/colorErrorContainer"
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_pause"
             app:iconGravity="textStart"
             app:iconPadding="6dp"
             app:iconSize="18dp"
-            app:iconTint="@color/md_onErrorContainer" />
+            app:iconTint="?attr/colorOnErrorContainer" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_btn"
@@ -108,14 +108,14 @@
             android:paddingHorizontal="16dp"
             android:text="@string/stop_recording"
             android:textAllCaps="false"
-            android:textColor="@color/md_onPrimary"
-            app:backgroundTint="@color/md_primary"
+            android:textColor="?attr/colorOnPrimary"
+            app:backgroundTint="?attr/colorPrimary"
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_stop_recording"
             app:iconGravity="textStart"
             app:iconPadding="6dp"
             app:iconSize="18dp"
-            app:iconTint="@color/md_onPrimary" />
+            app:iconTint="?attr/colorOnPrimary" />
     </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

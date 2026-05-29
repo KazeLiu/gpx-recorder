@@ -140,6 +140,9 @@
     <string name="language_simplified_chinese">Simplified Chinese</string>
     <string name="dark_mode">Dark mode</string>
     <string name="dark_mode_follow_system">Follow phone</string>
+    <string name="color_theme">Color theme</string>
+    <string name="color_theme_pink">Pink</string>
+    <string name="color_theme_blue">Blue</string>
     <string name="map_provider">Map service</string>
     <string name="map_provider_google">Google Maps</string>
     <string name="map_provider_amap">Amap</string>

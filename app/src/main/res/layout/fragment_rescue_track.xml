@@ -4,7 +4,7 @@
     android:id="@+id/rescue_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_surface">
+    android:background="?attr/colorSurface">
 
     <FrameLayout
         android:id="@+id/rescue_map_container"
@@ -19,7 +19,7 @@
         android:id="@+id/rescue_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/nav_bar_surface"
+        android:background="?attr/gpxNavBarSurface"
         android:gravity="center_vertical"
         android:minHeight="56dp"
         android:orientation="horizontal"
@@ -38,7 +38,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back"
             android:src="@drawable/ic_left_arrow"
-            app:tint="@color/on_nav_bar_surface" />
+            app:tint="?attr/gpxOnNavBarSurface" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rescue_track_title"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="@color/on_nav_bar_surface"
+                android:textColor="?attr/gpxOnNavBarSurface"
                 android:textStyle="bold" />
 
             <TextView
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rescue_step_drawing"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="@color/on_nav_bar_surface" />
+                android:textColor="?attr/gpxOnNavBarSurface" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -73,15 +73,15 @@
             android:minHeight="44dp"
             android:maxLines="1"
             android:text="@string/rescue_previous_step"
-            android:textColor="@color/on_nav_bar_surface"
-            app:strokeColor="@color/on_nav_bar_surface" />
+            android:textColor="?attr/gpxOnNavBarSurface"
+            app:strokeColor="?attr/gpxOnNavBarSurface" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/rescue_panel_scroll"
         android:layout_width="0dp"
         android:layout_height="320dp"
-        android:background="@color/md_surface"
+        android:background="?attr/colorSurface"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="@color/md_onSurfaceVariant" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
             <LinearLayout
                 android:id="@+id/rescue_anchor_summary_row"
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/md_onSurfaceVariant" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_anchor_sort_button"
@@ -204,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/md3_compact_item_spacing"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="@color/md_onSurfaceVariant" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
             <LinearLayout
                 android:id="@+id/rescue_planning_route_row"
@@ -221,7 +221,7 @@
                     android:layout_weight="1"
                     android:maxLines="2"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/md_onSurface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <Spinner
                     android:id="@+id/rescue_mode_spinner"
@@ -251,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/md_onSurfaceVariant" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/rescue_waypoint_sort_button"

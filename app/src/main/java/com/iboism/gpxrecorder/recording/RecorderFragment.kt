@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +17,7 @@ import com.iboism.gpxrecorder.Events
 import com.iboism.gpxrecorder.Keys
 import com.iboism.gpxrecorder.R
 import com.iboism.gpxrecorder.databinding.FragmentActiveRouteDetailsBinding
+import com.iboism.gpxrecorder.extensions.getThemeColor
 import com.iboism.gpxrecorder.model.GpxContent
 import com.iboism.gpxrecorder.recording.configurator.RecordingConfiguratorView
 import com.iboism.gpxrecorder.records.details.MapController
@@ -319,13 +319,11 @@ class RecorderFragment : Fragment(), RecorderServiceConnection.OnServiceConnecte
     }
 
     private fun updateRecordingHeaderStyle(isPaused: Boolean) {
-        val headerBackgroundColor = ContextCompat.getColor(
-            requireContext(),
-            if (isPaused) R.color.md_errorContainer else R.color.nav_bar_surface
+        val headerBackgroundColor = requireContext().getThemeColor(
+            if (isPaused) R.attr.colorErrorContainer else R.attr.gpxNavBarSurface
         )
-        val headerContentColor = ContextCompat.getColor(
-            requireContext(),
-            if (isPaused) R.color.md_onErrorContainer else R.color.on_nav_bar_surface
+        val headerContentColor = requireContext().getThemeColor(
+            if (isPaused) R.attr.colorOnErrorContainer else R.attr.gpxOnNavBarSurface
         )
 
         binding.recordingHeaderBackground.setBackgroundColor(headerBackgroundColor)

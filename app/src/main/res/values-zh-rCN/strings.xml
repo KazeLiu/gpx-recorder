@@ -128,6 +128,9 @@
     <string name="language_simplified_chinese">简体中文</string>
     <string name="dark_mode">深色模式</string>
     <string name="dark_mode_follow_system">跟随手机</string>
+    <string name="color_theme">颜色主题</string>
+    <string name="color_theme_pink">粉色</string>
+    <string name="color_theme_blue">蓝色</string>
     <string name="map_provider">地图服务</string>
     <string name="map_provider_google">Google 地图</string>
     <string name="map_provider_amap">高德地图</string>

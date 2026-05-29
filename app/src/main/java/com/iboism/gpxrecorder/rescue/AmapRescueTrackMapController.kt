@@ -25,6 +25,7 @@ import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.maps.model.Poi
 import com.amap.api.maps.model.PolylineOptions
 import com.iboism.gpxrecorder.R
+import com.iboism.gpxrecorder.extensions.getThemeColor
 import com.iboism.gpxrecorder.model.LastLocation
 import com.iboism.gpxrecorder.model.RescueDraftStep
 import com.iboism.gpxrecorder.model.RescueTrackDraft
@@ -204,7 +205,7 @@ class AmapRescueTrackMapController(
             }
             drawPolyline(
                 points,
-                ContextCompat.getColor(mapView.context, R.color.google_light_blue),
+                mapView.context.getThemeColor(R.attr.gpxRouteLineColor),
                 12f
             )
         } else if (draft.currentStep == RescueDraftStep.PLANNING.name || draft.currentStep == RescueDraftStep.GENERATED.name) {
@@ -214,7 +215,7 @@ class AmapRescueTrackMapController(
                 if (route.size >= 2) {
                     drawPolyline(
                         route.map { toAmapLatLng(it.lat, it.lon) },
-                        ContextCompat.getColor(mapView.context, R.color.google_light_blue),
+                        mapView.context.getThemeColor(R.attr.gpxRouteLineColor),
                         12f
                     )
                 }
@@ -242,7 +243,7 @@ class AmapRescueTrackMapController(
             }
             drawPolyline(
                 points,
-                ContextCompat.getColor(mapView.context, R.color.md_primary),
+                mapView.context.getThemeColor(R.attr.colorPrimary),
                 8f
             )
         }
@@ -319,16 +320,15 @@ class AmapRescueTrackMapController(
     private fun numberedWaypointIcon(number: Int): com.amap.api.maps.model.BitmapDescriptor {
         val cacheKey = number
         return waypointIconCache.getOrPut(cacheKey) {
-            numberedCircleIcon(number, ContextCompat.getColor(mapView.context, R.color.md_secondary))
+            numberedCircleIcon(number, mapView.context.getThemeColor(R.attr.colorSecondary))
         }
     }
 
     private fun numberedAnchorIcon(number: Int, locked: Boolean): com.amap.api.maps.model.BitmapDescriptor {
         val cacheKey = 10_000 + number + if (locked) 1_000 else 0
         return waypointIconCache.getOrPut(cacheKey) {
-            val color = ContextCompat.getColor(
-                mapView.context,
-                if (locked) R.color.google_light_blue else R.color.md_primary
+            val color = mapView.context.getThemeColor(
+                if (locked) R.attr.gpxRouteLineColor else R.attr.colorPrimary
             )
             numberedCircleIcon(number, color)
         }
